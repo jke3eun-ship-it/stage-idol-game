@@ -183,6 +183,19 @@ body{background:var(--stage-bg);color:var(--stage-text)}
 @media(min-width:1020px){.app{max-width:620px;margin-left:max(30px,calc((100vw - 990px)/2));margin-right:0;padding-left:34px;padding-right:34px}.status-panel{right:max(25px,calc((100vw - 990px)/2));top:20px;bottom:20px;width:325px;transform:none!important;border:1px solid #53645a;border-radius:18px;box-shadow:none;z-index:30}.status-toggle,.status-close,.status-shade{display:none!important}}
 @media(max-width:1019px){.status-panel:not(.open){pointer-events:none}}
 @media(prefers-reduced-motion:reduce){.status-panel{transition:none}}
+
+.training-result-shade{position:fixed;inset:0;background:#050809d9;z-index:110;display:none;align-items:center;justify-content:center;padding:18px;overflow-y:auto}
+.training-result-shade.open{display:flex}
+.training-result-dialog{width:min(100%,440px);background:#252d30;border:1px solid #5a6861;border-top:4px solid #d8fa59;border-radius:13px;padding:24px 20px;box-shadow:0 20px 70px #000a;color:#f5f7f1}
+.training-result-kicker{color:#d8fa59;font-size:11px;letter-spacing:.16em;font-weight:900}
+.training-result-dialog h2{font-size:29px;line-height:1.25;margin:13px 0}
+.training-result-dialog p{color:#c5d0ca;font-size:14px;line-height:1.7}
+.training-result-values{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:20px 0}
+.training-result-values>div{background:#1a2124;border:1px solid #46534d;border-radius:8px;padding:15px 12px}
+.training-result-values span{display:block;color:#b7c5bc;font-size:11px;margin-bottom:7px}
+.training-result-values strong{display:block;color:#d8fa59;font-size:20px}
+.training-result-next{width:100%;min-height:54px;background:#d8fa59;color:#182019;border:0;border-radius:7px;font-weight:900;font-size:15px}
+body.training-result-open{overflow:hidden}
 </style></head><body><main class="app">
 <section class="screen active" id="home">
 <div class="poster-topbar"><span class="poster-top-label">STAGE / IDOL LIFE SIMULATOR</span><div class="poster-top-controls"><span class="poster-edition">FIRST EDITION</span><button aria-label="사운드 끄기" aria-pressed="true" class="sound-toggle" id="soundToggle" onclick="toggleSound()" title="사운드 ON/OFF" type="button"></button></div></div>
@@ -283,7 +296,7 @@ body{background:var(--stage-bg);color:var(--stage-text)}
 <div class="status-panel-head"><div><div class="roll-tag">PLAYER / STATUS</div><h2 id="panelName">플레이어</h2></div><button class="status-close" type="button" onclick="toggleStatus(false)" aria-label="닫기">×</button></div>
 <div class="panel-tabs"><button id="tabStats" class="on" onclick="setStatusTab('stats')">능력치</button><button id="tabRelations" onclick="setStatusTab('relations')">관계 · 커리어</button></div>
 <div id="panelStats"></div><div id="panelRelations" hidden></div>
-</aside><div id="chapterTransition" class="chapter-transition" role="status" aria-live="polite" aria-hidden="true"><div class="chapter-transition-inner"><div class="chapter-kicker" id="chapterKicker">STAGE</div><h2 id="chapterTitle">새로운 시작</h2><p id="chapterDescription">당신의 이야기가 시작됩니다.</p><div class="chapter-loading" aria-hidden="true"><i></i></div><div class="chapter-serial">STAGE / YOUR LIFE. YOUR DEBUT.</div></div></div><script>
+</aside><div id="chapterTransition" class="chapter-transition" role="status" aria-live="polite" aria-hidden="true"><div class="chapter-transition-inner"><div class="chapter-kicker" id="chapterKicker">STAGE</div><h2 id="chapterTitle">새로운 시작</h2><p id="chapterDescription">당신의 이야기가 시작됩니다.</p><div class="chapter-loading" aria-hidden="true"><i></i></div><div class="chapter-serial">STAGE / YOUR LIFE. YOUR DEBUT.</div></div></div><div id="trainingResultShade" class="training-result-shade" aria-hidden="true"><div class="training-result-dialog" role="dialog" aria-modal="true" aria-labelledby="trainingResultTitle"><div class="training-result-kicker" id="trainingResultKicker">TRAINING RESULT</div><h2 id="trainingResultTitle">훈련 결과</h2><p id="trainingResultNarrative"></p><div class="training-result-values"><div><span>능력치 변화</span><strong id="trainingResultStat"></strong></div><div><span>컨디션 변화</span><strong id="trainingResultEnergy"></strong></div></div><button class="training-result-next" id="trainingResultNext" type="button" onclick="continueAfterTraining()">계속하기 →</button></div></div><script>
 const soundOnIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
 const soundOffIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="m16 9 5 6m0-6-5 6"/></svg>';
 let soundEnabled=localStorage.getItem('stage-sound-enabled')!=='false';
@@ -316,7 +329,7 @@ function go(id){
 function updateSelection(){document.querySelectorAll('[data-spec]').forEach(b=>b.classList.toggle('selected',selected.includes(b.dataset.spec)));$('pickCount').textContent=`(${selected.length}/2)`;if($('confirmTalent'))$('confirmTalent').disabled=!draft||draft.choice<0||selected.length!==2;}
 document.querySelectorAll('[data-spec]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.spec;if(selected.includes(k))selected=selected.filter(v=>v!==k);else if(selected.length<2)selected.push(k);if(draft)draft.selected=[...selected];updateSelection()}));
 function save(){if(state)renderStatus();localStorage.setItem('stage-save-v17',JSON.stringify(state));$('continue').disabled=false}
-function loadGame(){try{state=JSON.parse(localStorage.getItem('stage-save-v17'));if(!state)throw 0;normalizeState();render();if(state.auditionResults&&!state.debuted){renderAudition();go('audition')}else if(state.debuted){if(state.switchOffer)renderSwitchOffer();else if(state.careerSeason>0)openCareer();else showDebutDetails()}else if(state.pendingEvent){renderEvent();go('traineeEvent')}else go('game')}catch(e){alert('저장된 게임이 없습니다.')}}
+function loadGame(){try{state=JSON.parse(localStorage.getItem('stage-save-v17'));if(!state)throw 0;normalizeState();render();if(state.trainingResultPending&&state.lastTrainingResult){go('game');pendingTrainingContinuation=state.auditionResults?'audition':state.pendingEvent?'event':'game';showTrainingResult()}else if(state.auditionResults&&!state.debuted){renderAudition();go('audition')}else if(state.debuted){if(state.switchOffer)renderSwitchOffer();else if(state.careerSeason>0)openCareer();else showDebutDetails()}else if(state.pendingEvent){renderEvent();go('traineeEvent')}else go('game')}catch(e){alert('저장된 게임이 없습니다.')}}
 function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 function rollStats(){
   // 총합 60, 개별 시작 최대 20. 주력은 확률 가중치만 부여.
@@ -370,7 +383,7 @@ function confirmRoll(){if(!draft||!draft.confirmed||draft.choice<0||selected.len
  trainingFocus=state.selected[0]||'보컬';save();render();go('game');}
 function normalizeState(){
  if(!state)return;
- state.year??=2028;state.actions??=state.trained?2:0;state.trainingLog??=[];state.monthsCompleted??=0;state.lastReport??='';state.careerHistory??=[];state.energy??=80;state.traineeTurns??=Math.min(8,(state.monthsCompleted||0)*2+(state.actions||0));state.debuted??=false;state.fanSupport??=65;state.agencyTrust??=null;state.eventFlags??={};state.eventQueue??=[];state.specialAudition??=null;state.auditionResults??=null;state.auditionScore??=null;state.agencySize??=null;state.eventResults??=[];state.pendingEvent??=null;state.activeFocus??=[...state.selected];state.careerSeason??=0;state.investments??={};state.switchOffer??=null;state.switchBonus??=null;state.lastSwitchSeason??=-10;state.fans??=Math.max(120,Math.round((state.debut?.score||50)*35));state.cash??=1500;state.albumCount??=0;state.albumHistory??=[];state.albumThisSeason??=false;state.lastAlbumResult??='';
+ state.year??=2028;state.actions??=state.trained?2:0;state.trainingLog??=[];state.monthsCompleted??=0;state.lastReport??='';state.careerHistory??=[];state.energy??=80;state.traineeTurns??=Math.min(8,(state.monthsCompleted||0)*2+(state.actions||0));state.debuted??=false;state.injury??=null;state.forcedRestTurns??=0;state.recoveryMonths??=0;state.trainingResultPending??=false;state.fanSupport??=65;state.agencyTrust??=null;state.eventFlags??={};state.eventQueue??=[];state.specialAudition??=null;state.auditionResults??=null;state.auditionScore??=null;state.agencySize??=null;state.eventResults??=[];state.pendingEvent??=null;state.activeFocus??=[...state.selected];state.careerSeason??=0;state.investments??={};state.switchOffer??=null;state.switchBonus??=null;state.lastSwitchSeason??=-10;state.fans??=Math.max(120,Math.round((state.debut?.score||50)*35));state.cash??=1500;state.albumCount??=0;state.albumHistory??=[];state.albumThisSeason??=false;state.lastAlbumResult??='';
  if(state.month>12){state.year+=Math.floor((state.month-1)/12);state.month=(state.month-1)%12+1;}
  if(!keys.includes(trainingFocus))trainingFocus=state.selected?.[0]||'보컬';
 }
@@ -384,23 +397,68 @@ function render(){
  $('actionCounter').textContent=state.traineeTurns+' / 8';
  $('progressFill').style.width=(state.traineeTurns*12.5)+'%';
  $('stats').innerHTML=keys.map(k=>`<div class="stat"><div class="stathead"><span>${k}${state.selected.includes(k)?' ✦':''}</span><strong>${state.stats[k]}</strong></div><div class="bar"><div class="fill" style="width:${Math.min(100,state.stats[k]*5)}%"></div></div></div>`).join('');
- $('majorDetail').textContent='주력: '+state.selected.join(' · ')+' · 성공률 30% · 성공 시 +4~7 · 실패 시 컨디션 -18~-25';
- $('weakDetail').textContent='주력: '+state.selected.join(' · ')+' · 성공률 80% · 성공 시 +1~3 · 실패 시 컨디션 -5~-9';
- $('restDetail').textContent='성공률 100% · 컨디션 +18~26 · 능력치 상승 없음';
- $('safeDetail').textContent='주력: '+state.selected.join(' · ')+' · 성공률 100% · 능력치 +1 · 컨디션 -2~-4';
- $('trainingHint').textContent=`남은 선택 ${8-state.traineeTurns}회 · 네 가지 행동 모두 1턴을 소비합니다.`;
+ $('majorDetail').textContent='주력 능력치 · 성공률 30% · 성공 +8~12 · 실패 시 능력치 -1~-2, 컨디션 -12~-18';
+ $('weakDetail').textContent='주력 능력치 · 성공률 80% · 성공 +1~3 · 실패 시 능력치 -1~-2, 컨디션 -5~-9';
+ $('restDetail').textContent='확정 회복 · 컨디션 +18~26 · 부상 치료 가능';
+ $('safeDetail').textContent='주력 능력치 · 성공률 100% · 능력치 +1 · 컨디션 -2~-4';
+ $('trainingHint').textContent=`남은 선택 ${Math.max(0,8-state.traineeTurns)}회 · 컨디션 ${state.energy} · 부상 위험: ${injuryRiskText(state.energy)}${state.injury?' · 현재 '+(state.injury==='serious'?'심각한':'경미한')+' 부상':''}${state.forcedRestTurns?' · 다음 턴 강제 휴식':''}${state.recoveryMonths?' · 회복기 '+state.recoveryMonths+'개월 (성장 -30%)':''}`;
+ document.querySelectorAll(".growth-choice").forEach(b=>b.disabled=false);
+ if(state.forcedRestTurns>0){document.querySelectorAll(".growth-choice").forEach(b=>{if(!b.getAttribute('onclick')?.includes("'rest'"))b.disabled=true;});}
  $('eventTitle').textContent='연습생 성장 전략';
- $('story').textContent='혹독한 훈련은 고위험·고성장, 꾸준한 훈련은 안정적인 성장, 휴식은 컨디션을 회복하고, 안정적인 훈련은 반드시 능력치를 소폭 올립니다. 혹독한 훈련 성공률 30%, 꾸준한 훈련 80%로 고정됩니다.';
+ $('story').textContent='컨디션이 낮아질수록 훈련 중 부상 위험이 급증합니다. 경미한 부상은 능력치 -1~2, 심각한 부상은 능력치 -3~5 및 추가 컨디션 하락이 발생합니다. 부상 중에는 훈련 성과도 제한됩니다. 심각한 부상 시 다음 1턴(1개월)은 강제 휴식이며, 이후 3개월간 훈련 성장량이 30% 감소합니다.';
  $('logHistory').textContent=(state.trainingLog||[]).join('\\n')||'아직 기록이 없습니다.';
+}
+
+let pendingTrainingContinuation=null;
+function showTrainingResult(){
+ const r=state?.lastTrainingResult;if(!r)return;
+ const names={hard:'혹독한 훈련',steady:'꾸준한 훈련',safe:'안정적인 훈련',rest:'휴식'};
+ $('trainingResultKicker').textContent='TRAINING RESULT · '+state.traineeTurns+' / 8';
+ $('trainingResultTitle').textContent=(names[r.mode]||'훈련')+' · '+r.outcome;
+ $('trainingResultNarrative').textContent=r.narration+(r.injuryMessage?' '+r.injuryMessage:'')+' 다음 훈련 부상 위험: '+injuryRiskText(r.energyAfter);
+ $('trainingResultStat').textContent=r.target?r.target+' '+(r.gain>0?'+':'')+r.gain:'변화 없음';
+ const delta=r.energyAfter-r.energyBefore;
+ $('trainingResultEnergy').textContent=r.energyBefore+' → '+r.energyAfter+' ('+(delta>0?'+':'')+delta+')';
+ $('trainingResultNext').textContent=state.auditionResults?'기획사 오디션으로 →':state.pendingEvent?'이벤트 확인 →':'다음 턴으로 →';
+ $('trainingResultShade').classList.add('open');$('trainingResultShade').setAttribute('aria-hidden','false');
+ document.body.classList.add('training-result-open');
+ $('trainingResultNext').focus();
+}
+function continueAfterTraining(){
+ if(!$('trainingResultShade').classList.contains('open'))return;
+ $('trainingResultShade').classList.remove('open');$('trainingResultShade').setAttribute('aria-hidden','true');
+ document.body.classList.remove('training-result-open');
+ const next=pendingTrainingContinuation;pendingTrainingContinuation=null;state.trainingResultPending=false;save();
+ if(next==='audition'){renderAudition();go('audition');}
+ else if(next==='event'){renderEvent();go('traineeEvent');}
+ else {render();go('game');}
+}
+function injuryOdds(energy){
+ if(energy>=80)return {minor:0,serious:0};
+ if(energy>=60)return {minor:.10,serious:0};
+ if(energy>=40)return {minor:.15,serious:0};
+ if(energy>=20)return {minor:.15,serious:.05};
+ if(energy>=5)return {minor:.30,serious:.10};
+ return {minor:0,serious:.95};
+}
+function injuryRiskText(energy){
+ const r=injuryOdds(energy);
+ return `경미 ${Math.round(r.minor*100)}% / 심각 ${Math.round(r.serious*100)}%`;
 }
 function train(mode){
  if(!state||state.debuted)return;normalizeState();
- if(state.traineeTurns>=8||!['hard','steady','rest','safe'].includes(mode))return;
- let target=null,before=0,gain=0,outcome='',narration='',energyChange=0;
+ if((state.traineeTurns>=8&&!state.forcedRestTurns)||!['hard','steady','rest','safe'].includes(mode))return;
+ if(state.forcedRestTurns>0&&mode!=='rest'){render();return;}
+ const forcedRest=state.forcedRestTurns>0;
+ const recoveryAtStart=state.recoveryMonths;
+ let target=null,before=0,gain=0,outcome='',narration='',energyChange=0,injuryMessage='',injuryLoss=0;
+ const injuryAtStart=state.injury;const energyAtStart=state.energy;
  if(mode==='rest'){
   outcome='휴식 완료';
   energyChange=randomInt(18,26);
   narration='충분한 휴식으로 컨디션을 회복했다.';
+  if(forcedRest){injuryMessage='심각한 부상으로 1개월 강제 휴식했다. 이후 3개월간 성장 효율이 70%로 제한된다.';state.forcedRestTurns=0;state.injury=null;}
+  else if(state.injury){injuryMessage=state.injury==='serious'?'심각한 부상이 경미한 부상으로 호전됐다.':'경미한 부상이 완치됐다.';state.injury=state.injury==='serious'?'minor':null;}
  }else{
   const eligible=state.selected.filter(k=>keys.includes(k));
   if(!eligible.length)return;
@@ -411,28 +469,56 @@ function train(mode){
   const chance=mode==='hard'?.30:mode==='steady'?.80:1;
   const success=Math.random()<chance;
   if(success){
-   gain=mode==='hard'?randomInt(4,7):mode==='steady'?randomInt(1,3):1;
+   gain=mode==='hard'?randomInt(8,12):mode==='steady'?randomInt(1,3):1;
+   if(injuryAtStart==='serious')gain=Math.max(0,gain-2);
+   else if(injuryAtStart==='minor')gain=Math.max(0,gain-1);
+   if(recoveryAtStart>0)gain=Math.max(0,Math.round(gain*.7));
    state.stats[target]=Math.min(100,before+gain);
    outcome='성공';
-   energyChange=mode==='hard'?-randomInt(10,15):mode==='steady'?-randomInt(3,6):-randomInt(2,4);
+   energyChange=mode==='hard'?-randomInt(7,11):mode==='steady'?-randomInt(3,6):-randomInt(2,4);
    narration=mode==='hard'?'강도 높은 훈련이 큰 성과로 이어졌다.':mode==='steady'?'꾸준히 연습한 만큼 실력이 늘었다.':'안정적으로 훈련해 실력을 조금 높였다.';
   }else{
    outcome='실패';
-   energyChange=mode==='hard'?-randomInt(18,25):-randomInt(5,9);
-   narration=mode==='hard'?'무리한 훈련으로 피로가 크게 쌓였다.':'오늘은 성과가 없었다. 컨디션이 조금 떨어졌다.';
+   const failureLoss=mode==='hard'?randomInt(1,2):randomInt(1,2);
+   state.stats[target]=Math.max(0,before-failureLoss);
+   energyChange=mode==='hard'?-randomInt(12,18):-randomInt(5,9);
+   narration=mode==='hard'?`훈련 실패로 ${target} 능력치가 ${before-state.stats[target]} 하락하고 피로가 크게 쌓였다.`:`훈련 실패로 ${target} 능력치가 ${before-state.stats[target]} 하락하고 컨디션이 떨어졌다.`;
+
   }
  }
  state.traineeTurns++;
  const previousEnergy=state.energy;
  state.energy=clamp(state.energy+energyChange,0,100);
- state.trainingLog.push(`${state.traineeTurns}턴 · ${mode==='hard'?'혹독한 훈련':mode==='steady'?'꾸준한 훈련':mode==='safe'?'안정적인 훈련':'휴식'} · ${outcome} · ${target?target+' +'+(state.stats[target]-before):'능력치 변화 없음'} · 컨디션 ${previousEnergy}→${state.energy} · ${narration}`);
- state.lastTrainingResult={mode,outcome,target,gain:target?state.stats[target]-before:0,energyBefore:previousEnergy,energyAfter:state.energy,narration};
- if(mode!=='rest')state.fanSupport=clamp(state.fanSupport+(outcome==='성공'?1:mode==='hard'?-2:0),0,100);
- if(state.traineeTurns===8){evaluateDebut();save();renderAudition();go('audition');}
- else{
-  state.pendingEvent=pickTraineeEvent();
-  save();if(state.pendingEvent){renderEvent();go('traineeEvent')}else render();
+ // 부상 판정은 훈련 시작 시 컨디션을 기준으로 한다. 휴식은 부상 판정을 하지 않는다.
+ if(mode!=='rest'){
+  const risk=injuryOdds(energyAtStart),roll=Math.random();
+  const severity=roll<risk.serious?'serious':roll<risk.serious+risk.minor?'minor':null;
+  if(severity){
+   const actualSeverity=(severity==='minor'&&state.injury==='serious')?'serious':severity;
+   const affected=target||state.selected[0];
+   if(affected){
+    injuryLoss=severity==='serious'?randomInt(3,5):randomInt(1,2);
+    state.stats[affected]=Math.max(0,state.stats[affected]-injuryLoss);
+   }
+   if(severity==='serious')state.energy=clamp(state.energy-randomInt(12,20),0,100);
+   if(severity==='serious'||!state.injury)state.injury=severity;
+   if(severity==='serious'){state.forcedRestTurns=1;state.recoveryMonths=3;}
+   injuryMessage=(severity==='serious'?'심각한 부상!':'경미한 부상!')+' '+affected+' 능력치 -'+injuryLoss+'. '+(severity==='serious'?'다음 1개월 강제 휴식 + 이후 3개월 성장 효율 -30%. ':'')+'휴식으로 치료할 수 있다.';
+  }
  }
+
+ if(recoveryAtStart>0&&!forcedRest&&!state.forcedRestTurns)state.recoveryMonths=Math.max(0,state.recoveryMonths-1);
+ state.trainingLog.push(`${state.traineeTurns}턴 · ${mode==='hard'?'혹독한 훈련':mode==='steady'?'꾸준한 훈련':mode==='safe'?'안정적인 훈련':'휴식'} · ${outcome} · ${target?target+' '+(state.stats[target]-before>=0?'+':'')+(state.stats[target]-before):'능력치 변화 없음'} · 컨디션 ${previousEnergy}→${state.energy} · ${narration} ${injuryMessage}`);
+ state.lastTrainingResult={mode,outcome,target,gain:target?state.stats[target]-before:0,energyBefore:previousEnergy,energyAfter:state.energy,narration,injuryMessage,injuryLoss};
+ if(mode!=='rest')state.fanSupport=clamp(state.fanSupport+(outcome==='성공'?1:mode==='hard'?-2:0),0,100);
+ state.trainingResultPending=true;
+ if(state.traineeTurns>=8&&!state.forcedRestTurns){
+  evaluateDebut();save();pendingTrainingContinuation='audition';
+ }else{
+  state.pendingEvent=state.traineeTurns>=8?null:pickTraineeEvent();
+  save();pendingTrainingContinuation=state.pendingEvent?'event':'game';
+ }
+ showTrainingResult();
 }
 function clamp(n,lo,hi){return Math.max(lo,Math.min(hi,n))}
 const optionalEvents={
@@ -527,7 +613,9 @@ function resolveEvent(index){
 function evaluateDebut(){
  const focus=state.selected.reduce((sum,k)=>sum+state.stats[k],0);
  const versatility=Math.min(...keys.map(k=>state.stats[k]));
- const score=clamp(Math.round(32+focus*1.05+versatility*.45+(state.debutBonus||0)+randomInt(-9,9)),35,90);
+ const fatiguePenalty=state.injury==='serious'?12:state.injury==='minor'?4:0;
+ state.auditionFatiguePenalty=fatiguePenalty;
+ const score=clamp(Math.round(32+focus*1.05+versatility*.45+(state.debutBonus||0)+randomInt(-9,9)-fatiguePenalty),20,90);
  state.auditionScore=score;
  const visual=state.stats['비주얼'],vocal=state.stats['보컬'],dance=state.stats['댄스'];
  const scout=state.specialAudition;
@@ -539,14 +627,14 @@ const agencyLabels={large:'대형 기획사',medium:'중형 기획사',small:'�
 function renderAudition(){
  if(!state?.auditionResults)return;
  $('auditionScore').textContent=state.auditionScore+' / 100';
- $('auditionHint').textContent='기획사마다 보는 재능이 다릅니다. 합격은 능력과 운으로 결정됩니다.';
+ $('auditionHint').textContent='기획사마다 보는 재능이 다릅니다. 합격은 능력과 운으로 결정됩니다.'+(state.auditionFatiguePenalty?' 부상으로 오디션 점수 -'+state.auditionFatiguePenalty+'점 적용.':' 컨디션 감점 없음.');
  const entries=Object.entries(state.auditionResults);
  $('auditionChoices').innerHTML=entries.map(([k,r])=>`<button class="growth-choice" ${r.passed?'':'disabled'} onclick="acceptAgency('${k}')"><strong>${agencyLabels[k]} · ${r.passed?'합격':'불합격'}</strong><small>${r.passed?'계약 조건 확인 및 소속사 선택':'이번 오디션에서 불합격했습니다.'}</small></button>`).join('');
  $('auditionRetry').hidden=entries.some(([,r])=>r.passed);
 }
 function retryAudition(){
  if(!state?.auditionResults||Object.values(state.auditionResults).some(r=>r.passed))return;
- state.auditionResults=null;state.auditionScore=null;state.traineeTurns=7;state.energy=clamp(state.energy+12,30,100);
+ state.auditionResults=null;state.auditionScore=null;state.traineeTurns=7;state.forcedRestTurns=0;state.energy=clamp(state.energy+12,30,100);
  state.trainingLog.push('오디션 전원 불합격 · 추가 훈련 기회 획득');save();render();go('game');
 }
 function acceptAgency(size){
