@@ -203,20 +203,37 @@ body{background:var(--stage-bg);color:var(--stage-text)}
 .training-result-next{width:100%;min-height:54px;background:#d8fa59;color:#182019;border:0;border-radius:11px;font-weight:900;font-size:15px;position:sticky;bottom:0;cursor:pointer}
 .growth-reveal{background:#11191b;border:1px solid #46564c;border-radius:16px;padding:18px 15px 16px;margin:17px 0 4px;overflow:hidden}.growth-reveal[hidden]{display:none}.growth-top{display:flex;justify-content:space-between;gap:8px;color:#c5d3cd;font-size:12px;font-weight:800}.growth-top span:last-child{color:#d8fa59}.growth-final{text-align:center;font-size:18px;font-weight:900;margin-top:16px;min-height:26px;color:#d8fa59}.growth-reveal.finished{border-color:#9ab65b;box-shadow:0 0 26px #d8fa5916}.growth-reveal.negative .growth-final{color:#ff9f9e}.training-result-next:disabled{opacity:.4;cursor:wait}body.training-result-open{overflow:hidden}
 
-/* Three-row illuminated training outcome selector */
-.growth-list-mode .growth-options{display:flex;flex-direction:column;gap:10px;margin:20px 0 15px}
-.growth-list-mode .growth-option{display:flex;align-items:center;gap:15px;min-height:68px;padding:12px 16px;border:2px solid #33413d;border-radius:13px;background:#1a2425;color:#b8c4bf;transition:background .12s ease,border-color .12s ease,box-shadow .12s ease,color .12s ease;transform:translateZ(0)}
-.growth-list-mode .growth-option strong{font-size:24px;font-weight:900;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
-.growth-list-mode .growth-option-arrow{font-size:24px;opacity:.15;transition:opacity .12s ease}
-.growth-list-mode .growth-option-lamp{margin-left:auto;width:12px;height:12px;border-radius:50%;background:#52605b;flex-shrink:0}
-.growth-list-mode .growth-option.lit{background:#35442d;border-color:#d8fa59;color:#eaffad;box-shadow:0 0 15px #d8fa5936,inset 0 0 16px #d8fa5910}
-.growth-list-mode .growth-option.lit .growth-option-arrow{opacity:1;color:#d8fa59}
-.growth-list-mode .growth-option.lit .growth-option-lamp{background:#d8fa59;box-shadow:0 0 14px #d8fa59}
-.growth-list-mode .growth-option.lit.result-negative{background:#49272c;border-color:#ff5267;color:#ffb7bf;box-shadow:0 0 20px #ff526744,inset 0 0 15px #ff526711}
-.growth-list-mode .growth-option.lit.result-negative .growth-option-arrow{color:#ff5267}
-.growth-list-mode .growth-option.lit.result-negative .growth-option-lamp{background:#ff5267;box-shadow:0 0 15px #ff5267}
-.growth-list-mode .growth-final{font-size:14px}
-@media(prefers-reduced-motion:reduce){.growth-list-mode .growth-option{transition:none}}
+/* STAGE / editorial result reel — restrained, high-contrast, no arcade lamps */
+.growth-reveal.growth-list-mode{background:#101719;border:1px solid #33423e;border-radius:18px;padding:23px 19px 20px;margin-top:22px}
+.growth-list-mode .growth-top{align-items:center;text-transform:none;letter-spacing:.01em;font-size:12px}
+.growth-list-mode .growth-top span:first-child{color:#e4eee8;font-weight:800}
+.growth-list-mode .growth-top span:last-child{color:#8d9c95;font-size:11px;letter-spacing:.06em}
+.growth-list-mode .growth-readout{display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid #293630;padding:19px 2px 18px;margin-bottom:19px}
+.growth-list-mode .growth-readout-label{font-size:10px;color:#87988e;letter-spacing:.16em;font-weight:800}
+.growth-list-mode .growth-readout-value{font-size:38px;color:#f0f4f0;font-weight:850;font-variant-numeric:tabular-nums;letter-spacing:-.06em}
+.growth-list-mode .growth-options{position:relative;display:grid;gap:8px;margin:0 0 15px}
+.growth-list-mode .growth-option{will-change:transform;transform:scale(1);transform-origin:center;position:relative;display:flex;align-items:center;min-height:69px;padding:12px 17px;border:1px solid #2c3935;border-radius:10px;background:#192220;color:#a6b3ac;transition:transform .24s cubic-bezier(.2,.75,.25,1),background .24s ease,border-color .24s ease,box-shadow .24s ease,color .24s ease;overflow:visible}
+.growth-list-mode .growth-option:before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent;transition:background .22s ease}
+.growth-list-mode .growth-option-arrow{font-size:15px;font-weight:900;color:#687b71;opacity:0;transform:translateX(-7px);transition:opacity .2s,transform .2s;line-height:1}
+.growth-list-mode .growth-option strong{font-size:19px;line-height:1.2;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;min-width:64px;margin-left:4px}
+.growth-list-mode .growth-option-caption{margin-left:auto;color:#73847b;font-size:12px;font-weight:500;letter-spacing:0}
+.growth-list-mode .growth-option-lamp{display:none}
+.growth-list-mode .growth-option.lit{transform:scale(1.04);z-index:2;background:#29352c;border-color:#a7c45a;color:#e7ffa3;box-shadow:inset 0 0 0 1px #a7c45a25,0 4px 20px #d8fa5909}
+.growth-list-mode .growth-option.lit:before{background:#d8fa59}
+.growth-list-mode .growth-option.lit .growth-option-arrow{opacity:1;transform:translateX(0);color:#d8fa59}
+.growth-list-mode .growth-option.lit .growth-option-caption{color:#b9cf8b}
+.growth-list-mode .growth-option.lit.settled{transform:scale(1.04);animation:growthSettle .42s cubic-bezier(.2,.8,.2,1) both}@keyframes growthSettle{0%{transform:scale(1.04)}45%{transform:scale(1.07)}100%{transform:scale(1.04)}}
+.growth-list-mode .growth-option.lit.result-negative{background:#342329;border-color:#e96676;color:#ffc4cb;box-shadow:inset 0 0 0 1px #e9667620,0 4px 20px #ff526714}
+.growth-list-mode .growth-option.lit.result-negative:before{background:#ff6478}
+.growth-list-mode .growth-option.lit.result-negative .growth-option-arrow,.growth-list-mode .growth-option.lit.result-negative .growth-option-caption{color:#ff8d9c}
+.growth-list-mode .growth-option.lit.result-positive{background:#303f28}
+.growth-list-mode .growth-final{min-height:20px;margin:14px 0 0;font-size:11px;letter-spacing:.03em;font-weight:650;color:#8d9e95;text-align:center}
+.growth-list-mode.finished .growth-final{font-size:13px;font-weight:850;color:#d8fa59}
+.growth-list-mode.finished.negative .growth-final{color:#ff8997}
+.growth-reveal.finished{border-color:#56694a;box-shadow:0 0 20px #d8fa590a}
+.growth-reveal.finished.negative{border-color:#7b454c;box-shadow:0 0 20px #ff52670a}
+.training-result-next:disabled{opacity:.4;cursor:wait}body.training-result-open{overflow:hidden}
+@media(prefers-reduced-motion:reduce){.growth-list-mode .growth-option,.growth-list-mode .growth-option-arrow{transition:none;animation:none!important}}
 </style></head><body><main class="app">
 <section class="screen active" id="home">
 <div class="poster-topbar"><span class="poster-top-label">STAGE / IDOL LIFE SIMULATOR</span><div class="poster-top-controls"><span class="poster-edition">FIRST EDITION</span><button aria-label="사운드 끄기" aria-pressed="true" class="sound-toggle" id="soundToggle" onclick="toggleSound()" title="사운드 ON/OFF" type="button"></button></div></div>
@@ -466,7 +483,7 @@ function runGrowthReveal(items){
  panel.hidden=false;panel.className='growth-reveal growth-list-mode';
  $('trainingResultValues').hidden=true;$('trainingResultNarrative').hidden=true;
  $('growthTarget').textContent=main.label+' 성장 판정';$('growthPhase').textContent='판정 중';
- $('growthFinal').textContent='화면을 터치하면 즉시 공개';$('trainingResultNext').disabled=true;
+ $('growthFinal').textContent='화면을 터치하면 판정을 건너뜁니다';$('trainingResultNext').disabled=true;
  const diff=main.now-main.old;
  // Three distinct, plausible-looking outcomes. Only the precomputed actual result is authoritative.
  const candidates=[diff];
@@ -477,30 +494,32 @@ function runGrowthReveal(items){
  // Deterministic ordering makes the display stable without revealing which outcome is real.
  candidates.sort((x,y)=>y-x);
  const winning=candidates.indexOf(diff);
+ const readout=document.createElement('div');readout.className='growth-readout';readout.innerHTML='<span class="growth-readout-label">CURRENT LEVEL</span><strong class="growth-readout-value"></strong>';readout.querySelector('strong').textContent=main.old;
  const list=document.createElement('div');list.className='growth-options';
  const optionEls=candidates.map((value)=>{
   const el=document.createElement('div');el.className='growth-option';
-  const arrow=document.createElement('span');arrow.className='growth-option-arrow';arrow.textContent='➜';
-  const label=document.createElement('strong');label.textContent=Math.abs(value)+(value>0?' 상승!':value<0?' 하락!':' 변화 없음');
+  const arrow=document.createElement('span');arrow.className='growth-option-arrow';arrow.textContent='';
+  const label=document.createElement('strong');label.textContent=(value>0?'▲ ':value<0?'▼ ':'― ')+Math.abs(value);
+  const caption=document.createElement('span');caption.className='growth-option-caption';caption.textContent=value>0?'성장':value<0?'훈련 역효과':'변화 없음';
   const lamp=document.createElement('span');lamp.className='growth-option-lamp';
-  el.append(arrow,label,lamp);list.append(el);return el;
+  el.append(arrow,label,caption,lamp);list.append(el);return el;
  });
- const mount=$('growthOptionsMount');mount.replaceChildren(list);
+ const mount=$('growthOptionsMount');mount.replaceChildren(readout,list);
  function light(index,final=false){
-  optionEls.forEach((el,i)=>{el.className='growth-option'+(i===index?' lit':'')+(i===index&&final?(diff<0?' result-negative':' result-positive'):'');});
+  optionEls.forEach((el,i)=>{el.className='growth-option'+(i===index?' lit':'')+(i===index&&final?(diff<0?' result-negative':' result-positive'):'')+(i===index&&final?' settled':'');});
  }
  function finish(skipped){
   if(!growthRevealActive)return;
   growthRevealActive=false;if(growthFrame!==null)cancelAnimationFrame(growthFrame);growthFrame=null;
   light(winning,true);panel.classList.add('finished');if(diff<0)panel.classList.add('negative');
   $('growthPhase').textContent='판정 확정';
-  $('growthFinal').textContent=diff>0?'성장 성공! +'+diff:diff<0?'성장 실패! '+diff:'변화 없음';
+  $('growthFinal').textContent=diff>0?'성장 확정  ·  +'+diff:diff<0?'성장 하락  ·  '+diff:'변화 없음';
   $('trainingResultValues').hidden=false;$('trainingResultNarrative').hidden=false;$('trainingResultNext').disabled=false;
   if(!skipped)growthTone(diff>0?1040:350,.18);
   growthFinish=null;
  }
  growthRevealActive=true;growthFinish=finish;
- const duration=4400,start=performance.now();let last=-1;
+ const duration=4100,start=performance.now();let last=-1;
  function frame(now){
   if(!growthRevealActive)return;
   const t=Math.min(1,(now-start)/duration);
