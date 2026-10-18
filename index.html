@@ -191,7 +191,7 @@ body{background:var(--stage-bg);color:var(--stage-text)}
 .training-result-kicker{color:#d8fa59;font-size:11px;letter-spacing:.17em;font-weight:800}
 .training-result-dialog h2{font-size:clamp(22px,6vw,28px);line-height:1.3;margin:10px 0 9px;word-break:keep-all}
 .training-result-dialog p{color:#bdc9c5;font-size:13px;line-height:1.65;margin:0;word-break:keep-all}
-.training-result-values{display:flex;flex-direction:column;gap:8px;margin:20px 0}
+.training-result-values[hidden],#trainingResultNarrative[hidden]{display:none!important}.training-result-values{display:flex;flex-direction:column;gap:8px;margin:20px 0}
 .result-section-label{font-size:11px;font-weight:800;letter-spacing:.09em;color:#9eaea7;margin:8px 0 2px}
 .result-stat-row{display:grid;grid-template-columns:minmax(75px,1fr) auto auto;align-items:center;gap:12px;background:#192125;border:1px solid #35433f;border-radius:11px;padding:12px 13px;min-height:53px}
 .result-stat-row .result-name{font-size:13px;font-weight:700;color:#f1f5f1}
@@ -202,6 +202,21 @@ body{background:var(--stage-bg);color:var(--stage-text)}
 .result-footer-note{color:#94a69e;font-size:11px;line-height:1.5;margin-top:2px}
 .training-result-next{width:100%;min-height:54px;background:#d8fa59;color:#182019;border:0;border-radius:11px;font-weight:900;font-size:15px;position:sticky;bottom:0;cursor:pointer}
 .growth-reveal{background:#11191b;border:1px solid #46564c;border-radius:16px;padding:18px 15px 16px;margin:17px 0 4px;overflow:hidden}.growth-reveal[hidden]{display:none}.growth-top{display:flex;justify-content:space-between;gap:8px;color:#c5d3cd;font-size:12px;font-weight:800}.growth-top span:last-child{color:#d8fa59}.growth-numbers{display:flex;justify-content:center;align-items:center;gap:15px;font-variant-numeric:tabular-nums;margin:13px 0 16px}.growth-numbers span:first-child{color:#a9b8b2;font-size:27px;font-weight:800}.growth-arrow{color:#71817b;font-size:22px}.growth-numbers span:last-child{color:#d8fa59;font-size:44px;font-weight:950;min-width:70px;text-align:center}.growth-track{position:relative;height:18px;border-radius:20px;background:linear-gradient(90deg,#ec8795 0%,#e9b86d 35%,#d8fa59 72%,#9ee7b8 100%);border:3px solid #34413c}.growth-track-segments{position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(10% - 2px),#101719 10%);opacity:.65;pointer-events:none}.growth-track-marker{position:absolute;z-index:2;left:0;top:-10px;width:4px;height:32px;border-radius:3px;background:#fff;box-shadow:0 0 9px #fff;transform:translateX(-50%)}.growth-ticks{display:flex;justify-content:space-between;color:#8fa39b;font-size:11px;font-weight:800;margin-top:8px}.growth-final{text-align:center;font-size:18px;font-weight:900;margin-top:16px;min-height:26px;color:#d8fa59}.growth-reveal:not(.finished) .growth-track-marker{will-change:left}.growth-reveal:not(.finished) .growth-track-fill{will-change:width}.growth-reveal.finished{border-color:#9ab65b;box-shadow:0 0 26px #d8fa5916}.growth-reveal.negative .growth-final,.growth-reveal.negative .growth-numbers span:last-child{color:#ff9f9e}.training-result-next:disabled{opacity:.4;cursor:wait}body.training-result-open{overflow:hidden}
+
+/* Three-row illuminated training outcome selector */
+.growth-list-mode .growth-options{display:flex;flex-direction:column;gap:10px;margin:20px 0 15px}
+.growth-list-mode .growth-option{display:flex;align-items:center;gap:15px;min-height:68px;padding:12px 16px;border:2px solid #33413d;border-radius:13px;background:#1a2425;color:#b8c4bf;transition:background .12s ease,border-color .12s ease,box-shadow .12s ease,color .12s ease;transform:translateZ(0)}
+.growth-list-mode .growth-option strong{font-size:24px;font-weight:900;letter-spacing:-.6px;font-variant-numeric:tabular-nums}
+.growth-list-mode .growth-option-arrow{font-size:24px;opacity:.15;transition:opacity .12s ease}
+.growth-list-mode .growth-option-lamp{margin-left:auto;width:12px;height:12px;border-radius:50%;background:#52605b;flex-shrink:0}
+.growth-list-mode .growth-option.lit{background:#35442d;border-color:#d8fa59;color:#eaffad;box-shadow:0 0 15px #d8fa5936,inset 0 0 16px #d8fa5910}
+.growth-list-mode .growth-option.lit .growth-option-arrow{opacity:1;color:#d8fa59}
+.growth-list-mode .growth-option.lit .growth-option-lamp{background:#d8fa59;box-shadow:0 0 14px #d8fa59}
+.growth-list-mode .growth-option.lit.result-negative{background:#49272c;border-color:#ff5267;color:#ffb7bf;box-shadow:0 0 20px #ff526744,inset 0 0 15px #ff526711}
+.growth-list-mode .growth-option.lit.result-negative .growth-option-arrow{color:#ff5267}
+.growth-list-mode .growth-option.lit.result-negative .growth-option-lamp{background:#ff5267;box-shadow:0 0 15px #ff5267}
+.growth-list-mode .growth-final{font-size:14px}
+@media(prefers-reduced-motion:reduce){.growth-list-mode .growth-option{transition:none}}
 </style></head><body><main class="app">
 <section class="screen active" id="home">
 <div class="poster-topbar"><span class="poster-top-label">STAGE / IDOL LIFE SIMULATOR</span><div class="poster-top-controls"><span class="poster-edition">FIRST EDITION</span><button aria-label="사운드 끄기" aria-pressed="true" class="sound-toggle" id="soundToggle" onclick="toggleSound()" title="사운드 ON/OFF" type="button"></button></div></div>
@@ -447,55 +462,62 @@ function runGrowthReveal(items){
  if(growthFrame!==null)cancelAnimationFrame(growthFrame);
  clearTimeout(growthTimer);growthFrame=null;growthRevealActive=false;growthFinish=null;
  const panel=$('growthReveal'),main=items.find(x=>keys.includes(x.label));
- if(!main){panel.hidden=true;$('trainingResultValues').style.visibility='visible';$('trainingResultNext').disabled=false;return;}
- panel.hidden=false;panel.className='growth-reveal';$('trainingResultValues').style.visibility='hidden';
+ if(!main){panel.hidden=true;$('trainingResultValues').hidden=false;$('trainingResultNarrative').hidden=false;$('trainingResultNext').disabled=false;return;}
+ panel.hidden=false;panel.className='growth-reveal growth-list-mode';
+ $('trainingResultValues').hidden=true;$('trainingResultNarrative').hidden=true;
  $('growthTarget').textContent=main.label+' 성장 판정';$('growthPhase').textContent='판정 중';
- $('growthBefore').textContent=main.old;$('growthFinal').textContent='화면을 터치하면 건너뛰기';$('trainingResultNext').disabled=true;
- const diff=main.now-main.old,low=Math.min(-5,diff-3),high=Math.max(15,diff+3),range=high-low;
- $('growthTicks').innerHTML=`<span>${low>0?'+':''}${low}</span><span>±0</span><span>+${high}</span>`;
- const duration=3400,finalPosition=(diff-low)/range;
- const marker=$('growthMarker'),fill=$('growthFill'),number=$('growthAfter');
- function draw(position){
-  const fraction=Math.max(0,Math.min(1,position));
-  marker.style.left=(fraction*100)+'%';fill.style.width=(fraction*100)+'%';
-  number.textContent=main.old+Math.round(low+fraction*range);
+ $('growthFinal').textContent='화면을 터치하면 결과 공개';$('trainingResultNext').disabled=true;
+ const diff=main.now-main.old;
+ // Three distinct, plausible-looking outcomes. Only the precomputed actual result is authoritative.
+ const candidates=[diff];
+ for(const n of [diff>0?Math.max(1,diff-2):3,diff<0?Math.min(-1,diff+2):-2,1,3,-1,-3,8,12]){
+  if(!candidates.includes(n))candidates.push(n);
+  if(candidates.length===3)break;
+ }
+ // Deterministic ordering makes the display stable without revealing which outcome is real.
+ candidates.sort((x,y)=>y-x);
+ const winning=candidates.indexOf(diff);
+ const list=document.createElement('div');list.className='growth-options';
+ const optionEls=candidates.map((value)=>{
+  const el=document.createElement('div');el.className='growth-option';
+  const arrow=document.createElement('span');arrow.className='growth-option-arrow';arrow.textContent='➜';
+  const label=document.createElement('strong');label.textContent=Math.abs(value)+(value>0?' 상승!':value<0?' 하락!':' 변화 없음');
+  const lamp=document.createElement('span');lamp.className='growth-option-lamp';
+  el.append(arrow,label,lamp);list.append(el);return el;
+ });
+ const old=$('growthNumbersPlaceholder')||document.querySelector('#growthReveal .growth-numbers');
+ if(old)old.hidden=true;
+ const track=panel.querySelector('.growth-track');if(track)track.hidden=true;
+ const ticks=$('growthTicks');if(ticks)ticks.hidden=true;
+ const previous=panel.querySelector('.growth-options');if(previous)previous.remove();
+ $('growthFinal').before(list);
+ function light(index,final=false){
+  optionEls.forEach((el,i)=>{el.className='growth-option'+(i===index?' lit':'')+(i===index&&final?(diff<0?' result-negative':' result-positive'):'');});
  }
  function finish(skipped){
   if(!growthRevealActive)return;
   growthRevealActive=false;if(growthFrame!==null)cancelAnimationFrame(growthFrame);growthFrame=null;
-  draw(finalPosition);number.textContent=main.now;
-  panel.classList.add('finished');if(diff<0)panel.classList.add('negative');
+  light(winning,true);panel.classList.add('finished');if(diff<0)panel.classList.add('negative');
   $('growthPhase').textContent='판정 확정';
   $('growthFinal').textContent=diff>0?'성장 성공! +'+diff:diff<0?'성장 실패! '+diff:'변화 없음';
-  $('trainingResultValues').style.visibility='visible';$('trainingResultNext').disabled=false;
+  $('trainingResultValues').hidden=false;$('trainingResultNarrative').hidden=false;$('trainingResultNext').disabled=false;
   if(!skipped)growthTone(diff>0?1040:350,.18);
   growthFinish=null;
  }
  growthRevealActive=true;growthFinish=finish;
- // Smooth continuous sweep, then a progressively slowing final approach.
- // The actual outcome is fixed before this visual animation starts.
- const start=performance.now();let lastBeep=-1;
+ const duration=4400,start=performance.now();let last=-1;
  function frame(now){
   if(!growthRevealActive)return;
   const t=Math.min(1,(now-start)/duration);
-  let position;
-  if(t<.68){
-   const phase=t/.68;
-   const cycles=3.7*phase-1.4*phase*phase;
-   position=.5-.49*Math.cos(cycles*Math.PI*2);
-  }else{
-   const u=(t-.68)/.32;
-   const ease=1-Math.pow(1-u,4);
-   const from=.5-.49*Math.cos((3.7-1.4)*Math.PI*2);
-   position=from+(finalPosition-from)*ease;
-  }
-  draw(position);
-  const beat=Math.floor(t*24);
-  if(beat!==lastBeep&&t<.78){lastBeep=beat;if(beat%2===0)growthTone(480+beat*13,.024);}
+  // Smooth continuous time-based animation, with decelerating stepped highlights.
+  const totalSteps=24,progress=1-Math.pow(1-t,2.7);
+  const step=Math.min(totalSteps-1,Math.floor(progress*totalSteps));
+  const index=t>=.985?winning:step%3;
+  if(step!==last){last=step;light(index);if(step%3===0&&t<.85)growthTone(450+step*10,.028);}
   if(t>=1){finish(false);return;}
   growthFrame=requestAnimationFrame(frame);
  }
- draw(.01);growthFrame=requestAnimationFrame(frame);
+ light(0);growthFrame=requestAnimationFrame(frame);
 }
 // Tap anywhere on the result overlay to reveal the predetermined outcome immediately.
 $('trainingResultShade').addEventListener('pointerdown',e=>{
@@ -507,7 +529,7 @@ function showStatResult(){
  const r=state?.statResultPending;if(!r)return;
  pendingStatContinuation=r.next;
  $('trainingResultKicker').textContent='STAGE / RESULT';
- $('trainingResultTitle').textContent=r.title;
+ $('trainingResultTitle').textContent='능력치 변화 판정';
  $('trainingResultNarrative').textContent=r.description;
  const parsed=(r.rows||[]).map(text=>{const match=text.match(/^(.*?)\s+(-?\d+)\s*→\s*(-?\d+)\s*\([+-]?\d+\)$/);return match?{label:match[1],old:Number(match[2]),now:Number(match[3])}:null;}).filter(Boolean);
  showResultRows(parsed);runGrowthReveal(parsed);
@@ -520,7 +542,7 @@ function showTrainingResult(){
  const r=state?.lastTrainingResult;if(!r)return;
  const names={hard:'혹독한 훈련',steady:'꾸준한 훈련',safe:'안정적인 훈련',rest:'휴식'};
  $('trainingResultKicker').textContent='STAGE / TRAINING · '+state.traineeTurns+' / 8';
- $('trainingResultTitle').textContent=(names[r.mode]||'훈련')+' · '+r.outcome;
+ $('trainingResultTitle').textContent=(names[r.mode]||'훈련')+' · 성장 판정';
  $('trainingResultNarrative').textContent=r.narration+(r.injuryMessage?' '+r.injuryMessage:'')+' 다음 훈련 부상 위험: '+injuryRiskText(r.energyAfter);
  const items=[];
  if(r.target&&Number.isFinite(Number(r.gain))){const after=state.stats[r.target];items.push({label:r.target,old:after-Number(r.gain),now:after});}
