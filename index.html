@@ -329,7 +329,7 @@ function go(id){
 function updateSelection(){document.querySelectorAll('[data-spec]').forEach(b=>b.classList.toggle('selected',selected.includes(b.dataset.spec)));$('pickCount').textContent=`(${selected.length}/2)`;if($('confirmTalent'))$('confirmTalent').disabled=!draft||draft.choice<0||selected.length!==2;}
 document.querySelectorAll('[data-spec]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.spec;if(selected.includes(k))selected=selected.filter(v=>v!==k);else if(selected.length<2)selected.push(k);if(draft)draft.selected=[...selected];updateSelection()}));
 function save(){if(state)renderStatus();localStorage.setItem('stage-save-v17',JSON.stringify(state));$('continue').disabled=false}
-function loadGame(){try{state=JSON.parse(localStorage.getItem('stage-save-v17'));if(!state)throw 0;normalizeState();render();if(state.trainingResultPending&&state.lastTrainingResult){go('game');pendingTrainingContinuation=state.auditionResults?'audition':state.pendingEvent?'event':'game';showTrainingResult()}else if(state.auditionResults&&!state.debuted){renderAudition();go('audition')}else if(state.debuted){if(state.switchOffer)renderSwitchOffer();else if(state.careerSeason>0)openCareer();else showDebutDetails()}else if(state.pendingEvent){renderEvent();go('traineeEvent')}else go('game')}catch(e){alert('저장된 게임이 없습니다.')}}
+function loadGame(){try{state=JSON.parse(localStorage.getItem('stage-save-v17'));if(!state)throw 0;normalizeState();render();if(state.statResultPending){go(state.debuted?'career':'game');showStatResult()}else if(state.trainingResultPending&&state.lastTrainingResult){go('game');pendingTrainingContinuation=state.auditionResults?'audition':state.pendingEvent?'event':'game';showTrainingResult()}else if(state.auditionResults&&!state.debuted){renderAudition();go('audition')}else if(state.debuted){if(state.switchOffer)renderSwitchOffer();else if(state.careerSeason>0)openCareer();else showDebutDetails()}else if(state.pendingEvent){renderEvent();go('traineeEvent')}else go('game')}catch(e){alert('저장된 게임이 없습니다.')}}
 function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 function rollStats(){
   // 총합 60, 개별 시작 최대 20. 주력은 확률 가중치만 부여.
@@ -383,7 +383,7 @@ function confirmRoll(){if(!draft||!draft.confirmed||draft.choice<0||selected.len
  trainingFocus=state.selected[0]||'보컬';save();render();go('game');}
 function normalizeState(){
  if(!state)return;
- state.year??=2028;state.actions??=state.trained?2:0;state.trainingLog??=[];state.monthsCompleted??=0;state.lastReport??='';state.careerHistory??=[];state.energy??=80;state.traineeTurns??=Math.min(8,(state.monthsCompleted||0)*2+(state.actions||0));state.debuted??=false;state.injury??=null;state.forcedRestTurns??=0;state.recoveryMonths??=0;state.trainingResultPending??=false;state.fanSupport??=65;state.agencyTrust??=null;state.eventFlags??={};state.eventQueue??=[];state.specialAudition??=null;state.auditionResults??=null;state.auditionScore??=null;state.agencySize??=null;state.eventResults??=[];state.pendingEvent??=null;state.activeFocus??=[...state.selected];state.careerSeason??=0;state.investments??={};state.switchOffer??=null;state.switchBonus??=null;state.lastSwitchSeason??=-10;state.fans??=Math.max(120,Math.round((state.debut?.score||50)*35));state.cash??=1500;state.albumCount??=0;state.albumHistory??=[];state.albumThisSeason??=false;state.lastAlbumResult??='';
+ state.year??=2028;state.actions??=state.trained?2:0;state.trainingLog??=[];state.monthsCompleted??=0;state.lastReport??='';state.careerHistory??=[];state.energy??=80;state.traineeTurns??=Math.min(8,(state.monthsCompleted||0)*2+(state.actions||0));state.debuted??=false;state.injury??=null;state.forcedRestTurns??=0;state.recoveryMonths??=0;state.trainingResultPending??=false;state.statResultPending??=null;state.fanSupport??=65;state.agencyTrust??=null;state.eventFlags??={};state.eventQueue??=[];state.specialAudition??=null;state.auditionResults??=null;state.auditionScore??=null;state.agencySize??=null;state.eventResults??=[];state.pendingEvent??=null;state.activeFocus??=[...state.selected];state.careerSeason??=0;state.investments??={};state.switchOffer??=null;state.switchBonus??=null;state.lastSwitchSeason??=-10;state.fans??=Math.max(120,Math.round((state.debut?.score||50)*35));state.cash??=1500;state.albumCount??=0;state.albumHistory??=[];state.albumThisSeason??=false;state.lastAlbumResult??='';
  if(state.month>12){state.year+=Math.floor((state.month-1)/12);state.month=(state.month-1)%12+1;}
  if(!keys.includes(trainingFocus))trainingFocus=state.selected?.[0]||'보컬';
 }
@@ -409,6 +409,29 @@ function render(){
  $('logHistory').textContent=(state.trainingLog||[]).join('\\n')||'아직 기록이 없습니다.';
 }
 
+let pendingStatContinuation=null;
+function statSnapshot(){return {stats:{...state.stats},energy:state.energy,fanSupport:state.fanSupport,agencyTrust:state.agencyTrust};}
+function openStatResult(title,before,description,next='game'){
+ const rows=[];
+ for(const k of keys){const old=before.stats[k],now=state.stats[k];if(old!==now)rows.push(`${k} ${old} → ${now} (${now-old>0?'+':''}${now-old})`);}
+ for(const [k,label] of [['energy','컨디션'],['fanSupport','팬덤 지지도'],['agencyTrust','기획사 신뢰도']]){
+  if(before[k]!==state[k]&&before[k]!=null&&state[k]!=null)rows.push(`${label} ${before[k]} → ${state[k]} (${state[k]-before[k]>0?'+':''}${state[k]-before[k]})`);
+ }
+ state.statResultPending={title,description,rows,next};save();showStatResult();
+}
+function showStatResult(){
+ const r=state?.statResultPending;if(!r)return;
+ pendingStatContinuation=r.next;
+ $('trainingResultKicker').textContent='CHOICE RESULT';
+ $('trainingResultTitle').textContent=r.title;
+ $('trainingResultNarrative').textContent=r.description;
+ $('trainingResultStat').textContent=r.rows.filter(x=>!x.startsWith('컨디션 ')).join(' / ')||'능력치 변화 없음';
+ $('trainingResultEnergy').textContent=r.rows.find(x=>x.startsWith('컨디션 '))||'컨디션 변화 없음';
+ $('trainingResultNext').textContent='결과 확인 →';
+ $('trainingResultShade').classList.add('open');$('trainingResultShade').setAttribute('aria-hidden','false');
+ document.body.classList.add('training-result-open');
+ $('trainingResultNext').focus();
+}
 let pendingTrainingContinuation=null;
 function showTrainingResult(){
  const r=state?.lastTrainingResult;if(!r)return;
@@ -426,6 +449,16 @@ function showTrainingResult(){
 }
 function continueAfterTraining(){
  if(!$('trainingResultShade').classList.contains('open'))return;
+ if(state?.statResultPending){
+  const next=state.statResultPending.next;
+  state.statResultPending=null;pendingStatContinuation=null;save();
+  $('trainingResultShade').classList.remove('open');$('trainingResultShade').setAttribute('aria-hidden','true');
+  document.body.classList.remove('training-result-open');
+  if(next==='switchOffer'){renderSwitchOffer();go('switchOffer');}
+  else if(next==='career'){renderCareer();go('career');}
+  else {render();go('game');}
+  return;
+ }
  $('trainingResultShade').classList.remove('open');$('trainingResultShade').setAttribute('aria-hidden','true');
  document.body.classList.remove('training-result-open');
  const next=pendingTrainingContinuation;pendingTrainingContinuation=null;state.trainingResultPending=false;save();
@@ -545,6 +578,7 @@ function pickTraineeEvent(){
 }
 function resolveOptionalEvent(id,index){
  const e=optionalEvents[id];if(!e||!e.choices[index])return;
+ const before=statSnapshot();
  const yes=index===0,good=Math.random()<.65;
  let message='';const s=state;
  if(id==='lesson'){if(yes){const k=s.selected[randomInt(0,1)];const d=good?2:0;s.stats[k]=clamp(s.stats[k]+d,0,100);s.energy=clamp(s.energy-(good?6:10),30,100);message=`${k} +${d} · 컨디션 변화`;}else{s.energy=clamp(s.energy+9,30,100);message='컨디션 +9';}}
@@ -555,7 +589,7 @@ function resolveOptionalEvent(id,index){
  if(id==='viral'){if(yes){s.fanSupport=clamp(s.fanSupport+(good?10:-7),0,100);message=good?'팬덤 지지도 +10':'팬덤 지지도 -7';}else message='추가 활동을 자제했다';}
  if(id==='producer'){if(yes){const k=s.selected[randomInt(0,1)];s.stats[k]=clamp(s.stats[k]+(good?3:0),0,100);message=good?`${k} +3`:'미팅이 성과 없이 끝났다';}else message='훈련을 이어갔다';}
  s.trainingLog.push(`특별 이벤트 · ${e.title} · ${e.choices[index].label} · ${message}`);
- s.pendingEvent=null;save();render();go('game');
+ s.pendingEvent=null;openStatResult(e.title,before,message);
 }
 const traineeEvents={
  5:{kicker:'STORY · 경쟁자',title:'같은 데뷔조의 경쟁자',text:'연습생 동료가 함께 연습하자고 제안한다. 개인 실력을 다듬을까, 팀워크를 쌓을까?',choices:[{label:'개인 연습에 집중한다',desc:'주력 능력치를 더 단련한다.',type:'focus'},{label:'동료와 함께 연습한다',desc:'인성과 협업 능력을 보여준다.',type:'team'}]},
@@ -591,6 +625,7 @@ function resolveEvent(index){
  const eventId=state.pendingEvent,e=traineeEvents[eventId]||optionalEvents[eventId],choice=e?.choices[index];
  if(!choice)return;
  if(typeof eventId==='string'){resolveOptionalEvent(eventId,index);return;}
+ const before=statSnapshot();
  let target;
  if(choice.type==='focus'||choice.type==='solo'){
    target=[...state.selected].sort((a,b)=>state.stats[b]-state.stats[a])[0];
@@ -608,7 +643,7 @@ function resolveEvent(index){
  state.eventResults.push({eventId,choice:choice.label,target,outcome,delta,bonus});
  state.trainingLog.push(`특별 이벤트 · ${choice.label} · ${outcome} · ${target} ${delta>=0?'+':''}${delta} · 데뷔 평가 영향 ${bonus>=0?'+':''}${bonus}`);
  state.pendingEvent=null;state.fanSupport=clamp(state.fanSupport+(outcome==='대성공'?3:outcome==='악재'?-3:1),0,100);
- save();render();go('game');
+ openStatResult(e.title+' · '+outcome,before,`데뷔 평가 영향 ${bonus>=0?'+':''}${bonus}`);
 }
 function evaluateDebut(){
  const focus=state.selected.reduce((sum,k)=>sum+state.stats[k],0);
@@ -717,6 +752,7 @@ function releaseAlbum(concept){
 
 function investCareer(kind){
  if(!state?.debuted||state.switchOffer)return;
+ const before=statSnapshot();
  const f=state.activeFocus;
  const target=kind==='major'?f.slice().sort((a,b)=>state.stats[a]-state.stats[b])[0]:kind;
  if(!keys.includes(target)||(kind!=='major'&&f.includes(target)))return;
@@ -732,8 +768,7 @@ function investCareer(kind){
   const gap=state.stats[target]-state.stats[replace];
   if(gap>=-4)state.switchOffer={target,replace,chance:gap>=10?85:gap>=5?70:50};
  }
- save();
- if(state.switchOffer){renderSwitchOffer();go('switchOffer');}else renderCareer();
+ openStatResult(`${target} 성장 투자 · ${outcome}`,before,`이번 시즌 ${target} 성장 결과입니다.`,state.switchOffer?'switchOffer':'career');
 }
 function renderSwitchOffer(){
  const o=state.switchOffer;if(!o)return;
@@ -744,6 +779,7 @@ function renderSwitchOffer(){
 }
 function resolveSwitch(accept){
  const o=state?.switchOffer;if(!o)return;
+ const before=statSnapshot();
  const year=2028+Math.floor(state.careerSeason/2);
  if(!accept){
   const k=state.activeFocus.slice().sort((a,b)=>state.stats[a]-state.stats[b])[0];
@@ -756,7 +792,7 @@ function resolveSwitch(accept){
   state.careerHistory.push(`${year}년 · 전향 성공 · ${idolType(state.activeFocus)} · ${o.target} +${gain}`);
  }else state.careerHistory.push(`${year}년 · 전향 실패 · 기존 유형 유지`);
  state.lastSwitchSeason=state.careerSeason;state.switchOffer=null;
- save();renderCareer();go('career');
+ openStatResult('활동 방향 전환 결과',before,accept?'전향 선택 결과가 반영되었습니다.':'기존 활동 방향을 유지합니다.','career');
 }
 
 let statusTab='stats';
