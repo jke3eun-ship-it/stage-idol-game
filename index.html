@@ -274,6 +274,12 @@ body{background:var(--stage-bg);color:var(--stage-text)}
 .stage-live-stat strong{font-size:15px;color:#edf2e8;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 #stageConditionValue[data-level="low"]{color:#ff9b91}#stageConditionValue[data-level="medium"]{color:#e3c180}
 #stageDateSpacer{display:none;height:92px}
+.choice-signals{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px;font-size:12px;line-height:1.55}
+.choice-signal{padding:4px 8px;border:1px solid currentColor;border-radius:7px;font-weight:700}
+.choice-return{color:#d8fa89}.choice-risk{color:#ffc18b}.choice-risk-high{color:#ffaba4}.choice-cost{color:#f0d280}.choice-neutral{color:#bdc8c7}
+.choice-preview{display:none;margin-top:12px;border-top:1px solid #ffffff25;padding-top:10px;font-size:13px;line-height:1.8;font-weight:400}
+.growth-choice.pending-confirm .choice-preview{display:block}
+.choice-preview-line{display:block}.choice-preview-note{display:block;color:#bdc8c7;font-size:12px;margin-top:6px}
 .debut-group-editor{margin:18px 0;padding:18px;border:1px solid #6b7e4d;border-radius:15px;background:#d8fa5909}
 .debut-group-editor label{display:block;font-size:15px;font-weight:800;margin-bottom:10px;color:#edf2e8}
 .debut-group-editor input{background:#182023;border-color:#768756;color:#f4f8ed}
@@ -1764,6 +1770,28 @@ function careerChoiceHint(e,c,i){
  if(e.id==='producer')hint+=' · 성공 시 다음 앨범 음악성 +'+(i===0?5:3);
  return hint;
 }
+function careerChoiceOdds(e,index,policy=careerChoicePolicy(e,index)){
+ const skill=careerEventSkill(policy.skill),aggression=[1,.52,.12][index];
+ const base=clamp(.52+skill*.012+(state.agencyTrust??50)*.0015-(e.risk-2)*.035,.24,.86);
+ return {aggression,chance:index===2?.94:index===1?Math.min(.90,base+.18):base};
+}
+function careerChoiceForecast(e,index){
+ const p=careerChoicePolicy(e,index);if(!p)return null;
+ if(p.kind!=='activity')return {kind:p.kind,recovery:['recover','delay'].includes(p.kind)?Math.min(100-state.energy,p.kind==='recover'?24:8):0};
+ const {aggression,chance}=careerChoiceOdds(e,index,p);
+ const range=(base,low,high,cap=Infinity)=>[Math.min(cap,Math.round(base*aggression*low)),Math.min(cap,Math.round(base*aggression*high))];
+ const fatigue=range(e.fatigue,.75,1.15,state.energy);
+ return {kind:p.kind,chance,paid:p.paid,fans:range(e.fanReward,.75,1.25),fanLoss:range(e.fanReward,.2,.6,state.fans),cash:p.paid?range(e.cashReward,.65,1.25):[0,0],cashLoss:p.paid?range(e.cashReward,.35,1.05,state.cash):[0,0],fatigue,remaining:[state.energy-fatigue[1],state.energy-fatigue[0]],injury:index===0&&Math.round(e.fatigue*aggression*1.15)>=12};
+}
+function careerChoiceSignals(e,index){
+ const f=careerChoiceForecast(e,index);if(!f)return '';
+ const span=(tone,text)=>'<span class="choice-signal '+tone+'">'+escapeCharacterText(text)+'</span>';
+ if(f.kind!=='activity')return '<span class="choice-signals">'+(f.recovery?span('choice-return','회복 +'+f.recovery):span('choice-neutral','추가 손익·소모 없음'))+(f.kind==='delay'?span('choice-cost','시간 +1개월'):'')+'</span>';
+ const range=a=>a[0]===a[1]?a[0].toLocaleString('ko-KR'):a[0].toLocaleString('ko-KR')+'~'+a[1].toLocaleString('ko-KR');
+ const failure=Math.round((1-f.chance)*100),tone=failure>=30?'choice-risk-high':'choice-risk';
+ const line=(color,text)=>'<span class="choice-preview-line '+color+'">'+escapeCharacterText(text)+'</span>';
+ return '<span class="choice-signals">'+span('choice-return',f.paid?'보상 · 수입·팬 증가':'보상 · 팬 증가')+span(tone,'실패 '+failure+'%')+span('choice-cost','컨디션 −'+range(f.fatigue))+'</span><span class="choice-preview">'+line('choice-return','성공 '+Math.round(f.chance*100)+'% · 팬 +'+range(f.fans)+'명'+(f.paid?' · 개인 수입 +'+range(f.cash)+'만원':' · 추가 보수 없음'))+line(tone,'실패 '+failure+'% · 팬 −'+range(f.fanLoss)+'명'+(f.paid?' · 개인 자산 −'+range(f.cashLoss)+'만원':''))+line('choice-cost','성공·실패 공통 소모 · 컨디션 −'+range(f.fatigue))+line(f.remaining[0]<=30?'choice-risk-high':'choice-neutral','소모 후 컨디션 '+range(f.remaining)+' / 100')+(f.injury?line('choice-risk','피로 판정에 따라 추가 부상 위험 · 부상 시 회복 일정·추가 손실 발생'):'')+'<span class="choice-preview-note">현재 상태 기준 예상 범위 · 팬 지지도와 회사 신뢰도에도 성공·실패에 따른 변화가 반영됩니다. 같은 선택지를 한 번 더 터치하면 확정됩니다.</span></span>';
+}
 
 function renderCareerSpecial(){
  const e=lifeEventPool.find(x=>x.id===state.pendingCareerEvent);
@@ -1777,7 +1805,7 @@ function renderCareerSpecial(){
  setEventScene('careerSpecial',e.category==='health'?'rose':'amber','특별 이벤트',eventCategoryLabels[e.category]||'커리어',careerEventReason(e));
  $('careerEventStage').textContent=`활동 ${(state.careerSeason/2).toFixed(1)}년 차 · 이번 사건에 대응한 뒤 육성 복귀`;
  $('careerEventTag').textContent='비정기 사건 · '+(eventCategoryLabels[e.category]||'커리어');$('careerEventTitle').textContent=e.title;$('careerEventText').textContent=e.text+(careerEventPolicies[e.id]?.notice?'\n\n'+careerEventPolicies[e.id].notice:'');
- $('careerEventChoices').innerHTML=e.choices.map((c,i)=>`<button class="growth-choice" onclick="resolveCareerSpecial(${i})"><strong>${escapeCharacterText(careerChoiceLabel(e,i))}</strong><small>${careerChoiceHint(e,c,i)}</small></button>`).join('');go('careerSpecial');
+ $('careerEventChoices').innerHTML=e.choices.map((c,i)=>`<button class="growth-choice" onclick="resolveCareerSpecial(${i})"><strong>${escapeCharacterText(careerChoiceLabel(e,i))}</strong><small>${escapeCharacterText(careerChoiceHint(e,c,i))}</small>${careerChoiceSignals(e,i)}</button>`).join('');go('careerSpecial');
 }
 function resolveCareerSpecial(choice){
  const e=lifeEventPool.find(x=>x.id===state.pendingCareerEvent);if(!e||![0,1,2].includes(choice))return;
@@ -1800,9 +1828,8 @@ function resolveCareerSpecial(choice){
   recordCareerEvent(e,choice,policy,before);
   openStatResult(e.title,before,'다음 컴백 준비 일정을 한 달 미뤘습니다. 달력에 1개월이 반영되고 컨디션이 8 회복됩니다. 이미 발매한 앨범 기록은 유지됩니다.','career',eventPresentation(e));return;
  }
- const skill=careerEventSkill(policy.skill);
- const aggression=[1,.52,.12][choice], base=clamp(.52+skill*.012+(state.agencyTrust??50)*.0015-(e.risk-2)*.035, .24,.86);
- const success=Math.random()<(choice===2?.94:choice===1?Math.min(.90,base+.18):base);
+ const {aggression,chance}=careerChoiceOdds(e,choice,policy);
+ const success=Math.random()<chance;
  const fans=success?Math.round(e.fanReward*aggression*(.75+Math.random()*.5)):-Math.round(e.fanReward*aggression*(.2+Math.random()*.4));
  const paidActivity=policy.paid;
  const cash=paidActivity?(success?Math.round(e.cashReward*aggression*(.65+Math.random()*.6)):-Math.round(e.cashReward*aggression*(.35+Math.random()*.7))):0;
@@ -1823,7 +1850,7 @@ function resolveCareerSpecial(choice){
  const why=success?'선택한 대응이 긍정적인 반응을 얻었습니다.':'선택한 대응이 기대한 반응을 얻지 못했습니다.';
  const costText=applied.cash<0?' 개인 자산이 '+Math.abs(applied.cash).toLocaleString()+'만원 감소했습니다.':applied.cash>0?' 개인 보수 '+applied.cash.toLocaleString()+'만원을 받았습니다.':' 추가 수입과 지출은 없습니다.';
  const fatigueText=applied.energy<0?' 컨디션이 '+Math.abs(applied.energy)+' 감소했습니다.':applied.energy>0?' 컨디션이 '+applied.energy+' 회복됐습니다.':' 컨디션 변화는 없습니다.';
- openStatResult(e.title,before,`선택: ${action}\n결과: ${why}${costText}${fatigueText}${success&&e.id==='producer'?' 다음 앨범 음악성 +'+state.nextAlbumQualityBonus+' 보너스가 예약되었습니다.':''}${policy.notice?'\n'+policy.notice:''}\n판정 성공률 약 ${Math.round((choice===2?.94:choice===1?Math.min(.90,base+.18):base)*100)}% · 이번 사건 종료 후 육성 복귀`,'career',eventPresentation(e));
+ openStatResult(e.title,before,`선택: ${action}\n결과: ${why}${costText}${fatigueText}${success&&e.id==='producer'?' 다음 앨범 음악성 +'+state.nextAlbumQualityBonus+' 보너스가 예약되었습니다.':''}${policy.notice?'\n'+policy.notice:''}\n판정 성공률 약 ${Math.round(chance*100)}% · 이번 사건 종료 후 육성 복귀`,'career',eventPresentation(e));
 }
 // Three authored continuation routes for each of the 25 original career events.
 // Persist the selected route so a browser reload cannot reroll the story.
@@ -2721,6 +2748,7 @@ let pendingChoiceOriginalHTML=null;
 function clearPendingChoice(){
  if(pendingChoiceButton){
   pendingChoiceButton.classList.remove('pending-confirm');
+  pendingChoiceButton.removeAttribute?.('aria-expanded');
   if(pendingChoiceOriginalHTML!==null){pendingChoiceButton.innerHTML=pendingChoiceOriginalHTML;pendingChoiceButton.removeAttribute?.('aria-pressed');}
  }
  pendingChoiceOriginalHTML=null;
@@ -2741,6 +2769,7 @@ function confirmConsequentialChoice(event){
  }
  clearPendingChoice();pendingChoiceButton=button;
  button.classList.add('pending-confirm');
+ if(/^resolveCareerSpecial\(/.test(action))button.setAttribute('aria-expanded','true');
  const confirmLabel=button.dataset?.confirmLabel;
  if(confirmLabel){
   pendingChoiceOriginalHTML=button.innerHTML;
