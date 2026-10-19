@@ -272,6 +272,52 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 @keyframes stageResultRise{from{opacity:0;transform:translateY(13px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes stageResultGlow{from{filter:brightness(2.5)}to{filter:brightness(1)}}
 @media(prefers-reduced-motion:reduce){.activity-settlement-screen.settlement-animated .result-stat-row,.activity-settlement-screen.settlement-animated .result-delta.up{animation:none}}
+
+/* Mobile-first 1 → 3 → 2 flow: immersive roulette, compact readable story */
+.activity-settlement-content{justify-content:center;min-height:calc(100dvh - 90px)}
+.activity-settlement-content .training-result-kicker{font-size:11px}
+.activity-settlement-content h2{font-size:clamp(25px,7vw,31px);line-height:1.25}
+.activity-settlement-content .growth-reveal{margin:22px 0 24px}
+.activity-settlement-content .growth-readout{min-height:38px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#b8c9c1;font-weight:650}
+.activity-settlement-content .growth-readout-label,.activity-settlement-content .growth-readout-value{display:none}
+.activity-settlement-content #activitySettlementValues{display:none!important}
+.activity-settlement-content .training-result-next{position:static;margin-top:12px;min-height:54px}
+.activity-settlement-content .growth-final{font-size:16px;min-height:24px}
+.training-result-dialog{max-width:420px;padding:22px 20px 18px}
+.training-result-dialog h2{font-size:clamp(19px,5vw,23px);line-height:1.4;letter-spacing:-.035em;margin:10px 0 17px}
+.training-result-dialog #trainingResultNarrative{font-size:15px;line-height:1.75;color:#e3ebe6;white-space:pre-line;word-break:keep-all}
+.training-result-dialog .training-result-next{margin-top:24px}
+@media(max-width:600px){.training-result-shade{padding:18px}.training-result-dialog{padding:22px 19px 18px;border-radius:18px;max-height:calc(100dvh - 48px)}.training-result-dialog h2{font-size:21px;line-height:1.35}.training-result-dialog #trainingResultNarrative{font-size:15px;line-height:1.7}.growth-list-mode .growth-option{min-height:62px}.activity-settlement-screen{padding:24px 18px max(22px,env(safe-area-inset-bottom))}}
+
+/* STAGE mobile-first information hierarchy (2026-10-19) */
+@media(max-width:600px){
+ .screen:not(#home){padding-top:12px}
+ .screen .top{margin-bottom:8px}
+ .screen .step{font-size:11px;margin-bottom:7px;line-height:1.35}
+ .screen .heading{font-size:clamp(23px,6.4vw,29px);line-height:1.23;margin-top:5px;margin-bottom:9px;letter-spacing:-.035em}
+ .screen .hint{font-size:15px;line-height:1.65;word-break:keep-all;margin-top:5px;margin-bottom:12px}
+ .screen .small-help{font-size:14px;line-height:1.65;word-break:keep-all}
+ .screen .roll-card{padding:14px;margin-top:10px;margin-bottom:12px}
+ .screen .roll-tag{font-size:11px}
+ .growth-choices{gap:9px}
+ .growth-choice{min-height:60px;padding:13px 14px}
+ .growth-choice strong{font-size:16px;line-height:1.4}
+ .growth-choice small{font-size:13px;line-height:1.5}
+ #game #trainActions{margin-top:10px}
+ #game .roll-card:has(#trainActions){margin-top:8px!important}
+ #game .roll-card:has(#actionCounter){padding:12px 14px;margin-top:10px!important}
+ #career .roll-card:has(.btn.primary){border-color:#879d58;background:#253128;margin-top:12px!important}
+ #career .roll-card:has(.btn.primary) .btn{min-height:56px;font-size:16px}
+ #careerEconomy .roll-summary{padding-top:7px;padding-bottom:7px}
+ #careerAlbum .hint,#careerGrowth .hint,#careerActivity .hint{margin-bottom:10px}
+ #careerAlbum .roll-card,#careerGrowth .roll-card{margin-top:8px}
+ #careerEnd #endHistory{white-space:pre-line;line-height:1.8}
+ .training-result-dialog #trainingResultNarrative{font-size:16px;line-height:1.8;white-space:pre-line;overflow-wrap:anywhere}
+ .training-result-dialog{overflow-y:auto}
+ .activity-settlement-content .growth-readout{display:none}
+ .activity-settlement-content .growth-final{display:none}
+ .activity-settlement-content .growth-reveal{margin:13px 0 16px}
+}
 </style><style id="idol-name-style">
 .name-gender-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .name-gender{min-height:48px;border:1px solid #4b5565;border-radius:12px;background:#1c222e;color:#d3d9e2;font-size:16px;font-weight:750;cursor:pointer}
@@ -309,13 +355,6 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 <div class="step">STEP 03 / 03 · GROWTH</div>
 <h1 class="heading" id="greeting">연습생 생활</h1>
 
-<div class="status"><span id="careerStatus">연습생 · 1년 차</span><span id="energy">체력 80 / 100</span></div>
-<div class="roll-card" style="margin:16px 0">
-<div class="roll-head"><span class="roll-tag">데뷔 준비</span><strong id="actionCounter">0 / 4</strong></div>
-<div class="bar" style="margin-top:12px"><div class="fill" id="progressFill" style="width:0%"></div></div>
-<p class="small-help" id="trainingHint"></p>
-</div>
-<div id="stats" hidden></div>
 <div class="roll-card" style="margin-bottom:18px">
 <div class="roll-tag">육성 방향</div><h2 id="eventTitle" style="margin:12px 0">연습생 성장 전략</h2>
 <p class="small-help" id="story">어떤 하루를 보낼까요?</p>
@@ -327,6 +366,13 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 </div>
 
 </div>
+<div class="status"><span id="careerStatus">연습생 · 1년 차</span><span id="energy">체력 80 / 100</span></div>
+<div class="roll-card" style="margin:16px 0">
+<div class="roll-head"><span class="roll-tag">데뷔 준비</span><strong id="actionCounter">0 / 5</strong></div>
+<div class="bar" style="margin-top:12px"><div class="fill" id="progressFill" style="width:0%"></div></div>
+<p class="small-help" id="trainingHint"></p>
+</div>
+<div id="stats" hidden></div>
 <div class="roll-card"><div class="roll-tag">연습생 성장 기록</div>
 <p id="logHistory" class="small-help" style="white-space:pre-line">아직 기록이 없습니다.</p></div>
 <div class="footer">자동 저장 · 브라우저 내 저장 · 간편 육성 시스템 베타</div>
@@ -372,8 +418,8 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 <p class="small-help" style="margin:18px 0">데뷔 후에는 앨범을 발매하고, 성장에 투자하며, 커리어를 쌓을 수 있습니다.</p>
 <div class="actions"><button class="btn primary" onclick="openCareer()">데뷔 후 커리어 →</button><button class="btn secondary" onclick="go('home')">타이틀로 돌아가기</button></div>
 </section>
-<section class="screen" id="career"><div class="top">STAGE / CAREER</div><div class="step" id="careerYear"></div><h1 class="heading" id="careerType"></h1><p class="hint" id="careerFocus"></p><div id="careerStats" hidden></div><div class="roll-card" style="margin-top:16px"><div class="roll-tag">팬덤 · 활동 자금</div><div id="careerEconomy"></div></div>
-<div id="militaryBar" style="margin-top:12px"></div><div id="injurySummary" class="small-help" style="margin-top:8px"></div><div id="retireButton" style="margin-top:12px"></div><div class="roll-card"><div class="roll-tag">이번 시즌 주력 활동</div><p class="small-help">앨범 컴백 · 콘서트/투어 · 방송/예능 · 휴식/자기계발 중 선택하세요.</p><button class="btn primary" type="button" onclick="advanceCareerFlow()">활동 선택하기 →</button></div></section>
+<section class="screen" id="career"><div class="top">STAGE / CAREER</div><div class="step" id="careerYear"></div><h1 class="heading" id="careerType"></h1><p class="hint" id="careerFocus"></p><div id="careerStats" hidden></div><div class="roll-card"><div class="roll-tag">이번 시즌 주력 활동</div><button class="btn primary" type="button" onclick="advanceCareerFlow()">활동 선택하기 →</button></div><div class="roll-card" style="margin-top:16px"><div class="roll-tag">팬덤 · 활동 자금</div><div id="careerEconomy"></div></div>
+<div id="militaryBar" style="margin-top:12px"></div><div id="injurySummary" class="small-help" style="margin-top:8px"></div><div id="retireButton" style="margin-top:12px"></div></section>
 <section class="screen" id="careerActivity"><div class="top">STAGE / SEASON PLAN</div><div class="step" id="activitySeasonLabel"></div><h1 class="heading">이번 시즌 주력 활동</h1><p class="hint">이번 시즌에는 무엇에 집중할까요? 선택한 활동을 마친 뒤 성장 투자로 넘어갑니다.</p><div id="activityOptions" class="growth-choices"></div></section>
 <section class="screen" id="careerOtherActivity"><div class="top">STAGE / ACTIVITY</div><h1 class="heading" id="otherActivityTitle"></h1><p class="hint" id="otherActivityHint"></p><div id="otherActivityOptions" class="growth-choices"></div></section>
 <section class="screen" id="careerAlbum"><div class="top">STAGE / ALBUM PRODUCTION</div><div class="step" id="albumSeasonLabel"></div><h1 class="heading">① 앨범 제작</h1><p class="hint">앨범 제작을 확정하면 음악방송·예능·팬사인회 활동이 자동 진행되고 흥행 결과 화면으로 넘어갑니다.</p><div class="roll-card"><div class="roll-tag">앨범 제작 · 시즌당 1회</div><div id="albumChoices" class="growth-choices"></div></div></section>
@@ -389,7 +435,7 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 <div class="status-panel-head"><div><div class="roll-tag">PLAYER / STATUS</div><h2 id="panelName">플레이어</h2></div><button class="status-close" type="button" onclick="toggleStatus(false)" aria-label="닫기">×</button></div>
 <div class="panel-tabs"><button id="tabStats" class="on" onclick="setStatusTab('stats')">능력치</button><button id="tabRelations" onclick="setStatusTab('relations')">관계 · 커리어</button><button id="tabPopularity" onclick="setStatusTab('popularity')">멤버 인기</button></div>
 <div id="panelStats"></div><div id="panelRelations" hidden></div><div id="panelPopularity" hidden></div>
-</aside><div id="chapterTransition" class="chapter-transition" role="status" aria-live="polite" aria-hidden="true"><div class="chapter-transition-inner"><div class="chapter-kicker" id="chapterKicker">STAGE</div><h2 id="chapterTitle">새로운 시작</h2><p id="chapterDescription">당신의 이야기가 시작됩니다.</p><div class="chapter-loading" aria-hidden="true"><i></i></div><div class="chapter-serial">STAGE / YOUR LIFE. YOUR DEBUT.</div></div></div><section id="activitySettlementScreen" class="activity-settlement-screen" hidden aria-label="활동 정산"><div class="activity-settlement-content"><div class="training-result-kicker">STAGE / ACTIVITY SETTLEMENT</div><h2>활동 정산</h2><p class="activity-settlement-subtitle">이번 선택으로 달라진 기록</p><div id="activityGrowthRevealMount"></div><div id="activitySettlementValues" class="training-result-values"></div><button id="activitySettlementContinue" class="training-result-next" type="button" onclick="continueAfterTraining()">다음으로 →</button></div></section><div id="trainingResultShade" class="training-result-shade" aria-hidden="true"><div class="training-result-dialog" role="dialog" aria-modal="true" aria-labelledby="trainingResultTitle"><div class="training-result-kicker" id="trainingResultKicker">TRAINING RESULT</div><h2 id="trainingResultTitle">훈련 결과</h2><p id="trainingResultNarrative"></p><div id="growthReveal" class="growth-reveal" hidden><div class="growth-top"><span id="growthTarget">보컬 성장 판정</span><span id="growthPhase">판정 중</span></div><div id="growthOptionsMount"></div><div class="growth-final" id="growthFinal">판정 수치 계산 중…</div></div><div class="training-result-values" id="trainingResultValues"></div><button class="training-result-next" id="trainingResultNext" type="button" onclick="continueAfterTraining()">계속하기 →</button></div></div><script>
+</aside><div id="chapterTransition" class="chapter-transition" role="status" aria-live="polite" aria-hidden="true"><div class="chapter-transition-inner"><div class="chapter-kicker" id="chapterKicker">STAGE</div><h2 id="chapterTitle">새로운 시작</h2><p id="chapterDescription">당신의 이야기가 시작됩니다.</p><div class="chapter-loading" aria-hidden="true"><i></i></div><div class="chapter-serial">STAGE / YOUR LIFE. YOUR DEBUT.</div></div></div><section id="activitySettlementScreen" class="activity-settlement-screen" hidden aria-label="활동 정산"><div class="activity-settlement-content"><div class="training-result-kicker">STAGE / ACTIVITY SETTLEMENT</div><h2>성장 판정</h2><div id="activityGrowthRevealMount"></div><div id="activitySettlementValues" class="training-result-values"></div><button id="activitySettlementContinue" class="training-result-next" type="button" onclick="continueAfterTraining()">결과 보기 →</button></div></section><div id="trainingResultShade" class="training-result-shade" aria-hidden="true"><div class="training-result-dialog" role="dialog" aria-modal="true" aria-labelledby="trainingResultTitle"><div class="training-result-kicker" id="trainingResultKicker">TRAINING RESULT</div><h2 id="trainingResultTitle">훈련 결과</h2><p id="trainingResultNarrative"></p><div id="growthReveal" class="growth-reveal" hidden><div class="growth-top"><span id="growthTarget">보컬 성장 판정</span><span id="growthPhase">판정 중</span></div><div id="growthOptionsMount"></div><div class="growth-final" id="growthFinal">판정 수치 계산 중…</div></div><div class="training-result-values" id="trainingResultValues"></div><button class="training-result-next" id="trainingResultNext" type="button" onclick="continueAfterTraining()">계속하기 →</button></div></div><script>
 const soundOnIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
 const soundOffIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="m16 9 5 6m0-6-5 6"/></svg>';
 let soundEnabled=localStorage.getItem('stage-sound-enabled')!=='false';
@@ -607,9 +653,9 @@ function runGrowthReveal(items){
  if(!main){panel.hidden=true;$('trainingResultValues').hidden=false;$('trainingResultNarrative').hidden=false;$('trainingResultNext').disabled=false;return;}
  panel.hidden=false;panel.className='growth-reveal growth-list-mode';
  $('trainingResultValues').hidden=true;$('trainingResultNarrative').hidden=true;
- if(resultStage==='settlement'){$('activitySettlementValues').hidden=true;$('activitySettlementContinue').disabled=true;}
+ if(resultStage==='roulette'){$('activitySettlementValues').hidden=true;$('activitySettlementContinue').disabled=true;}
  $('growthTarget').textContent=main.label+' 성장 판정';$('growthPhase').textContent='판정 중';
- $('growthFinal').textContent='화면을 터치하면 판정을 건너뜁니다';$('trainingResultNext').disabled=true;
+ $('growthFinal').textContent='결과를 결정하는 중…';$('trainingResultNext').disabled=true;
  const diff=main.now-main.old;
  // Three distinct, plausible-looking outcomes. Only the precomputed actual result is authoritative.
  const candidates=[diff];
@@ -620,7 +666,7 @@ function runGrowthReveal(items){
  // Deterministic ordering makes the display stable without revealing which outcome is real.
  candidates.sort((x,y)=>y-x);
  const winning=candidates.indexOf(diff);
- const readout=document.createElement('div');readout.className='growth-readout';readout.innerHTML='<span class="growth-readout-label">CURRENT LEVEL</span><strong class="growth-readout-value"></strong>';readout.querySelector('strong').textContent=main.old;
+ const readout=document.createElement('div');readout.className='growth-readout';readout.textContent='';
  const list=document.createElement('div');list.className='growth-options';
  const optionEls=candidates.map((value)=>{
   const el=document.createElement('div');el.className='growth-option';
@@ -639,9 +685,9 @@ function runGrowthReveal(items){
   growthRevealActive=false;if(growthFrame!==null)cancelAnimationFrame(growthFrame);growthFrame=null;
   light(winning,true);panel.classList.add('finished');if(diff<0)panel.classList.add('negative');
   $('growthPhase').textContent='판정 확정';
-  $('growthFinal').textContent=diff>0?'성장 확정  ·  +'+diff:diff<0?'성장 하락  ·  '+diff:'변화 없음';
-  $('trainingResultValues').hidden=false;$('trainingResultNarrative').hidden=false;$('trainingResultNext').disabled=false;
-  if(resultStage==='settlement'){$('activitySettlementValues').hidden=false;$('activitySettlementContinue').disabled=false;}
+  $('growthFinal').textContent='';
+  $('trainingResultValues').hidden=true;$('trainingResultNarrative').hidden=false;$('trainingResultNext').disabled=false;
+  if(resultStage==='roulette'){$('activitySettlementValues').hidden=true;$('activitySettlementContinue').disabled=false;}
   if(!skipped)growthTone(diff>0?1040:350,.18);
   growthFinish=null;
  }
@@ -684,24 +730,30 @@ let resultStage='story';
 let resultItems=[];
 function beginMobileResult(items){
  resultItems=items;
- resultStage='story';
+ resultStage='roulette';
  $('growthReveal').hidden=true;
  $('trainingResultValues').hidden=true;
  $('trainingResultNarrative').hidden=false;
  const narrative=$('trainingResultNarrative');
  const raw=narrative.textContent;
  if(raw.includes('선택:')&&raw.includes('결과:')){
-   const choice=(raw.match(/(?:^|\n)선택:\s*([^\n]*)/)||[])[1];
-   const outcome=(raw.match(/(?:^|\n)결과:\s*([\s\S]*?)(?=\n(?:변화|판정 성공률|데뷔 평가)|$)/)||[])[1];
-   if(choice&&outcome){
-     narrative.replaceChildren();
-     const selected=document.createElement('div');selected.className='story-choice';selected.textContent='나의 선택 · '+choice.trim();
-     const story=document.createElement('div');story.className='story-outcome';story.textContent=outcome.trim();
-     narrative.append(selected,story);
-   }
+  const choice=(raw.match(/(?:^|\n)선택:\s*([^\n]*)/)||[])[1];
+  const outcome=(raw.match(/(?:^|\n)결과:\s*([\s\S]*?)(?=\n(?:변화|판정 성공률|데뷔 평가)|$)/)||[])[1];
+  if(choice&&outcome){
+   narrative.replaceChildren();
+   const selected=document.createElement('div');selected.className='story-choice';selected.textContent='선택 · '+choice.trim();
+   const story=document.createElement('div');story.className='story-outcome';story.textContent=outcome.trim();
+   narrative.append(selected,story);
+  }
  }
  $('trainingResultNext').disabled=false;
- $('trainingResultNext').textContent='닫기';
+ $('trainingResultNext').textContent='다음으로 →';
+ showMobileSettlement();
+}
+function showMobileStory(){
+ resultStage='story';
+ $('activitySettlementScreen').hidden=true;
+ $('trainingResultNarrative').hidden=false;
  $('trainingResultShade').classList.add('open');
  $('trainingResultShade').setAttribute('aria-hidden','false');
  document.body.classList.add('training-result-open');
@@ -709,7 +761,8 @@ function beginMobileResult(items){
  $('trainingResultNext').focus();
 }
 function showMobileSettlement(){
- resultStage='settlement';
+ resultStage='roulette';
+ // Start with the roulette BEFORE the narrative popup.
  // Close the story popup and navigate to a dedicated, full-screen mobile settlement.
  $('trainingResultShade').classList.remove('open');
  $('trainingResultShade').setAttribute('aria-hidden','true');
@@ -738,14 +791,14 @@ function showTrainingResult(){
  const names={hard:'혹독한 훈련',steady:'꾸준한 훈련',safe:'안정적인 훈련',rest:'휴식'};
  $('trainingResultKicker').textContent='STAGE / TRAINING · '+state.traineeTurns+' / 5';
  $('trainingResultTitle').textContent=(names[r.mode]||'훈련')+' · 성장 판정';
- $('trainingResultNarrative').textContent=r.narration+(r.injuryMessage?' '+r.injuryMessage:'')+' 다음 훈련 부상 위험: '+injuryRiskText(r.energyAfter);
+ $('trainingResultNarrative').textContent=r.narration+(r.injuryMessage?'\n\n'+r.injuryMessage:'');
  const items=[];
  if(r.target&&Number.isFinite(Number(r.gain))){const after=state.stats[r.target];items.push({label:r.target,old:after-Number(r.gain),now:after});}
  if(r.energyBefore!==r.energyAfter)items.push({label:'컨디션',old:r.energyBefore,now:r.energyAfter});
  beginMobileResult(items);
 }
 function continueAfterTraining(){
- if(resultStage==='story'){if(!$('trainingResultShade').classList.contains('open'))return;showMobileSettlement();return;}if($('activitySettlementScreen').hidden)return;if(growthRevealActive){skipGrowthReveal();return;}$('activitySettlementScreen').hidden=true;if($('trainingResultNext').disabled)return;clearTimeout(growthTimer);
+ if(resultStage==='roulette'){if($('activitySettlementScreen').hidden)return;if(growthRevealActive){skipGrowthReveal();return;}showMobileStory();return;}if(resultStage!=='story'||!$('trainingResultShade').classList.contains('open'))return;clearTimeout(growthTimer);
  if(state?.statResultPending){
   const next=state.statResultPending.next;
   state.statResultPending=null;pendingStatContinuation=null;save();
