@@ -119,6 +119,12 @@ body{background:var(--stage-bg);color:var(--stage-text)}
 .screen:not(#home) .result{color:#d8fa59!important}
 #debut .roll-card{border-top:3px solid var(--stage-accent)}
 #debutRecord .heading{max-width:310px}
+#debutRecord #recordContent{display:grid;gap:12px;margin-top:15px;color:#e6e9e8;font-size:15px;line-height:1.65}
+#debutRecord .record-entry{border-left:3px solid var(--stage-accent);background:#252b2e;padding:13px 15px;border-radius:0 6px 6px 0;overflow-wrap:anywhere}
+#debutRecord .record-date{display:block;color:var(--stage-accent);font-size:12px;font-weight:800;letter-spacing:.04em;margin-bottom:6px}
+#debutRecord .record-main{display:block;font-size:16px;font-weight:750;color:#f1f4f1;margin-bottom:5px}
+#debutRecord .record-meta{display:block;color:#bfc7c7;font-size:13px;line-height:1.65}
+
 #career .roll-card{margin-bottom:0}
 #career .heading{margin-top:9px}
 #career .roll-card .roll-tag{display:block;margin-bottom:9px}
@@ -234,7 +240,7 @@ body{background:var(--stage-bg);color:var(--stage-text)}
 .growth-reveal.finished.negative{border-color:#7b454c;box-shadow:0 0 20px #ff52670a}
 .training-result-next:disabled{opacity:.4;cursor:wait}body.training-result-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.growth-list-mode .growth-option,.growth-list-mode .growth-option-arrow{transition:none;animation:none!important}}
-.album-verdict{border:2px solid #7d8e76;border-radius:16px;padding:17px 14px;background:#26322b;color:#f5f8f2}.album-verdict.hit{border-color:#d8fa59;background:#2b3828}.album-verdict.flop{border-color:#e08c94;background:#382b30}.album-verdict-kicker{font-size:12px;color:#c5d0c2}.album-verdict-title{font-size:30px;line-height:1.25;font-weight:900;margin:8px 0 4px;color:#d8fa59}.album-verdict.flop .album-verdict-title{color:#ffabb2}.album-verdict.average .album-verdict-title{color:#e6dfb4}.album-verdict-score{font-size:16px;font-weight:700}.album-verdict-note{font-size:13px;line-height:1.6;color:#d0d9d0}.album-verdict .album-result-grid span,.album-verdict .album-result-grid small{display:block;color:#b8c8bb;font-size:12px}.album-verdict .album-result-grid strong{font-size:20px;color:#fff}.album-verdict-footer{font-size:13px;line-height:1.8;margin-top:10px;border-top:1px solid #546455;padding-top:10px}.album-panel{margin-top:12px;padding:14px;border:1px solid #52634b;border-radius:14px;background:#222b29}.album-panel h3{margin:0 0 8px}.album-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.album-option{border:1px solid #526058;border-radius:10px;padding:11px 8px;background:#2c3635;color:#e9eee9;font:inherit;text-align:left;cursor:pointer}.album-option.selected{border-color:#d8fa59;background:#37432e;color:#d8fa59}.album-option:disabled{opacity:.38}.album-option small{display:block;font-size:11px;margin-top:4px;color:#afbdaf}.album-budget{display:flex;justify-content:space-between;gap:8px;margin:8px 0;font-size:13px}.album-budget input{width:100%;accent-color:#d8fa59}.album-result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.album-result-grid>div{background:#2a3633;padding:12px;border-radius:10px}.album-result-grid strong{display:block;font-size:18px;margin-top:4px}.album-muted{color:#b3c0b6;font-size:12px;line-height:1.6}.album-panel .btn{margin-top:10px;width:100%} 
+.album-verdict{border:2px solid #7d8e76;border-radius:16px;padding:17px 14px;background:#26322b;color:#f5f8f2}.album-verdict.hit{border-color:#d8fa59;background:#2b3828}.album-verdict.flop{border-color:#e08c94;background:#382b30}.album-verdict-kicker{font-size:12px;color:#c5d0c2}.album-verdict-title{font-size:30px;line-height:1.25;font-weight:900;margin:8px 0 4px;color:#d8fa59}.album-verdict.flop .album-verdict-title{color:#ffabb2}.album-verdict.average .album-verdict-title{color:#e6dfb4}.album-verdict-score{font-size:16px;font-weight:700}.album-verdict-note{font-size:13px;line-height:1.6;color:#d0d9d0}.album-verdict .album-result-grid span,.album-verdict .album-result-grid small{display:block;color:#b8c8bb;font-size:12px}.album-verdict .album-result-grid strong{font-size:20px;color:#fff}.album-verdict-footer{font-size:13px;line-height:1.8;margin-top:10px;border-top:1px solid #546455;padding-top:10px}.album-panel{margin-top:12px;padding:14px;border:1px solid #52634b;border-radius:14px;background:#222b29}.album-panel h3{margin:0 0 8px}.album-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.album-option{border:1px solid #526058;border-radius:10px;padding:11px 8px;background:#2c3635;color:#e9eee9;font:inherit;text-align:left;cursor:pointer}.album-option.selected{border-color:#d8fa59;background:#37432e;color:#d8fa59}.album-option:disabled{opacity:.38}.album-option small{display:block;font-size:11px;margin-top:4px;color:#afbdaf}.album-budget{display:flex;justify-content:space-between;gap:8px;margin:8px 0;font-size:13px}.album-budget input{width:100%;accent-color:#d8fa59}.album-result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.album-result-grid>div{background:#2a3633;padding:12px;border-radius:10px}.album-result-grid strong{display:block;font-size:18px;margin-top:4px}.album-muted{color:#b3c0b6;font-size:12px;line-height:1.6}.album-panel .btn{margin-top:10px;width:100%}.album-option.album-recommended{border-color:#a9bd63}.album-recommend-label{display:inline-block;margin-left:5px;padding:2px 5px;border-radius:5px;background:#d8fa59;color:#222a21;font-size:10px;font-weight:900;vertical-align:middle} 
 #stageDateBar{position:sticky;top:0;z-index:35;display:none;align-items:center;justify-content:space-between;padding:10px 15px;margin:0 -20px 10px;background:#1c2226f5;border-bottom:1px solid #47534b;backdrop-filter:blur(10px);font-size:13px;color:#e6eddf}
 #stageDateBar strong{color:#d8fa59;font-size:15px}
 
@@ -1320,8 +1326,8 @@ function renderAlbumVerdict(){
  const note=score>=83?'이번 앨범은 대중과 팬덤 모두에서 강한 성과를 냈습니다.':score>=65?'이번 앨범은 종합적으로 흥행에 성공했습니다.':score>=45?'기대만큼 폭발적이지는 않았지만 의미 있는 성적을 남겼습니다.':'이번 앨범은 종합 성적이 부진했습니다. 다음 컴백에서 반등을 노려보세요.';
  return `<section class="album-verdict ${tone}"><div class="album-verdict-kicker">앨범 활동 최종 결과 · ${r.year||''}년</div><div class="album-verdict-title">${verdict}</div><p class="album-verdict-note">${note}</p><div class="album-result-grid"><div><span>초동 판매량</span><strong>${Number(r.sales||0).toLocaleString()}장</strong><small>${comparison}</small></div><div><span>음원 최고 순위</span><strong>${r.chartRank?`${r.chartRank.toLocaleString()}위`:'기록 없음'}</strong><small>${r.chartRank<=100?'TOP 100 진입':'TOP 100 밖'}</small></div><div><span>음악성 평가</span><strong>${r.quality??'-'}점</strong></div><div><span>신규 팬덤</span><strong>+${Number(r.newFans||0).toLocaleString()}명</strong></div></div><div class="album-verdict-footer">개인 정산 <b>+${albumMoney(r.personal||0)}</b> · 회사 손익 <b>${signed(r.profit||0)}만원</b></div>${r.twist&&r.twist!=='없음'?`<p class="album-verdict-note">특이사항: ${r.twist}</p>`:''}</section>`;
 }
-const albumConcepts={fresh:['청량','비주얼','스타성'],power:['강렬','댄스','랩'],dream:['몽환','보컬','비주얼'],ballad:['감성','보컬','인성'],experimental:['실험적','랩','스타성']};
-const albumFormats={single:['싱글',.65],mini:['미니',1],full:['정규',1.6]};
+const albumConcepts={fresh:['청량 팝','비주얼','스타성'],power:['퍼포먼스 팝','댄스','스타성'],dream:['몽환 팝','보컬','비주얼'],ballad:['발라드','보컬','인성'],experimental:['얼터너티브','랩','스타성'],hiphop:['힙합','랩','스타성'],rnb:['R&B / 소울','보컬','스타성'],dance:['댄스 / EDM','댄스','랩'],acoustic:['어쿠스틱','보컬','인성'],visual:['하이틴 팝','비주얼','스타성'],raprock:['랩 록','랩','댄스'],theatrical:['드라마틱 팝','보컬','댄스'],fan:['팬송 앨범','인성','보컬'],concept:['콘셉트 아트팝','비주얼','랩']};
+const albumFormats={digital:['디지털 싱글',.48],single:['싱글',.65],mini:['미니',1],ep:['스페셜 EP',1.2],full:['정규',1.6]};
 const albumStrategies={public:'대중성',fans:'팬덤',art:'음악성'};
 const albumActivities={broadcast:['음악 방송 집중','음원 노출 + · 피로 증가'],variety:['예능·콘텐츠 집중','신규 팬 유입 + · 피로 증가'],fandom:['팬사인회·팬덤 집중','음반 판매 + · 피로 증가'],rest:['최소 활동·휴식','성적 보너스 적음 · 피로 회복']};
 const albumMoney=n=>Math.round(n).toLocaleString('ko-KR')+'만원';
@@ -1341,14 +1347,22 @@ function albumPick(field,value){
  const c=albumControl();if((field==='strategy'&&c<1)||(field==='concept'&&c<2)||(field==='format'&&c<3)||(field==='mode'&&c<3))return;
  state.albumDraft??=albumDefault();state.albumDraft[field]=value;save();renderCareer();
 }
-function albumOption(field,value,label,desc,disabled=false){const d=state.albumDraft;return `<button type="button" class="album-option ${d[field]===value?'selected':''}" ${disabled?'disabled':''} onclick="albumPick('${field}','${value}')"><strong>${label}</strong>${desc?`<small>${desc}</small>`:''}</button>`;}
+function albumRecommendedConcept(){
+ const stats=state?.stats||{};
+ return Object.keys(albumConcepts).reduce((best,key)=>{
+  const [,a,b]=albumConcepts[key];
+  const score=(Number(stats[a])||0)*.55+(Number(stats[b])||0)*.45;
+  return score>best.score?{key,score}:best;
+ },{key:'fresh',score:-1}).key;
+}
+function albumOption(field,value,label,desc,disabled=false){const d=state.albumDraft;const recommended=field==='concept'&&value===albumRecommendedConcept();return `<button type="button" class="album-option ${d[field]===value?'selected':''} ${recommended?'album-recommended':''}" ${disabled?'disabled':''} onclick="albumPick('${field}','${value}')"><strong>${label}${recommended?' <span class="album-recommend-label">추천</span>':''}</strong>${desc?`<small>${desc}</small>`:''}</button>`;}
 function renderAlbumUI(){
  if(state.albumThisSeason)return '<p class="small-help">이번 시즌 앨범 발매 완료 · 다음 시즌에 다시 제작할 수 있습니다.</p>';
  if(state.albumPending)return `<div class="album-panel"><h3>발매 처리 중</h3><button class="btn primary" onclick="finishAlbum()">흥행 결과 확인 →</button></div>`;
  state.albumDraft??=albumDefault();state.albumDraft.mode='normal';
  const d=state.albumDraft,c=albumControl(),budget=albumBudget();
- const fmt=c>=3?Object.entries(albumFormats).map(([k,v])=>albumOption('format',k,v[0],k==='full'?'제작비 부담 큼':k==='single'?'빠른 발매':'균형형')).join(''):`<p class="album-muted">회사 결정: ${albumFormats[d.format][0]} 앨범 (신뢰도 70부터 변경 가능)</p>`;
- const concept=c>=2?Object.entries(albumConcepts).map(([k,v])=>albumOption('concept',k,v[0],v.slice(1).join(' · '))).join(''):`<p class="album-muted">회사 결정: ${albumConcepts[d.concept][0]} (신뢰도 50부터 선택 가능)</p>`;
+ const fmt=c>=3?Object.entries(albumFormats).map(([k,v])=>albumOption('format',k,v[0],k==='full'?'대규모 제작':k==='digital'?'디지털 중심':k==='single'?'짧은 발매':k==='ep'?'특별 기획':'균형형')).join(''):`<p class="album-muted">회사 결정: ${albumFormats[d.format][0]} 앨범 (신뢰도 70부터 변경 가능)</p>`;
+ const concept=c>=2?Object.entries(albumConcepts).map(([k,v])=>albumOption('concept',k,v[0],v.slice(1).join(' · '))).join(''):`<p class="album-muted">회사 결정: ${albumConcepts[d.concept][0]} (신뢰도 50부터 선택 가능) · 현재 추천: ${albumConcepts[albumRecommendedConcept()][0]}</p>`;
  const strategy=c>=1?Object.entries(albumStrategies).map(([k,v])=>albumOption('strategy',k,v,'')).join(''):`<p class="album-muted">회사 결정: ${albumStrategies[d.strategy]} (신뢰도 30부터 변경 가능)</p>`;
  return `<div class="album-panel"><h3>소속사 컴백 제안서</h3><div class="album-budget"><span>회사 제작 예산</span><strong>${albumMoney(budget)}</strong></div><div class="album-budget"><span>회사 신뢰도</span><strong>${state.agencyTrust} / 100</strong></div><p class="album-muted">기대 초동 ${Math.round(Math.max(500,state.fans*.65)).toLocaleString()}장 · 개인 자산 차감 없음</p><h3>① 앨범 종류</h3><div class="album-options">${fmt}</div><h3>② 콘셉트</h3><div class="album-options">${concept}</div><h3>③ 타이틀 전략</h3><div class="album-options">${strategy}</div><p class="album-muted">제작비는 소속사가 자동 배분합니다.</p><button class="btn primary" onclick="startAlbum()">제작 확정 · 앨범 발매 →</button><p class="album-muted">발매 후 음악방송·예능·팬사인회가 자동 진행됩니다.</p></div>`;
 }
