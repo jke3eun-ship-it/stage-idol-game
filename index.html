@@ -177,6 +177,22 @@ body{background:var(--stage-bg);color:var(--stage-text)}
 .candidate-grid[hidden],#candidateConfirmActions[hidden]{display:none!important}#candidateConfirmActions{margin-bottom:16px}#confirmCandidate:disabled{opacity:.4;cursor:not-allowed}
 /* Two-step protection for all consequential game choices */
 .growth-choice.pending-confirm,[data-confirm-choice].pending-confirm{border-color:#d8fa59!important;background:#303a2c!important;box-shadow:inset 3px 0 0 #d8fa59}
+[data-confirm-choice].btn.primary.pending-confirm{background:#d8fa59!important;color:#172016!important;outline:2px solid #f2ffbb;outline-offset:3px;box-shadow:0 0 0 5px #d8fa5926;opacity:1}
+.choice-confirm-button-label{display:block;font-weight:850;line-height:1.5;white-space:normal}
+#annualProcessing{min-height:70dvh;justify-content:center}
+.annual-processing-card{margin:36px 0;padding:28px 20px;border:1px solid #526347;border-top:3px solid #d8fa59;border-radius:15px;background:radial-gradient(ellipse at top,#d8fa5910,transparent 75%),#202821;text-align:center;color:#edf2e8}
+.annual-processing-card .annual-processing-year{font-size:12px;letter-spacing:.08em;color:#bdcbae}
+.annual-processing-mark{display:grid;place-items:center;width:76px;height:76px;margin:26px auto;border:1px solid #d8fa5970;border-radius:50%;color:#d8fa59;font-size:26px;font-weight:850;box-shadow:0 0 35px #d8fa5912}
+.annual-processing-card h1{font-size:clamp(26px,7vw,38px);line-height:1.4;letter-spacing:-.05em;margin:14px 0;color:#eff5e5;word-break:keep-all}
+.annual-processing-card p{font-size:14px;line-height:1.8;color:#bec9b8;word-break:keep-all}
+.annual-processing-track{height:4px;margin:27px 0 18px;background:#ffffff16;border-radius:8px;overflow:hidden}
+.annual-processing-track i{display:block;height:100%;width:100%;transform:scaleX(0);transform-origin:left;background:#d8fa59}
+.annual-processing-steps{display:flex;justify-content:center;gap:18px;font-size:12px;color:#87947f}.annual-processing-steps .current{color:#d8fa59;font-weight:800}.annual-processing-steps .done{color:#c5d4bc}
+#annualProcessing[data-phase="judging"] .annual-processing-card{border-color:#b79952;border-top-color:#e3c180;background:radial-gradient(ellipse at top,#e3c18012,transparent 75%),#292720}
+#annualProcessing[data-phase="judging"] .annual-processing-mark{color:#e3c180;border-color:#e3c18080;box-shadow:0 0 35px #e3c18016}
+#annualProcessing[data-phase="judging"] .annual-processing-track i{background:#e3c180}#annualProcessing[data-phase="judging"] .current{color:#e3c180}
+@keyframes annualReviewProgress{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media(prefers-reduced-motion:reduce){.annual-processing-track i{animation:none!important;transform:scaleX(1)}}
 .choice-confirm-row{display:flex;gap:9px;align-items:center;margin:8px 0 13px;animation:confirmRise .14s ease-out}
 .choice-confirm-row button{min-height:47px;border-radius:7px;font-size:13px;font-weight:850;cursor:pointer}
 .choice-confirm-yes{flex:1;background:#d8fa59;color:#172016;border:0;padding:11px}
@@ -251,8 +267,22 @@ body{background:var(--stage-bg);color:var(--stage-text)}
 .training-result-next:disabled{opacity:.4;cursor:wait}body.training-result-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.growth-list-mode .growth-option,.growth-list-mode .growth-option-arrow{transition:none;animation:none!important}}
 .album-verdict{border:2px solid #7d8e76;border-radius:16px;padding:17px 14px;background:#26322b;color:#f5f8f2}.album-verdict.hit{border-color:#d8fa59;background:#2b3828}.album-verdict.flop{border-color:#e08c94;background:#382b30}.album-verdict-kicker{font-size:12px;color:#c5d0c2}.album-verdict-title{font-size:30px;line-height:1.25;font-weight:900;margin:8px 0 4px;color:#d8fa59}.album-verdict.flop .album-verdict-title{color:#ffabb2}.album-verdict.average .album-verdict-title{color:#e6dfb4}.album-verdict-score{font-size:16px;font-weight:700}.album-verdict-note{font-size:13px;line-height:1.6;color:#d0d9d0}.album-verdict .album-result-grid span,.album-verdict .album-result-grid small{display:block;color:#b8c8bb;font-size:12px}.album-verdict .album-result-grid strong{font-size:20px;color:#fff}.album-verdict-footer{font-size:13px;line-height:1.8;margin-top:10px;border-top:1px solid #546455;padding-top:10px}.album-panel{margin-top:12px;padding:14px;border:1px solid #52634b;border-radius:14px;background:#222b29}.album-panel h3{margin:0 0 8px}.album-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.album-option{border:1px solid #526058;border-radius:10px;padding:11px 8px;background:#2c3635;color:#e9eee9;font:inherit;text-align:left;cursor:pointer}.album-option.selected{border-color:#d8fa59;background:#37432e;color:#d8fa59}.album-option:disabled{opacity:.38}.album-option small{display:block;font-size:11px;margin-top:4px;color:#afbdaf}.album-budget{display:flex;justify-content:space-between;gap:8px;margin:8px 0;font-size:13px}.album-budget input{width:100%;accent-color:#d8fa59}.album-result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.album-result-grid>div{background:#2a3633;padding:12px;border-radius:10px}.album-result-grid strong{display:block;font-size:18px;margin-top:4px}.album-muted{color:#b3c0b6;font-size:12px;line-height:1.6}.album-panel .btn{margin-top:10px;width:100%}.album-option.album-recommended{border-color:#a9bd63}.album-recommend-label{display:inline-block;margin-left:5px;padding:2px 5px;border-radius:5px;background:#d8fa59;color:#222a21;font-size:10px;font-weight:900;vertical-align:middle} 
-#stageDateBar{position:sticky;top:0;z-index:35;display:none;align-items:center;justify-content:space-between;padding:10px 15px;margin:0 -20px 10px;background:#1c2226f5;border-bottom:1px solid #47534b;backdrop-filter:blur(10px);font-size:13px;color:#e6eddf}
-#stageDateBar strong{color:#d8fa59;font-size:15px}
+#stageDateBar{position:fixed;top:0;left:50%;transform:translateX(-50%);width:min(100%,430px);height:calc(92px + env(safe-area-inset-top));z-index:100000;display:none;flex-direction:column;justify-content:center;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 20px 10px;background:#1c2226f5;border-bottom:1px solid #47534b;backdrop-filter:blur(10px);font-size:12px;color:#c9d1c6}
+.stage-date-row,.stage-live-stats{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-width:0}
+#stageDateText{color:#d8fa59;font-size:14px;white-space:nowrap}
+.stage-live-stat{display:flex;align-items:center;gap:7px;min-width:0}
+.stage-live-stat strong{font-size:15px;color:#edf2e8;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#stageConditionValue[data-level="low"]{color:#ff9b91}#stageConditionValue[data-level="medium"]{color:#e3c180}
+#stageDateSpacer{display:none;height:92px}
+.debut-group-editor{margin:18px 0;padding:18px;border:1px solid #6b7e4d;border-radius:15px;background:#d8fa5909}
+.debut-group-editor label{display:block;font-size:15px;font-weight:800;margin-bottom:10px;color:#edf2e8}
+.debut-group-editor input{background:#182023;border-color:#768756;color:#f4f8ed}
+.debut-group-editor button{margin-top:10px;min-height:44px;padding:10px 14px;border:1px solid #748452;border-radius:10px;background:#d8fa5912;color:#d8fa59;font-weight:700}
+body.has-stage-hud .training-result-shade,body.has-stage-hud .activity-settlement-screen,body.has-stage-hud #traineeMiniOverlay,body.has-stage-hud .chapter-transition{top:calc(92px + env(safe-area-inset-top))}
+body.has-stage-hud .activity-settlement-content{min-height:calc(100dvh - 162px - env(safe-area-inset-top))}
+body.has-stage-hud .training-result-dialog{max-height:calc(100dvh - 140px - env(safe-area-inset-top))}
+@media(max-width:1019px){body.has-stage-hud .status-panel{top:calc(92px + env(safe-area-inset-top));padding-top:24px}}
+@media(min-width:1020px){#stageDateBar{left:max(30px,calc((100vw - 990px)/2));transform:none;width:620px;padding-left:34px;padding-right:34px}}
 
 /* Prevent double-tap zoom on interactive controls without blocking page scrolling. */
 html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipulation}
@@ -362,7 +392,7 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 .name-random-label span{float:right;color:#a8b4bc;letter-spacing:0}
 .name-random-button{width:100%;min-height:48px;border:1px solid #d8fa59!important;color:#d8fa59!important;background:#252e30!important;font-weight:800}
 .name-random-note{font-size:12px;color:#aeb7c2;margin:10px 0 0;text-align:center}
-</style></head><body><main class="app"><div id="stageDateBar" aria-live="polite"><span>STAGE · 현재 시간</span><strong id="stageDateText"></strong></div>
+</style></head><body><main class="app"><div id="stageDateBar" aria-label="현재 상태" aria-live="polite"><div class="stage-date-row"><span>STAGE · 현재 시간</span><strong id="stageDateText"></strong></div><div class="stage-live-stats"><span class="stage-live-stat">컨디션 <strong id="stageConditionValue"></strong></span><span class="stage-live-stat"><span id="stageFansLabel">그룹 팬</span><strong id="stageFansValue"></strong></span></div></div><div id="stageDateSpacer" aria-hidden="true"></div>
 <section class="screen active" id="home"><button type="button" class="btn secondary" onclick="showStageHall()" style="margin:8px 0">★ 명예의 전당</button>
 <div class="poster-topbar"><span class="poster-top-label">STAGE / IDOL LIFE SIMULATOR</span><div class="poster-top-controls"><span class="poster-edition">FIRST EDITION</span><button aria-label="사운드 끄기" aria-pressed="true" class="sound-toggle" id="soundToggle" onclick="toggleSound()" title="사운드 ON/OFF" type="button"></button></div></div>
 <div class="poster-art" aria-label="STAGE 데뷔 포스터">
@@ -412,6 +442,15 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 <p id="logHistory" class="small-help" style="white-space:pre-line">아직 기록이 없습니다.</p></div>
 <div class="footer">자동 저장 · 브라우저 내 저장 · 간편 육성 시스템 베타</div>
 </section>
+<section class="screen" id="annualProcessing" aria-label="연말정산 진행">
+<div class="annual-processing-card">
+<div class="annual-processing-year" id="annualProcessingYear"></div>
+<div class="annual-processing-mark" id="annualProcessingMark" aria-hidden="true">01</div>
+<div role="status" aria-live="polite" aria-atomic="true"><h1 id="annualProcessingTitle">연말정산 중…</h1><p id="annualProcessingText">올해의 활동 기록을 정리하고 있어요.</p></div>
+<div class="annual-processing-track" aria-hidden="true"><i id="annualProcessingBar"></i></div>
+<div class="annual-processing-steps" id="annualProcessingSteps"></div>
+</div>
+</section>
 <section class="screen" id="traineeEvent">
 <div class="top"><span>STAGE / TRAINEE</span><span class="pill">SPECIAL EVENT</span></div><div class="event-banner"><span class="event-emblem" id="traineeEventIcon" aria-hidden="true"></span><div><div class="event-overline" id="traineeEventLabel"></div><p class="event-subtitle" id="traineeEventSubtitle"></p></div></div><p class="event-context" id="traineeEventContext"></p>
 <div class="step">연습생 생활 · 특별 이벤트</div>
@@ -436,6 +475,12 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 <div class="step">DEBUT EVALUATION</div>
 <h1 class="heading">드디어, 데뷔.</h1>
 <p class="hint">연습생 생활의 성과가 첫 활동 조건에 반영됩니다.</p>
+<div id="debutGroupEditor" class="debut-group-editor" hidden>
+<label for="debutGroupNameInput">우리의 그룹 이름</label>
+<input id="debutGroupNameInput" type="text" maxlength="24" autocomplete="off" spellcheck="false" aria-describedby="debutGroupNameHelp" oninput="updateDebutGroupName(this.value)">
+<button type="button" onclick="rerollDebutGroupName()">랜덤 이름 다시 뽑기 ↻</button>
+<p class="small-help" id="debutGroupNameHelp">랜덤 이름을 그대로 쓰거나 원하는 이름을 직접 입력하세요. 최대 24자 · 멤버는 가상으로 생성되며, 이름에 따라 데뷔 성과가 달라지지 않습니다. 빈칸으로 확정하면 처음 생성된 이름을 사용합니다.</p>
+</div>
 <div class="roll-card" style="margin:18px 0">
 <div class="roll-tag">DEBUT REPORT</div><h2 id="debutName" style="margin:12px 0 4px"></h2>
 <p class="small-help" id="debutAgency"></p>
@@ -443,7 +488,7 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 <p class="roll-desc" id="debutDescription"></p>
 <div id="debutStats" hidden></div><div id="debutGroupRoster" style="margin-top:16px"></div>
 </div>
-<div class="actions"><button class="btn primary" onclick="showDebutDetails()">데뷔 기록 확인하기 →</button></div>
+<div class="actions"><button class="btn primary" id="debutConfirmButton" onclick="confirmDebutGroupName()">데뷔 기록 확인하기 →</button></div>
 </section>
 <section class="screen" id="debutRecord">
 <div class="top"><span>STAGE / CAREER</span></div>
@@ -481,6 +526,7 @@ function beginBgm(){if(soundEnabled&&bgm.src)bgm.play().catch(()=>{});}
 let state=null;let selected=[];let draft=null;let trainingFocus='보컬';const keys=['보컬','댄스','랩','비주얼','스타성','인성'];const $=id=>document.getElementById(id);
 let chapterTransitionTimer=null;
 function go(id){
+ if(id!=='annualProcessing')clearAnnualProcessingTimer();
  const active=document.querySelector('.screen.active');
  const previous=active?.id;
  const changeScreen=()=>{clearPendingChoice();updateStageDate(id);if(state)renderStatus();document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));$(id).classList.add('active');window.scrollTo(0,0);};
@@ -515,8 +561,17 @@ function changeAgency(size){
 }
 function updateStageDate(screenId){
  const bar=$('stageDateBar');if(!bar)return;
- bar.style.display=state&&screenId!=='home'&&screenId!=='create'&&screenId!=='roll'?'flex':'none';
+ const visible=!!state&&!['home','create','roll'].includes(screenId);
+ bar.style.display=visible?'flex':'none';$('stageDateSpacer').style.display=visible?'block':'none';
+ document.body.classList.toggle('has-stage-hud',visible);
  if(!state)return;
+ const p=state.awardPresentation,waiting=p&&!p.reviewOnly&&['settlement','judging'].includes(p.phase);
+ const stats=waiting&&p.preAwardStats?p.preAwardStats:state;
+ const energy=Math.max(0,Math.min(100,Math.round(Number(stats.energy)||0)));
+ $('stageConditionValue').textContent=energy+' / 100';
+ $('stageConditionValue').dataset.level=energy<=30?'low':energy<=60?'medium':'high';
+ $('stageFansLabel').textContent=state.debuted?'그룹 팬':'팬';
+ $('stageFansValue').textContent=state.debuted?Math.max(0,Math.round(Number(stats.fans)||0)).toLocaleString('ko-KR')+'명':'데뷔 전';
  // 연습생은 훈련 1회=1개월, 데뷔 이후는 시즌 1회=6개월.
  const elapsed=(state.traineeMonths??state.traineeTurns??0)+(state.debuted?Math.floor((state.careerSeason||0)*6)+(state.extraMonths||0):0);
  const monthIndex=elapsed;
@@ -1306,6 +1361,31 @@ function endTraineeSchool(){
 // Group debut foundation (phase 1): independent roster, stored with each character.
 const groupPrefixes=['루미','에버','아스','벨','네오','하이','세레','미라','오로','아르','엘리','레브'];
 const groupSuffixes=['나','온','아','스','엘','즈','엑스','티','브','리스','온즈','디아'];
+function randomDebutGroupName(){return groupPrefixes[Math.floor(Math.random()*groupPrefixes.length)]+groupSuffixes[Math.floor(Math.random()*groupSuffixes.length)];}
+function cleanDebutGroupName(value){return Array.from(String(value??'').replace(/[\u0000-\u001f\u007f]/g,' ').replace(/\s+/g,' ').trim()).slice(0,24).join('');}
+function debutGroupNamePreview(){return cleanDebutGroupName(state?.pendingDebutGroupName?.value)||state?.group?.name||'';}
+function updateDebutGroupName(value){
+ if(!state?.pendingDebutGroupName||!state.group||state.careerEnded)return;
+ state.pendingDebutGroupName.value=String(value??'').slice(0,48);
+ $('debutName').textContent=debutGroupNamePreview()+' · '+state.name+' · '+state.debut.tier;
+ renderDebutGroup();save();
+}
+function rerollDebutGroupName(){
+ if(!state?.pendingDebutGroupName||!state.group||state.careerEnded)return;
+ const current=debutGroupNamePreview();let name=randomDebutGroupName();
+ if(name===current){const all=groupPrefixes.flatMap(a=>groupSuffixes.map(b=>a+b));name=all[(all.indexOf(name)+1)%all.length];}
+ $('debutGroupNameInput').value=name;updateDebutGroupName(name);
+}
+function confirmDebutGroupName(){
+ if(!state?.debut||state.careerEnded)return;
+ if(state.pendingDebutGroupName&&state.group){
+  state.group.name=debutGroupNamePreview();
+  const index=state.pendingDebutGroupName.historyIndex;
+  if(Number.isInteger(index)&&index>=0&&index<state.careerHistory.length)state.careerHistory[index]=`${state.debut.year}년 · ${state.group.name} 그룹 데뷔`;
+  delete state.pendingDebutGroupName;save();renderDebut();
+ }
+ showDebutDetails();
+}
 const femaleMemberNames=['서아','하린','지우','유나','수빈','민서','채원','다은','예린','소희','가은','윤서','세은','시은','유진'];
 const maleMemberNames=['도윤','지훈','현우','민준','서준','시우','태현','준호','지민','유찬','건우','승민','재현','은우','정우'];
 function assignGroupPositions(group=state?.group){
@@ -1319,7 +1399,7 @@ function assignGroupPositions(group=state?.group){
 }
 function createDebutGroup(){
  const size=4+Math.floor(Math.random()*4),names=[state.name],pool=[...(state.gender==='male'?maleMemberNames:femaleMemberNames)].filter(n=>n!==state.name);
- const groupName=groupPrefixes[Math.floor(Math.random()*groupPrefixes.length)]+groupSuffixes[Math.floor(Math.random()*groupSuffixes.length)];
+ const groupName=randomDebutGroupName();
  const roles={'보컬':'메인보컬','댄스':'메인댄서','랩':'메인래퍼','비주얼':'비주얼','스타성':'센터','인성':'리더'};
  const mainKey=m=>keys.reduce((best,k)=>(m.stats[k]||0)>(m.stats[best]||0)?k:best,keys[0]);
  const members=[{id:'player',name:state.name,isPlayer:true,stats:{...state.stats},popularity:40+Math.floor(Math.random()*21)}];
@@ -1392,7 +1472,7 @@ function renderDebutGroup(){
  const el=$('debutGroupRoster');if(!el)return;
  if(!state.group){el.innerHTML='';return;}
  const g=state.group;
- el.innerHTML='<div class="roll-tag">GROUP DEBUT · '+g.members.length+'인조</div><h3 style="margin:9px 0 12px">'+escapeCharacterText(g.name)+'</h3>'+g.members.map(m=>'<div class="roll-summary"><span>'+escapeCharacterText(m.name)+(m.isPlayer?' (나)':'')+' · '+escapeCharacterText(m.position)+'</span><strong>'+Math.max(...keys.map(k=>Number(m.stats[k])||0))+'</strong></div>').join('')+'<p class="small-help" style="margin-top:10px">숫자는 각 멤버의 최고 능력치입니다. 능력치는 100점 만점이며 포지션은 팀 내 실력에 따라 갱신됩니다. 그룹 전체 실력이 앨범에 반영됩니다.</p>';
+ el.innerHTML='<div class="roll-tag">GROUP DEBUT · '+g.members.length+'인조</div><h3 style="margin:9px 0 12px">'+escapeCharacterText(debutGroupNamePreview())+'</h3>'+g.members.map(m=>'<div class="roll-summary"><span>'+escapeCharacterText(m.name)+(m.isPlayer?' (나)':'')+' · '+escapeCharacterText(m.position)+'</span><strong>'+Math.max(...keys.map(k=>Number(m.stats[k])||0))+'</strong></div>').join('')+'<p class="small-help" style="margin-top:10px">숫자는 각 멤버의 최고 능력치입니다. 능력치는 100점 만점이며 포지션은 팀 내 실력에 따라 갱신됩니다. 그룹 전체 실력이 앨범에 반영됩니다.</p>';
 }
 function acceptAgency(size){
  if(!state?.auditionResults?.[size]?.passed||state.debuted)return;
@@ -1407,13 +1487,17 @@ function acceptAgency(size){
  state.fans=Math.max(120,Math.round(score*35*(size==='large'?2.2:size==='medium'?1.45:1)));state.group.fanCount=state.fans;state.personalFans=Math.round(state.fans*(state.group.members.find(m=>m.isPlayer)?.popularity||40)/100/state.group.members.length);state.aceRewards=0;
  captureDebutJourney();
  state.careerHistory.push(`${state.debut.year}년 · ${state.group.name} 그룹 데뷔`);
+ state.pendingDebutGroupName={value:state.group.name,historyIndex:state.careerHistory.length-1};
  state.careerHistory.push(`${state.debut.year}년 데뷔 · ${agencyLabels[size]} · ${tier} · ${idolType(state.activeFocus||state.selected)} · 평가 ${score}점`);
  save();renderDebut();go('debut');
 }
 function renderDebut(){
  if(!state?.debut)return;
  const d=state.debut;
- $('debutName').textContent=(state.group?state.group.name+' · ':'')+state.name+' · '+d.tier;
+ $('debutName').textContent=(state.group?debutGroupNamePreview()+' · ':'')+state.name+' · '+d.tier;
+ $('debutGroupEditor').hidden=!state.pendingDebutGroupName;
+ if(state.pendingDebutGroupName)$('debutGroupNameInput').value=state.pendingDebutGroupName.value;
+ $('debutConfirmButton').textContent=state.pendingDebutGroupName?'이 이름으로 데뷔 · 기록 확인 →':'데뷔 기록 확인하기 →';
  renderDebutGroup();
  $('debutAgency').textContent='소속: '+d.agency+' · '+d.year+'년 데뷔 · '+idolType(state.activeFocus||state.selected);
  $('debutScore').textContent=d.score+' / 100';
@@ -1422,10 +1506,11 @@ function renderDebut(){
 }
 function showDebutDetails(){
  if(!state?.debut)return;
+ if(state.pendingDebutGroupName){renderDebut();go('debut');return;}
  $('recordMessage').textContent=state.name+'의 데뷔 기록이 저장되었습니다.';
  const box=$('recordContent');box.replaceChildren();
  const d=state.debut;
- const fields=[['데뷔 연도',`${d.year}년`],['소속사',d.agency],['데뷔 평가',`${d.score}점`],['데뷔 유형',idolType(state.activeFocus||state.selected)]];
+ const fields=[...(state.group?[['그룹명',state.group.name]]:[]),['데뷔 연도',`${d.year}년`],['소속사',d.agency],['데뷔 평가',`${d.score}점`],['데뷔 유형',idolType(state.activeFocus||state.selected)]];
  for(const [label,value] of fields){const row=document.createElement('div');row.className='roll-summary';const a=document.createElement('span');a.textContent=label;const b=document.createElement('strong');b.textContent=value;row.append(a,b);box.append(row);}
  const history=document.createElement('details');history.className='stage-history-details';const summary=document.createElement('summary');summary.textContent='전체 커리어 기록 보기';const lines=document.createElement('p');lines.textContent=state.careerHistory.join('\n');history.append(summary,lines);box.append(history);
  go('debutRecord');
@@ -1563,7 +1648,8 @@ function eligibleCareerEvent(e){
  if(e.gender&&e.gender!==state.gender)return false;
  if(independent()&&['contract','label','shared_contract','shared_concept','overwork','f_image'].includes(e.id))return false;
  // Military storylines require an actual service history, not merely male gender.
- const militaryCompleted=['completed','social_done'].includes(state.militaryStatus);
+ const militaryCompleted=militaryReturnEligible();
+ if(e.id==='military_return')return militaryReturnEligible();
  if(['m_trend','m_reunion','m_documentary'].includes(e.id)&&!militaryCompleted)return false;
  if(['m_farewell','m_fanclub'].includes(e.id)&&!(state.gender==='male'&&['active','social'].includes(state.militaryStatus)&&retirementAge()>=19&&retirementAge()<27))return false;
  if(e.minYears&&state.careerSeason/2<e.minYears)return false;
@@ -1593,7 +1679,7 @@ function eligibleCareerEvent(e){
 function maybeScheduleCareerEvent(){
  if(!state.debuted||state.careerEnded||state.pendingCareerEvent||state.pendingCareerTwist)return;
  if(state.careerSeason-state.lastLifeEventSeason<1||Math.random()>=.45)return;
- const pool=lifeEventPool.filter(e=>!state.seenLifeEvents.includes(e.id)&&eligibleCareerEvent(e));
+ const pool=lifeEventPool.filter(e=>e.id!=='military_return'&&!state.seenLifeEvents.includes(e.id)&&eligibleCareerEvent(e));
  if(!pool.length)return;
  const e=pool[randomInt(0,pool.length-1)];state.pendingCareerEvent=e.id;state.seenLifeEvents.push(e.id);state.lastLifeEventSeason=state.careerSeason;
  state.lifeEvents[lifeStage()]=(state.lifeEvents[lifeStage()]||0)+1;save();
@@ -1695,6 +1781,7 @@ function renderCareerSpecial(){
 }
 function resolveCareerSpecial(choice){
  const e=lifeEventPool.find(x=>x.id===state.pendingCareerEvent);if(!e||![0,1,2].includes(choice))return;
+ if(e.id==='military_return'&&!militaryReturnEligible()){state.pendingCareerEvent=null;state.seenLifeEvents=state.seenLifeEvents.filter(id=>id!=='military_return');save();openCareer();return;}
  const before=statSnapshot();
  const policy=careerChoicePolicy(e,choice);if(!policy)return;
  const action=careerChoiceLabel(e,choice);
@@ -1993,12 +2080,17 @@ function militaryRecheck(){if(!canMilitaryRecheck())return;const pending=state.i
  // Game-only simplified result, not a real medical grading rule.
  state.militaryStatus=level>=3?'exempt':level>=1?'social':prev;
  state.militaryReport={kind:'exam',title:'재검사 결과',text:`영구 후유증 ${level}단계 누적. ${prev==='active'?'현역 대상':'사회복무요원 대상'} → ${state.militaryStatus==='exempt'?'병역면제':state.militaryStatus==='social'?'사회복무요원 대상':'현역 대상'}. 실제 병역판정 기준과 별개의 게임 규칙입니다.`};state.militaryHistory.push(`${militaryAge()}세 · 재검사 · ${state.militaryStatus}`);save();renderMilitaryReport();}
-function startMilitaryService(){if(!militaryEligible()||!['active','social'].includes(state.militaryStatus)||state.injuryRecovery||state.seasonActivity)return;const social=state.militaryStatus==='social',months=social?21:18;const before={fans:state.fans,stats:{...state.stats},energy:state.energy};
+function startMilitaryService(){if(!militaryEligible()||militaryAge()<19||!['active','social'].includes(state.militaryStatus)||state.injuryRecovery||state.seasonActivity)return;const social=state.militaryStatus==='social',months=social?21:18;const before={fans:state.fans,stats:{...state.stats},energy:state.energy};
  const loyalty=clamp(state.fanSupport||0,0,100),decline=(social?.20:.25)*(1-loyalty*.008);const loss=Math.round(state.fans*decline);
  state.fans=Math.max(0,state.fans-loss);for(const k of ['보컬','댄스','랩','스타성'])state.stats[k]=Math.max(0,state.stats[k]-randomInt(0,k==='댄스'?3:2));state.energy=Math.max(state.energy,75);advanceExtraMonths(months);state.militaryLastDecisionAge=99;
  state.militaryStatus=social?'social_done':'completed';state.pendingMilitaryHomecoming=true;state.militaryReport={kind:'service',title:social?'사회복무요원 소집해제':'현역 복무 완료',text:`${months}개월이 지났습니다. 팬덤 ${before.fans.toLocaleString()} → ${state.fans.toLocaleString()}명 (-${loss.toLocaleString()}명). 보컬 ${before.stats['보컬']}→${state.stats['보컬']}, 댄스 ${before.stats['댄스']}→${state.stats['댄스']}, 랩 ${before.stats['랩']}→${state.stats['랩']}, 스타성 ${before.stats['스타성']}→${state.stats['스타성']}. 충성도 ${loyalty}/100이 팬덤 유지에 영향을 주었습니다.`};
  state.careerHistory.push(`${militaryAge()}세 · ${social?'사회복무':'현역'} ${months}개월 종료 · 팬덤 -${loss}명`);save();renderMilitaryReport();}
-function renderMilitaryHomecoming(){state.pendingMilitaryHomecoming=false;const support=state.fanSupport||0,peak=state.peakFans||0;const title=support>=80?'기다림의 끝':state.fans<peak*.55?'달라진 세상':'전설의 귀환';
+function militaryReturnEligible(){return militaryEligible()&&militaryAge()>=20&&['completed','social_done'].includes(state.militaryStatus);}
+function renderMilitaryHomecoming(){
+ if(!state?.pendingMilitaryHomecoming)return false;
+ state.pendingMilitaryHomecoming=false;
+ if(!militaryReturnEligible()||state.seenLifeEvents.includes('military_return')){save();openCareer();return false;}
+const support=state.fanSupport||0,peak=state.peakFans||0;const title=support>=80?'기다림의 끝':state.fans<peak*.55?'달라진 세상':'전설의 귀환';
  state.pendingCareerEvent='military_return';state.seenLifeEvents.push('military_return');state.careerHistory.push(`${militaryAge()}세 · 복귀 이벤트: ${title}`);save();renderCareerSpecial();return true;}
 lifeEventPool.push({id:'military_return',title:'군백기 이후 복귀 준비',text:'복무를 마치고 정규 활동에 앞서 팬들과 다시 만날 준비를 합니다. 충성 팬덤과 과거 활동이 반응에 영향을 줍니다.',choices:[['복귀 공연 홍보','높은 위험 · 높은 보상'],['다음 앨범 티저 공개','균형형 복귀'],['소규모 팬 교류','안정적인 팬덤 회복']],category:'military',risk:4,skill:'fans',fanReward:8500,safeReward:2000,fatigue:25,safeFatigue:9,cashReward:900,safeCash:200,severity:11});
 
@@ -2165,15 +2257,44 @@ function calculateAnnualAwards(year){
  }else state.careerHistory.push(`${year}년 · STAGE MUSIC AWARDS · 수상 없음`);
  return report;
 }
+let annualProcessingTimer=null;
+function clearAnnualProcessingTimer(){if(annualProcessingTimer!==null){clearTimeout(annualProcessingTimer);annualProcessingTimer=null;}}
+function renderAnnualProcessing(){
+ const p=state?.awardPresentation;if(!p||p.reviewOnly||!['settlement','judging'].includes(p.phase))return;
+ clearAnnualProcessingTimer();
+ const judging=p.phase==='judging',duration=judging?1700:1300,years=p.years||[p.year];
+ $('annualProcessing').dataset.phase=p.phase;
+ $('annualProcessingYear').textContent=(years.length>1?years[0]+'–'+years.at(-1):p.year)+'년 · '+state.name+'의 기록';
+ $('annualProcessingMark').textContent=judging?'02':'01';
+ $('annualProcessingTitle').textContent=judging?'연말 시상 심사 중…':'연말정산 중…';
+ $('annualProcessingText').textContent=judging?'한 해의 활동 성과를 바탕으로 수상 결과를 확인하고 있어요.':'수익과 지출, 팬덤과 성장 기록을 정리하고 있어요.';
+ $('annualProcessingSteps').innerHTML='<span class="'+(judging?'done':'current')+'">'+(judging?'✓ ':'01 ')+'연말정산</span><span class="'+(judging?'current':'')+'">02 시상 심사</span>';
+ const bar=$('annualProcessingBar');bar.style.animation='none';void bar.offsetWidth;bar.style.animation='annualReviewProgress '+duration+'ms linear forwards';
+ toggleStatus(false);go('annualProcessing');$('statusToggle').hidden=true;$('statusPanel').hidden=true;
+ const owner=state,phase=p.phase;
+ annualProcessingTimer=setTimeout(()=>{
+  if(state!==owner||state.awardPresentation!==p||p.phase!==phase||state.careerEnded)return;
+  annualProcessingTimer=null;
+  if(phase==='settlement'){p.phase='judging';save();renderAnnualProcessing();}
+  else finishAnnualProcessing();
+ },duration);
+}
+function finishAnnualProcessing(){
+ const p=state?.awardPresentation;if(!p||p.reviewOnly||p.phase!=='judging'||annualProcessingTimer!==null)return;
+ clearAnnualProcessingTimer();p.phase='results';save();renderAwardPresentation();
+}
 function beginAnnualAwards(){
  if(!state?.pendingAwardYears?.length){openCareer();return;}
  syncAnnualReview();
  const years=[...new Set(state.pendingAwardYears.splice(0))];
+ const preAwardStats={energy:state.energy,fans:state.fans};
  for(const year of years)if(!(state.awardsHistory||[]).some(a=>a.year===year))calculateAnnualAwards(year);
- state.awardPresentation={year:years[0],years};save();renderAwardPresentation();
+ state.awardPresentation={year:years[0],years,phase:'settlement',preAwardStats};save();renderAwardPresentation();
 }
 function renderAwardPresentation(){
  const presentation=state?.awardPresentation;if(!presentation)return;
+ if(!presentation.reviewOnly&&['settlement','judging'].includes(presentation.phase)){renderAnnualProcessing();return;}
+ clearAnnualProcessingTimer();
  const years=presentation.years||[presentation.year];
  const reports=years.map(year=>(state.awardsHistory||[]).find(a=>a.year===year)).filter(Boolean);
  const reviews=years.map(annualReviewRecord).filter((r,i,a)=>a.findIndex(x=>x.year===r.year)===i);
@@ -2192,6 +2313,8 @@ function renderAwardPresentation(){
 
 function nextAwardReveal(){
  if(!state?.awardPresentation)return;
+ if(['settlement','judging'].includes(state.awardPresentation.phase))return;
+ clearAnnualProcessingTimer();
  state.awardPresentation=null;save();
  if(state.pendingAwardYears?.length)beginAnnualAwards();else openCareer();
 }
@@ -2422,7 +2545,7 @@ function albumPick(field,value){
  const allowed={format:Object.keys(albumFormats),concept:Object.keys(albumConcepts),strategy:Object.keys(albumStrategies),mode:['normal'],producer:['house','famous','rookie'],choreo:['challenge','intense','vocal'],mv:['studio','cinema','performance'],promo:['broadcast','shorts','fandom','global']};
  if(!allowed[field]?.includes(value))return;
  const c=albumControl();if((field==='strategy'&&c<1)||(field==='concept'&&c<2)||(field==='format'&&c<3)||(field==='mode'&&c<3))return;
- state.albumDraft??=albumDefault();state.albumDraft[field]=value;save();renderCareer();
+ clearPendingChoice();state.albumDraft??=albumDefault();state.albumDraft[field]=value;save();renderCareer();
 }
 function albumRecommendedConcept(){
  return Object.keys(albumConcepts).reduce((best,key)=>{
@@ -2441,7 +2564,7 @@ function renderAlbumUI(){
  const fmt=c>=3?Object.entries(albumFormats).map(([k,v])=>albumOption('format',k,v[0],k==='full'?'대규모 제작':k==='digital'?'디지털 중심':k==='single'?'짧은 발매':k==='ep'?'특별 기획':'균형형')).join(''):`<p class="album-muted">회사 결정: ${albumFormats[d.format][0]} 앨범 (신뢰도 70부터 변경 가능)</p>`;
  const concept=c>=2?Object.entries(albumConcepts).map(([k,v])=>albumOption('concept',k,v[0],v.slice(1).join(' · ')+' · 예상 완성도 '+Math.round(activityPerformance(Object.fromEntries(v.slice(1).map((k,i)=>[k,i===0?.55:.45])),{groupShare:state.group?.members?.length>1?.65:0}).quality)+'/100')).join(''):`<p class="album-muted">회사 결정: ${albumConcepts[d.concept][0]} (신뢰도 50부터 선택 가능) · 현재 추천: ${albumConcepts[albumRecommendedConcept()][0]}</p>`;
  const strategy=c>=1?Object.entries(albumStrategies).map(([k,v])=>albumOption('strategy',k,v,'')).join(''):`<p class="album-muted">회사 결정: ${albumStrategies[d.strategy]} (신뢰도 30부터 변경 가능)</p>`;
- return `<div class="album-panel"><h3>${independent()?'독립 제작 계획':'소속사 컴백 제안서'}</h3><div class="album-budget"><span>${independent()?'개인 제작 한도':'회사 제작 예산'}</span><strong>${albumMoney(budget)}</strong></div><div class="album-budget"><span>${independent()?'제작 자율도':'회사 신뢰도'}</span><strong>${independent()?'독립 · 모든 제작 선택 가능':state.agencyTrust+' / 100'}</strong></div><p class="album-muted">기대 초동 ${Math.round(Math.max(500,state.fans*.65)).toLocaleString()}장 · ${independent()?'제작비 개인 부담 · 손익 전액 개인 귀속':'제작비·적자 회사 부담 · 흑자 13% 개인 정산'}</p><h3>① 앨범 종류</h3><div class="album-options">${fmt}</div><h3>② 콘셉트</h3><div class="album-options">${concept}</div><h3>③ 타이틀 전략</h3><div class="album-options">${strategy}</div><p class="album-muted">${independent()?'제작비는 개인 자산 범위 안에서 배분합니다. 기존 그룹 멤버들과 독립 프로젝트를 진행합니다.':'제작비는 소속사가 자동 배분합니다.'}${state.nextAlbumQualityBonus?' 프로듀서 협업: 이번 앨범 음악성 +'+state.nextAlbumQualityBonus:''}</p><button class="btn primary" data-confirm-choice onclick="startAlbum()">제작 확정 · 앨범 발매 →</button><p class="album-muted">발매 후 음악방송·예능·팬사인회가 자동 진행됩니다.</p></div>`;
+ return `<div class="album-panel"><h3>${independent()?'독립 제작 계획':'소속사 컴백 제안서'}</h3><div class="album-budget"><span>${independent()?'개인 제작 한도':'회사 제작 예산'}</span><strong>${albumMoney(budget)}</strong></div><div class="album-budget"><span>${independent()?'제작 자율도':'회사 신뢰도'}</span><strong>${independent()?'독립 · 모든 제작 선택 가능':state.agencyTrust+' / 100'}</strong></div><p class="album-muted">기대 초동 ${Math.round(Math.max(500,state.fans*.65)).toLocaleString()}장 · ${independent()?'제작비 개인 부담 · 손익 전액 개인 귀속':'제작비·적자 회사 부담 · 흑자 13% 개인 정산'}</p><h3>① 앨범 종류</h3><div class="album-options">${fmt}</div><h3>② 콘셉트</h3><div class="album-options">${concept}</div><h3>③ 타이틀 전략</h3><div class="album-options">${strategy}</div><p class="album-muted">${independent()?'제작비는 개인 자산 범위 안에서 배분합니다. 기존 그룹 멤버들과 독립 프로젝트를 진행합니다.':'제작비는 소속사가 자동 배분합니다.'}${state.nextAlbumQualityBonus?' 프로듀서 협업: 이번 앨범 음악성 +'+state.nextAlbumQualityBonus:''}</p><button class="btn primary" data-confirm-choice data-confirm-label="한 번 더 눌러 앨범 제작 →" onclick="startAlbum()">제작 확정 · 앨범 발매 →</button><p class="album-muted">발매 후 음악방송·예능·팬사인회가 자동 진행됩니다.</p></div>`;
 }
 // Phase 2: group performance influences releases; player stats remain individual.
 function groupAlbumTalent(concept){
@@ -2579,7 +2702,7 @@ function toggleStatus(force){const open=typeof force==='boolean'?force:!$('statu
 function setStatusTab(tab){statusTab=tab;$('tabStats').classList.toggle('on',tab==='stats');$('tabRelations').classList.toggle('on',tab==='relations');$('tabPopularity').classList.toggle('on',tab==='popularity');$('panelStats').hidden=tab!=='stats';$('panelRelations').hidden=tab!=='relations';$('panelPopularity').hidden=tab!=='popularity';}
 function radarSvg(){if(!state)return '';const pts=(r)=>keys.map((k,i)=>[140+83*r*Math.cos((-Math.PI/2)+i*Math.PI/3),123+83*r*Math.sin((-Math.PI/2)+i*Math.PI/3)].map(n=>n.toFixed(1)).join(',')).join(' ');return `<svg class="panel-radar" viewBox="0 0 280 252" aria-label="육각형 능력치 그래프">${[.25,.5,.75,1].map(r=>`<polygon points="${pts(r)}" fill="none" stroke="#56665d"/>`).join('')}${keys.map((k,i)=>`<line x1="140" y1="123" x2="${140+83*Math.cos(-Math.PI/2+i*Math.PI/3)}" y2="${123+83*Math.sin(-Math.PI/2+i*Math.PI/3)}" stroke="#56665d"/>`).join('')}<polygon points="${keys.map((k,i)=>[140+83*clamp(state.stats[k]/100,0,1)*Math.cos(-Math.PI/2+i*Math.PI/3),123+83*clamp(state.stats[k]/100,0,1)*Math.sin(-Math.PI/2+i*Math.PI/3)].join(',')).join(' ')}" fill="#d8fa5940" stroke="#d8fa59" stroke-width="2.5"/>${keys.map((k,i)=>`<text x="${140+111*Math.cos(-Math.PI/2+i*Math.PI/3)}" y="${127+111*Math.sin(-Math.PI/2+i*Math.PI/3)}" text-anchor="middle" fill="#e4eee5" font-size="11">${k}</text>`).join('')}</svg>`;}
 function renderStatus(){
- if(!state)return;normalizeState();$('statusToggle').hidden=false;$('panelName').textContent=state.name;
+ if(!state)return;normalizeState();const waiting=state.awardPresentation&&!state.awardPresentation.reviewOnly&&['settlement','judging'].includes(state.awardPresentation.phase);$('statusToggle').hidden=!!waiting;$('statusPanel').hidden=!!waiting;$('panelName').textContent=state.name;
  $('panelStats').innerHTML=radarSvg()+keys.map(k=>`<div class="panel-line"><div class="stathead"><span>${k}${(state.activeFocus||state.selected).includes(k)?' ✦':''}</span><strong>${state.stats[k]}</strong></div><div class="bar"><div class="fill" style="width:${clamp(state.stats[k],0,100)}%"></div></div></div>`).join('')+`<div class="panel-metric"><div class="stathead"><span>컨디션</span><strong>${state.energy} / 100</strong></div><div class="bar"><div class="fill" style="width:${state.energy}%"></div></div></div>`;
  const popularityPanel=$('panelPopularity');
  if(state.group?.members?.length){
@@ -2594,7 +2717,13 @@ migrateLegacyCharacter();refreshCharacterSlots();syncSound();renderDreamChoices(
 // First tap selects; a second tap on the same option commits. Navigation stays direct.
 let confirmedChoiceClick=false;
 let pendingChoiceButton=null;
+let pendingChoiceOriginalHTML=null;
 function clearPendingChoice(){
+ if(pendingChoiceButton){
+  pendingChoiceButton.classList.remove('pending-confirm');
+  if(pendingChoiceOriginalHTML!==null){pendingChoiceButton.innerHTML=pendingChoiceOriginalHTML;pendingChoiceButton.removeAttribute?.('aria-pressed');}
+ }
+ pendingChoiceOriginalHTML=null;
  document.querySelectorAll('.choice-confirm-row').forEach(el=>el.remove());
  document.querySelectorAll('.growth-choice.pending-confirm, [data-confirm-choice].pending-confirm').forEach(el=>el.classList.remove('pending-confirm'));
  pendingChoiceButton=null;
@@ -2612,8 +2741,14 @@ function confirmConsequentialChoice(event){
  }
  clearPendingChoice();pendingChoiceButton=button;
  button.classList.add('pending-confirm');
+ const confirmLabel=button.dataset?.confirmLabel;
+ if(confirmLabel){
+  pendingChoiceOriginalHTML=button.innerHTML;
+  button.innerHTML='<span class="choice-confirm-button-label">'+escapeCharacterText(confirmLabel)+'</span>';
+  button.setAttribute('aria-pressed','true');
+ }
  const row=document.createElement('div');row.className='choice-confirm-row choice-confirm-hint';
- row.setAttribute('role','status');row.textContent='같은 항목을 한 번 더 터치하면 확정 · 다른 항목을 누르면 선택 변경';
+ row.setAttribute('role','status');row.textContent=confirmLabel?'위 버튼을 한 번 더 누르면 앨범이 제작됩니다.':'같은 항목을 한 번 더 터치하면 확정 · 다른 항목을 누르면 선택 변경';
  button.insertAdjacentElement('afterend',row);
 }
 document.addEventListener('click',confirmConsequentialChoice,true);
