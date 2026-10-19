@@ -237,6 +237,9 @@ body{background:var(--stage-bg);color:var(--stage-text)}
 .album-verdict{border:2px solid #7d8e76;border-radius:16px;padding:17px 14px;background:#26322b;color:#f5f8f2}.album-verdict.hit{border-color:#d8fa59;background:#2b3828}.album-verdict.flop{border-color:#e08c94;background:#382b30}.album-verdict-kicker{font-size:12px;color:#c5d0c2}.album-verdict-title{font-size:30px;line-height:1.25;font-weight:900;margin:8px 0 4px;color:#d8fa59}.album-verdict.flop .album-verdict-title{color:#ffabb2}.album-verdict.average .album-verdict-title{color:#e6dfb4}.album-verdict-score{font-size:16px;font-weight:700}.album-verdict-note{font-size:13px;line-height:1.6;color:#d0d9d0}.album-verdict .album-result-grid span,.album-verdict .album-result-grid small{display:block;color:#b8c8bb;font-size:12px}.album-verdict .album-result-grid strong{font-size:20px;color:#fff}.album-verdict-footer{font-size:13px;line-height:1.8;margin-top:10px;border-top:1px solid #546455;padding-top:10px}.album-panel{margin-top:12px;padding:14px;border:1px solid #52634b;border-radius:14px;background:#222b29}.album-panel h3{margin:0 0 8px}.album-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0}.album-option{border:1px solid #526058;border-radius:10px;padding:11px 8px;background:#2c3635;color:#e9eee9;font:inherit;text-align:left;cursor:pointer}.album-option.selected{border-color:#d8fa59;background:#37432e;color:#d8fa59}.album-option:disabled{opacity:.38}.album-option small{display:block;font-size:11px;margin-top:4px;color:#afbdaf}.album-budget{display:flex;justify-content:space-between;gap:8px;margin:8px 0;font-size:13px}.album-budget input{width:100%;accent-color:#d8fa59}.album-result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:12px 0}.album-result-grid>div{background:#2a3633;padding:12px;border-radius:10px}.album-result-grid strong{display:block;font-size:18px;margin-top:4px}.album-muted{color:#b3c0b6;font-size:12px;line-height:1.6}.album-panel .btn{margin-top:10px;width:100%} 
 #stageDateBar{position:sticky;top:0;z-index:35;display:none;align-items:center;justify-content:space-between;padding:10px 15px;margin:0 -20px 10px;background:#1c2226f5;border-bottom:1px solid #47534b;backdrop-filter:blur(10px);font-size:13px;color:#e6eddf}
 #stageDateBar strong{color:#d8fa59;font-size:15px}
+
+/* Prevent double-tap zoom on interactive controls without blocking page scrolling. */
+html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipulation}
 </style><style id="idol-name-style">
 .name-gender-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .name-gender{min-height:48px;border:1px solid #4b5565;border-radius:12px;background:#1c222e;color:#d3d9e2;font-size:16px;font-weight:750;cursor:pointer}
@@ -267,28 +270,28 @@ body{background:var(--stage-bg);color:var(--stage-text)}
 </section>
 <section class="screen" id="create"><button class="back" onclick="go('home')">← 돌아가기</button><div class="step">STEP 01 / 03 · YOUR NAME</div><h1 class="heading">당신의 이름을<br/>알려주세요.</h1><p class="hint">이름을 정하면 서로 다른 세 가지 타고난 재능이 제시됩니다. 그중 한 가지 인생을 선택하세요.</p><div class="field"><label>아이돌 성별</label><div class="name-gender-row"><button type="button" class="name-gender active" id="genderFemale" onclick="chooseIdolGender('female')">여자</button><button type="button" class="name-gender" id="genderMale" onclick="chooseIdolGender('male')">남자</button></div></div>
 <div class="field"><label for="name">활동명 · 직접 입력 가능</label><input id="name" maxlength="12" placeholder="이름을 입력하거나 랜덤 생성하세요" value="김유진" oninput="onIdolNameEdited()"/></div>
-<div class="name-random-box"><div class="name-random-label">RANDOM NAME GENERATOR <span id="namePoolInfo"></span></div><button type="button" class="btn name-random-button" onclick="rollIdolName()">↻ 랜덤 이름 다시 뽑기</button><p class="name-random-note">마음에 드는 이름이 나올 때까지 무제한! 직접 고쳐도 돼요.</p></div><div class="grow"></div><div class="actions"><button class="btn primary" id="startRoll" onclick="prepareRoll()">세 가지 재능 확인하기 →</button></div></section>
+<div class="name-random-box"><div class="name-random-label">RANDOM NAME GENERATOR</div><button type="button" class="btn name-random-button" onclick="rollIdolName()">↻ 랜덤 이름 다시 뽑기</button><p class="name-random-note">마음에 드는 이름이 나올 때까지 무제한! 직접 고쳐도 돼요.</p></div><div class="grow"></div><div class="actions"><button class="btn primary" id="startRoll" onclick="prepareRoll()">세 가지 재능 확인하기 →</button></div></section>
 <section class="screen" id="roll"><button class="back" onclick="go('create')">← 이름 설정으로</button><div class="step">STEP 02 / 03 · TALENT SELECTION</div><h1 class="heading">세 가지 가능성.<br/>하나의 인생.</h1><p class="hint">능력치 총합은 각각 60이지만, 균형형부터 한 분야에 두드러지는 특화형까지 등장합니다. 세 후보 중 하나를 선택한 뒤 집중 육성할 분야를 1개 또는 2개 골라주세요.</p><div class="candidate-grid" id="candidateGrid"></div><div class="actions" id="candidateConfirmActions"><button class="btn primary" id="confirmCandidate" disabled onclick="confirmCandidateChoice()">이 재능으로 결정하기 →</button></div><div id="focusSelection" class="focus-panel" hidden><button class="back" type="button" onclick="reviseCandidate()">← 다른 재능 다시 살펴보기</button><div class="step">STEP 03 / 03 · TRAINING FOCUS</div><h2>집중 육성할 능력치 1~2개</h2><p class="hint">타고난 능력치는 그대로 유지됩니다. 선택한 분야를 연습생 시절 집중적으로 훈련합니다. 하나만 고르면 그 분야에 성장이 집중됩니다.</p><div class="options" id="specialties"><button class="option" data-spec="보컬">보컬</button><button class="option" data-spec="댄스">댄스</button><button class="option" data-spec="랩">랩</button><button class="option" data-spec="비주얼">비주얼</button><button class="option" data-spec="스타성">스타성</button><button class="option" data-spec="인성">인성</button></div><p class="note">선택 <span id="pickCount">(0/2)</span> · 선택한 분야는 훈련 과정에서 성장시킬 수 있습니다.</p></div><div class="grow"></div><div class="actions"><button class="btn primary" id="confirmTalent" disabled onclick="confirmRoll()">이 재능으로 연습생 시작하기 →</button></div></section>
 <section class="screen" id="game">
 <div class="top"><span>STAGE / TRAINEE</span><span class="pill" id="year">2028 · 1월</span></div>
 <div class="step">STEP 03 / 03 · GROWTH</div>
 <h1 class="heading" id="greeting">연습생 생활</h1>
-<p class="hint">8번의 육성 선택과 필수·일반·희귀 이벤트를 거쳐 기획사 오디션에 도전합니다.</p>
+
 <div class="status"><span id="careerStatus">연습생 · 1년 차</span><span id="energy">체력 80 / 100</span></div>
 <div class="roll-card" style="margin:16px 0">
 <div class="roll-head"><span class="roll-tag">데뷔 준비</span><strong id="actionCounter">0 / 4</strong></div>
 <div class="bar" style="margin-top:12px"><div class="fill" id="progressFill" style="width:0%"></div></div>
-<p class="small-help" id="trainingHint">5번의 육성 선택과 필수 평가 2회를 마치면 기획사 오디션에 도전합니다.</p>
+<p class="small-help" id="trainingHint"></p>
 </div>
 <div id="stats" hidden></div>
 <div class="roll-card" style="margin-bottom:18px">
 <div class="roll-tag">육성 방향</div><h2 id="eventTitle" style="margin:12px 0">연습생 성장 전략</h2>
-<p class="small-help" id="story">세 가지 행동 중 하나를 선택하세요.</p>
+<p class="small-help" id="story">어떤 하루를 보낼까요?</p>
 <div id="trainActions" class="growth-choices">
-<button type="button" class="growth-choice" onclick="train('hard')"><strong>01 · 혹독한 훈련</strong><small id="majorDetail">성공 확률 낮음 · 성공 시 능력치 대폭 상승 · 실패 시 컨디션 크게 하락</small></button>
-<button type="button" class="growth-choice" onclick="train('steady')"><strong>02 · 꾸준한 훈련</strong><small id="weakDetail">성공 확률 높음 · 성공 시 능력치 상승 · 실패 시 컨디션 소폭 하락</small></button>
-<button type="button" class="growth-choice" onclick="train('rest')"><strong>03 · 휴식</strong><small id="restDetail">무조건 성공 · 컨디션 회복 · 능력치 상승 없음</small></button>
-<button type="button" class="growth-choice" onclick="train('safe')"><strong>04 · 안정적인 훈련</strong><small id="safeDetail">성공 확률 100% · 능력치 +1 · 컨디션 -2~-4</small></button>
+<button type="button" class="growth-choice" onclick="train('hard')"><strong>01 · 혹독한 훈련</strong><small id="majorDetail">한계를 시험한다.</small></button>
+<button type="button" class="growth-choice" onclick="train('steady')"><strong>02 · 꾸준한 훈련</strong><small id="weakDetail">차근차근 실력을 쌓는다.</small></button>
+<button type="button" class="growth-choice" onclick="train('rest')"><strong>03 · 휴식</strong><small id="restDetail">몸과 마음을 돌본다.</small></button>
+<button type="button" class="growth-choice" onclick="train('safe')"><strong>04 · 안정적인 훈련</strong><small id="safeDetail">기본기를 다진다.</small></button>
 </div>
 
 </div>
@@ -465,7 +468,6 @@ function rollIdolName(){
  }
  history.add(fullname);
  document.getElementById('name').value=fullname;
- document.getElementById('namePoolInfo').textContent=(pool.length*idolSurnames.length).toLocaleString('ko-KR')+'개 조합';
 }
 
 function prepareRoll(){const name=$('name').value.trim()||'새로운 아이돌';
@@ -516,15 +518,15 @@ function render(){
  $('actionCounter').textContent=state.traineeTurns+' / 5';
  $('progressFill').style.width=(state.traineeTurns*20)+'%';
  $('stats').innerHTML=keys.map(k=>`<div class="stat"><div class="stathead"><span>${k}${state.selected.includes(k)?' ✦':''}</span><strong>${state.stats[k]}</strong></div><div class="bar"><div class="fill" style="width:${Math.min(100,state.stats[k]*5)}%"></div></div></div>`).join('');
- $('majorDetail').textContent='주력 능력치 · 성공률 30% · 성공 +11~15 · 실패 시 능력치 -1~-2, 컨디션 -12~-18';
- $('weakDetail').textContent='주력 능력치 · 성공률 80% · 성공 +2~5 · 실패 시 능력치 -1~-2, 컨디션 -5~-9';
- $('restDetail').textContent='확정 회복 · 컨디션 +18~26 · 부상 치료 가능';
- $('safeDetail').textContent='주력 능력치 · 성공률 100% · 능력치 +2 · 컨디션 -2~-4';
- $('trainingHint').textContent=`남은 선택 ${Math.max(0,5-state.traineeTurns)}회 · 컨디션 ${state.energy} · 부상 위험: ${injuryRiskText(state.energy)}${state.injury?' · 현재 '+(state.injury==='serious'?'심각한':'경미한')+' 부상':''}${state.forcedRestTurns?' · 다음 턴 강제 휴식':''}${state.recoveryMonths?' · 회복기 '+state.recoveryMonths+'개월 (성장 -30%)':''}`;
+ $('majorDetail').textContent='한계를 시험한다.';
+ $('weakDetail').textContent='차근차근 실력을 쌓는다.';
+ $('restDetail').textContent='몸과 마음을 돌본다.';
+ $('safeDetail').textContent='기본기를 다진다.';
+ $('trainingHint').textContent=state.injury?'현재 부상 회복 중입니다.':state.forcedRestTurns?'지금은 휴식이 필요합니다.':'';
  document.querySelectorAll(".growth-choice").forEach(b=>b.disabled=false);
  if(state.forcedRestTurns>0){document.querySelectorAll(".growth-choice").forEach(b=>{if(!b.getAttribute('onclick')?.includes("'rest'"))b.disabled=true;});}
  $('eventTitle').textContent='연습생 성장 전략';
- $('story').textContent='컨디션이 낮아질수록 훈련 중 부상 위험이 급증합니다. 경미한 부상은 능력치 -1~2, 심각한 부상은 능력치 -3~5 및 추가 컨디션 하락이 발생합니다. 부상 중에는 훈련 성과도 제한됩니다. 심각한 부상 시 다음 1턴(1개월)은 강제 휴식이며, 이후 3개월간 훈련 성장량이 30% 감소합니다.';
+ $('story').textContent='오늘은 어떻게 시간을 보낼까요?';
  $('logHistory').textContent=(state.trainingLog||[]).join('\\n')||'아직 기록이 없습니다.';
 }
 
