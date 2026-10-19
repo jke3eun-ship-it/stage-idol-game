@@ -398,7 +398,7 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 <p class="hint" id="specialEventText"></p>
 <div class="growth-choices" id="specialEventChoices" style="margin-top:20px"></div>
 </div>
-<p class="small-help">선택지를 고른 뒤 확인해야 결과가 적용됩니다.</p>
+<p class="small-help">선택하면 바로 결과가 적용되고 자동 저장됩니다.</p>
 </section>
 <section class="screen" id="audition">
 <div class="top"><span>STAGE / AUDITION</span><span class="pill">CHAPTER 04</span></div>
@@ -434,8 +434,8 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 <section class="screen" id="careerActivity"><div class="top">STAGE / SEASON PLAN</div><div class="step" id="activitySeasonLabel"></div><h1 class="heading">이번 시즌 주력 활동</h1><p class="hint">이번 시즌에는 무엇에 집중할까요? 선택한 활동을 마친 뒤 성장 투자로 넘어갑니다.</p><div id="activityOptions" class="growth-choices"></div></section>
 <section class="screen" id="careerOtherActivity"><div class="top">STAGE / ACTIVITY</div><h1 class="heading" id="otherActivityTitle"></h1><p class="hint" id="otherActivityHint"></p><div id="otherActivityOptions" class="growth-choices"></div></section>
 <section class="screen" id="careerAlbum"><div class="top">STAGE / ALBUM PRODUCTION</div><div class="step" id="albumSeasonLabel"></div><h1 class="heading">① 앨범 제작</h1><p class="hint">앨범 제작을 확정하면 음악방송·예능·팬사인회 활동이 자동 진행되고 흥행 결과 화면으로 넘어갑니다.</p><div class="roll-card"><div class="roll-tag">앨범 제작 · 시즌당 1회</div><div id="albumChoices" class="growth-choices"></div></div></section>
-<section class="screen" id="careerAlbumResult"><div class="top">STAGE / ALBUM RESULTS</div><h1 class="heading">② 이번 시즌 활동 결과</h1><div id="albumResult" aria-live="polite" style="margin-top:12px"></div><div class="actions"><button class="btn primary" type="button" onclick="openGrowthScreen()">결과 확인 · 시즌 성장 투자 →</button></div></section>
-<section class="screen" id="careerGrowth"><div class="top">STAGE / GROWTH INVESTMENT</div><div class="step" id="growthSeasonLabel"></div><h1 class="heading">③ 이번 시즌 성장 투자</h1><p class="hint">능력치를 육성합니다. 투자 결과를 확인하면 다음 시즌으로 넘어갑니다.</p><div class="roll-card"><div class="roll-tag">성장 투자 · 시즌당 1회</div><div id="careerChoices" class="growth-choices"></div></div></section>
+<section class="screen" id="careerAlbumResult"><div class="top">STAGE / SEASON RESULTS</div><h1 class="heading">이번 시즌 활동 결과</h1><div id="albumResult" aria-live="polite" style="margin-top:12px"></div><div class="roll-card"><div class="roll-tag">다음 성장 선택 · 시즌당 1회</div><div class="step" id="growthSeasonLabel"></div><h2 style="margin:12px 0">어떤 능력을 키울까요?</h2><p class="small-help">위 활동 결과를 보고 성장 방향을 선택하세요. 성장 결과를 확인하면 다음 시즌으로 넘어갑니다.</p><div id="careerChoices" class="growth-choices"></div></div></section>
+
 <section class="screen" id="militaryScreen"><div class="top">STAGE / MILITARY</div><div class="step" id="militaryStage"></div><div class="roll-card"><div class="roll-tag">병역 · 커리어의 분기점</div><h1 class="heading" id="militaryTitle"></h1><p class="hint" id="militaryText"></p><div class="growth-choices" id="militaryChoices"></div></div></section>
 <section class="screen" id="injuryScreen"><div class="top">STAGE / RECOVERY</div><div class="roll-card"><div class="roll-tag">부상 · 수술 · 재활</div><h1 class="heading" id="injuryTitle"></h1><p class="hint" id="injuryText"></p><button class="btn primary" onclick="finishInjuryRecovery()">3개월 치료 및 재활 완료 →</button></div></section>
 <section class="screen" id="retirementCrisis"><div class="top">STAGE / CAREER CROSSROADS</div><div class="step" id="retirementStage"></div><div class="roll-card"><div class="roll-tag">은퇴 위기 · 선택의 순간</div><h1 class="heading" id="retirementTitle"></h1><p class="hint" id="retirementText"></p><div id="retirementOdds" class="small-help" style="margin:12px 0"></div><div class="growth-choices" id="retirementChoices"></div></div></section><section class="screen" id="careerSpecial"><div class="top">STAGE / SPECIAL EVENT</div><div class="step" id="careerEventStage"></div><div class="roll-card"><div class="roll-tag" id="careerEventTag"></div><h1 class="heading" id="careerEventTitle"></h1><p class="hint" id="careerEventText"></p><div class="growth-choices" id="careerEventChoices" style="margin-top:20px"></div></div></section><section class="screen" id="annualAwards"><div class="top">STAGE / MUSIC AWARDS</div><div class="step" id="awardYear"></div><h1 class="heading" id="awardHeading">STAGE MUSIC AWARDS</h1><p class="hint" id="awardIntro"></p><div class="roll-card" id="awardContent"></div><div class="actions"><button class="btn primary" onclick="nextAwardReveal()" id="awardNext">다음 →</button></div></section><section class="screen" id="stageHall"><div class="top">STAGE / HALL OF FAME</div><h1 class="heading">명예의 전당</h1><div id="stageHallList"></div><button class="btn secondary" onclick="go('home')">돌아가기</button></section><section class="screen" id="careerEnd"><div class="top">STAGE / FINAL REPORT</div><h1 class="heading" id="endTitle"></h1><div class="roll-card"><div id="endReport"></div></div><div id="storyEndPanel"></div><p class="small-help" id="endHistory" style="white-space:pre-line"></p><button class="btn primary" onclick="go('home')">타이틀로 돌아가기</button></section><section class="screen" id="switchOffer"><div class="top">STAGE / PRODUCER</div><div class="step">SPECIAL EVENT</div><div class="roll-card" style="margin:24px 0"><div class="roll-tag">전향 제안</div><h1 class="heading" id="switchTitle"></h1><p class="hint" id="switchText"></p><p class="small-help" id="switchOdds"></p><div class="growth-choices"><button class="growth-choice" onclick="resolveSwitch(true)"><strong>전향에 도전한다</strong><small>성공 시 새로운 유형과 성장 보너스</small></button><button class="growth-choice" onclick="resolveSwitch(false)"><strong>기존 유형을 유지한다</strong><small>현재 주력 능력치 +1</small></button></div></div></section>
@@ -515,7 +515,7 @@ function escapeCharacterText(v){return String(v||'').replace(/[&<>"']/g,c=>({'&'
 function loadCharacterSlot(id){const raw=localStorage.getItem(characterSlotKey(id));if(!raw){refreshCharacterSlots();return}activeCharacterId=id;localStorage.setItem(STAGE_ACTIVE_KEY,id);localStorage.setItem('stage-save-v17',raw);loadGame()}
 function deleteCharacterSlot(id){const slot=readCharacterSlots().find(x=>x.id===id);if(!slot||!confirm('"'+slot.name+'" 캐릭터의 저장 데이터를 삭제할까요? 복구할 수 없습니다.'))return;localStorage.removeItem(characterSlotKey(id));const slots=readCharacterSlots().filter(x=>x.id!==id);localStorage.setItem(STAGE_SLOTS_KEY,JSON.stringify(slots));if(activeCharacterId===id){activeCharacterId=slots[0]?.id||null;if(activeCharacterId){localStorage.setItem(STAGE_ACTIVE_KEY,activeCharacterId);localStorage.setItem('stage-save-v17',localStorage.getItem(characterSlotKey(activeCharacterId)))}else{localStorage.removeItem(STAGE_ACTIVE_KEY);localStorage.removeItem('stage-save-v17')}}refreshCharacterSlots()}
 function save(){if(!state)return;renderStatus();updateStageDate(document.querySelector('.screen.active')?.id);if(!activeCharacterId){activeCharacterId='c'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);localStorage.setItem(STAGE_ACTIVE_KEY,activeCharacterId)}const raw=JSON.stringify(state);try{localStorage.setItem(characterSlotKey(activeCharacterId),raw);localStorage.setItem('stage-save-v17',raw);const slots=readCharacterSlots().filter(x=>x.id!==activeCharacterId);slots.unshift({id:activeCharacterId,name:state.name,gender:state.gender||'female',updated:Date.now()});localStorage.setItem(STAGE_SLOTS_KEY,JSON.stringify(slots));refreshCharacterSlots()}catch(e){alert('브라우저 저장 공간이 부족하거나 저장이 차단되어 있습니다.')}}
-function loadGame(){try{state=JSON.parse(localStorage.getItem('stage-save-v17'));if(!state)throw 0;normalizeState();render();if(state.careerEnded&&!state.debuted){endTraineeSchoolView()}else if(state.pendingTraineeMini&&!state.debuted){go('game');openTraineeMini()}else if(state.careerEnded){showCareerEnd()}else if(state.awardPresentation&&!state.statResultPending){renderAwardPresentation()}else if(state.injuryRecovery&&!state.statResultPending){renderInjuryRecovery()}else if(state.militaryReport&&!state.statResultPending){renderMilitaryReport()}else if(state.pendingMilitaryHomecoming&&!state.statResultPending){renderMilitaryHomecoming()}else if(state.pendingRetirementCrisis&&!state.statResultPending){renderRetirementCrisis()}else if(state.pendingCareerTwist&&!state.statResultPending){renderCareerTwist()}else if(state.pendingCareerEvent&&!state.statResultPending){renderCareerSpecial()}else if(state.statResultPending){go(state.debuted?'career':'game');showStatResult()}else if(state.trainingResultPending&&state.lastTrainingResult){go('game');pendingTrainingContinuation=state.auditionResults?'audition':state.pendingEvent?'event':'game';showTrainingResult()}else if(state.auditionResults&&!state.debuted){renderAudition();go('audition')}else if(state.debuted){if(state.switchOffer)renderSwitchOffer();else if(state.careerSeason>0)openCareer();else showDebutDetails()}else if(state.pendingEvent){renderEvent();go('traineeEvent')}else go('game')}catch(e){alert('저장된 게임이 없습니다.')}}
+function loadGame(){try{state=JSON.parse(localStorage.getItem('stage-save-v17'));if(!state)throw 0;normalizeState();render();if(state.careerEnded&&!state.debuted){endTraineeSchoolView()}else if(state.pendingTraineeMini&&!state.debuted&&!state.trainingResultPending&&!state.statResultPending){go('game');openTraineeMini()}else if(state.careerEnded){showCareerEnd()}else if(state.awardPresentation&&!state.statResultPending){renderAwardPresentation()}else if(state.injuryRecovery&&!state.statResultPending){renderInjuryRecovery()}else if(state.militaryReport&&!state.statResultPending){renderMilitaryReport()}else if(state.pendingMilitaryHomecoming&&!state.statResultPending){renderMilitaryHomecoming()}else if(state.pendingRetirementCrisis&&!state.statResultPending){renderRetirementCrisis()}else if(state.pendingCareerTwist&&!state.statResultPending){renderCareerTwist()}else if(state.pendingCareerEvent&&!state.statResultPending){renderCareerSpecial()}else if(state.statResultPending){go(state.debuted?'career':'game');showStatResult()}else if(state.trainingResultPending&&state.lastTrainingResult){go('game');pendingTrainingContinuation=state.auditionResults?'audition':state.pendingEvent?'event':'game';showTrainingResult()}else if(state.auditionResults&&!state.debuted){renderAudition();go('audition')}else if(state.debuted){if(state.switchOffer)renderSwitchOffer();else if(state.careerSeason>0)openCareer();else showDebutDetails()}else if(state.pendingEvent){renderEvent();go('traineeEvent')}else go('game')}catch(e){alert('저장된 게임이 없습니다.')}}
 function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 function rollStats(profile=null){
   // 시작 총합 60 고정. 균형형 / 특화형 / 극단형이 공존하도록 프로필별 분포를 사용한다.
@@ -752,74 +752,15 @@ function showResultRows(items){
 let growthTimer=null,growthAudio=null,growthRevealActive=false,growthFinish=null,growthFrame=null;
 function growthTone(freq=600,length=.035){if(!soundEnabled)return;try{const C=window.AudioContext||window.webkitAudioContext;if(!C)return;if(!growthAudio)growthAudio=new C();if(growthAudio.state!=='running')return;const osc=growthAudio.createOscillator(),gain=growthAudio.createGain();osc.type='sine';osc.frequency.value=freq;gain.gain.setValueAtTime(.024,growthAudio.currentTime);gain.gain.exponentialRampToValueAtTime(.001,growthAudio.currentTime+length);osc.connect(gain);gain.connect(growthAudio.destination);osc.start();osc.stop(growthAudio.currentTime+length);}catch(e){}}
 function skipGrowthReveal(){if(growthRevealActive&&growthFinish)growthFinish(true);}
-function runGrowthReveal(items){
+function runGrowthReveal(){
+ clearTimeout(growthTimer);
  if(growthFrame!==null)cancelAnimationFrame(growthFrame);
- clearTimeout(growthTimer);growthFrame=null;growthRevealActive=false;growthFinish=null;
- const panel=$('growthReveal'),main=items.find(x=>keys.includes(x.label));
- if(!main){panel.hidden=true;$('trainingResultValues').hidden=false;$('trainingResultNarrative').hidden=false;$('trainingResultNext').disabled=false;return;}
- panel.hidden=false;panel.className='growth-reveal growth-list-mode';
- $('trainingResultValues').hidden=true;$('trainingResultNarrative').hidden=true;
- if(resultStage==='roulette'){$('activitySettlementValues').hidden=true;$('activitySettlementContinue').disabled=true;}
- $('growthTarget').textContent=main.label+' 성장 판정';$('growthPhase').textContent='판정 중';
- $('growthFinal').textContent='결과를 결정하는 중…';$('trainingResultNext').disabled=true;
- const diff=main.now-main.old;
- // Keep the actual outcome authoritative, but never force it into the best slot.
- // Distractors are display-only; growth odds and applied stats are unchanged.
- const pool=diff>=5?[diff+2,diff-3,-1]:diff>=2?[diff+3,diff-2,-1]:diff===1?[4,-1,-2]:diff===0?[3,1,-2]:[4,1,diff-2];
- const candidates=[diff];
- for(const n of pool){if(!candidates.includes(n))candidates.push(n);if(candidates.length===3)break;}
- candidates.sort((x,y)=>y-x);
- // Rotate visual positions so the winning row is not predictably the top row.
- const rotation=Math.floor(Math.random()*3);
- candidates.push(...candidates.splice(0,rotation));
- const winning=candidates.indexOf(diff);
- const readout=document.createElement('div');readout.className='growth-readout';readout.textContent='';
- const list=document.createElement('div');list.className='growth-options';
- const optionEls=candidates.map((value)=>{
-  const el=document.createElement('div');el.className='growth-option';
-  const arrow=document.createElement('span');arrow.className='growth-option-arrow';arrow.textContent='';
-  const label=document.createElement('strong');label.textContent=(value>0?'▲ ':value<0?'▼ ':'― ')+Math.abs(value);
-  const caption=document.createElement('span');caption.className='growth-option-caption';caption.textContent=value>0?'성장':value<0?'훈련 역효과':'변화 없음';
-  const lamp=document.createElement('span');lamp.className='growth-option-lamp';
-  el.append(arrow,label,caption,lamp);list.append(el);return el;
- });
- const mount=$('growthOptionsMount');mount.replaceChildren(readout,list);
- function light(index,final=false){
-  optionEls.forEach((el,i)=>{el.className='growth-option'+(i===index?' lit':'')+(i===index&&final?(diff<0?' result-negative':' result-positive'):'')+(i===index&&final?' settled':'');});
- }
- function finish(skipped){
-  if(!growthRevealActive)return;
-  growthRevealActive=false;if(growthFrame!==null)cancelAnimationFrame(growthFrame);growthFrame=null;
-  light(winning,true);panel.classList.add('finished');if(diff<0)panel.classList.add('negative');
-  $('growthPhase').textContent='판정 확정';
-  $('growthFinal').textContent='';
-  $('trainingResultValues').hidden=true;$('trainingResultNarrative').hidden=false;$('trainingResultNext').disabled=false;
-  if(resultStage==='roulette'){$('activitySettlementValues').hidden=true;$('activitySettlementContinue').disabled=false;}
-  if(!skipped)growthTone(diff>0?1040:350,.18);
-  growthFinish=null;
- }
- growthRevealActive=true;growthFinish=finish;
- const duration=4100,start=performance.now();let last=-1;
- function frame(now){
-  if(!growthRevealActive)return;
-  const t=Math.min(1,(now-start)/duration);
-  // Smooth continuous time-based animation, with decelerating stepped highlights.
-  const totalSteps=24,progress=1-Math.pow(1-t,2.7);
-  const step=Math.min(totalSteps-1,Math.floor(progress*totalSteps));
-  const index=t>=.985?winning:step%3;
-  if(step!==last){last=step;light(index);if(step%3===0&&t<.85)growthTone(450+step*10,.028);}
-  if(t>=1){finish(false);return;}
-  growthFrame=requestAnimationFrame(frame);
- }
- light(0);growthFrame=requestAnimationFrame(frame);
+ growthFrame=null;growthRevealActive=false;growthFinish=null;
+ $('growthReveal').hidden=true;
+ $('trainingResultValues').hidden=false;
+ $('trainingResultNarrative').hidden=false;
+ $('trainingResultNext').disabled=false;
 }
-// Tap anywhere on the result overlay to reveal the predetermined outcome immediately.
-$('activitySettlementScreen').addEventListener('pointerdown',e=>{if(growthRevealActive&&!e.target.closest('button'))skipGrowthReveal();});
-$('trainingResultShade').addEventListener('pointerdown',e=>{
- if(!growthRevealActive)return;
- if(e.target.closest('button'))return;
- skipGrowthReveal();
-});
 function showStatResult(){
  const r=state?.statResultPending;if(!r)return;
  pendingStatContinuation=r.next;
@@ -858,68 +799,30 @@ let pendingTrainingContinuation=null;
 let resultStage='story';
 let resultItems=[];
 function beginMobileResult(items){
- resultItems=items;
- resultStage='roulette';
- $('growthReveal').hidden=true;
- $('trainingResultValues').hidden=true;
- $('trainingResultNarrative').hidden=false;
- const narrative=$('trainingResultNarrative');
- const raw=narrative.textContent;
- if(raw.includes('선택:')&&raw.includes('결과:')){
-  const choice=(raw.match(/(?:^|\n)선택:\s*([^\n]*)/)||[])[1];
-  const outcome=(raw.match(/(?:^|\n)결과:\s*([\s\S]*?)(?=\n(?:변화|판정 성공률|데뷔 평가)|$)/)||[])[1];
-  if(choice&&outcome){
-   narrative.replaceChildren();
-   const selected=document.createElement('div');selected.className='story-choice';selected.textContent='나의 선택\n'+choice.trim();
-   const story=document.createElement('div');story.className='story-outcome';story.textContent=outcome.trim();
-   narrative.append(selected,story);
-  }
- }
- $('trainingResultNext').disabled=false;
- $('trainingResultNext').textContent='다음으로 →';
- showMobileSettlement();
-}
-function showMobileStory(){
- resultStage='story';
+ resultItems=items;resultStage='summary';
+ runGrowthReveal();
  $('activitySettlementScreen').hidden=true;
- $('trainingResultNarrative').hidden=false;
- $('trainingResultShade').classList.add('open');
- $('trainingResultShade').setAttribute('aria-hidden','false');
+ showResultRows(items);
+ const shade=$('trainingResultShade');
+ shade.classList.add('open');shade.setAttribute('aria-hidden','false');
  document.body.classList.add('training-result-open');
- $('trainingResultShade').querySelector('.training-result-dialog').scrollTop=0;
+ const dialog=shade.querySelector('.training-result-dialog');
+ dialog.scrollTop=0;
+ dialog.classList.remove('compact-result-enter');
+ // Cosmetic animation only: results and Continue are usable immediately.
+ void dialog.offsetWidth;dialog.classList.add('compact-result-enter');
+ $('trainingResultNext').disabled=false;
+ $('trainingResultNext').textContent='계속하기 →';
  $('trainingResultNext').focus();
 }
-function showMobileSettlement(){
- resultStage='roulette';
- // Start with the roulette BEFORE the narrative popup.
- // Close the story popup and navigate to a dedicated, full-screen mobile settlement.
- $('trainingResultShade').classList.remove('open');
- $('trainingResultShade').setAttribute('aria-hidden','true');
- const screen=$('activitySettlementScreen');
- const rows=$('activitySettlementValues');
- const source=$('trainingResultValues');
- showResultRows(resultItems);
- rows.replaceChildren(...Array.from(source.children));
- screen.hidden=false;
- // Reuse the ORIGINAL three-choice arrow roulette in the settlement screen.
- // Move the existing DOM instead of replacing the original animation with generic fades.
- const mount=$('activityGrowthRevealMount');
- mount.appendChild($('growthReveal'));
- $('activitySettlementValues').hidden=false;
- $('activitySettlementContinue').disabled=false;
- runGrowthReveal(resultItems);
- if(!$('growthReveal').hidden){
-   $('activitySettlementValues').hidden=true;
-   $('activitySettlementContinue').disabled=true;
- }
- screen.scrollTop=0;
- $('activitySettlementContinue').focus();
-}
+// Compatibility entry points; old saved results reopen as a single summary.
+function showMobileStory(){beginMobileResult(resultItems);}
+function showMobileSettlement(){beginMobileResult(resultItems);}
 function showTrainingResult(){
  const r=state?.lastTrainingResult;if(!r)return;
  const names={hard:'혹독한 훈련',steady:'꾸준한 훈련',safe:'안정적인 훈련',rest:'휴식'};
  $('trainingResultKicker').textContent='STAGE / TRAINING · '+state.traineeTurns+' / 5';
- $('trainingResultTitle').textContent=(names[r.mode]||'훈련')+' · 성장 판정';
+ $('trainingResultTitle').textContent=(names[r.mode]||'훈련')+' · 결과';
  $('trainingResultNarrative').textContent=r.narration+(r.injuryMessage?'\n\n'+r.injuryMessage:'');
  const items=[];
  if(r.target&&Number.isFinite(Number(r.gain))){const after=state.stats[r.target];items.push({label:r.target,old:after-Number(r.gain),now:after});}
@@ -927,7 +830,8 @@ function showTrainingResult(){
  beginMobileResult(items);
 }
 function continueAfterTraining(){
- if(resultStage==='roulette'){if($('activitySettlementScreen').hidden)return;if(growthRevealActive){skipGrowthReveal();return;}showMobileStory();return;}if(resultStage!=='story'||!$('trainingResultShade').classList.contains('open'))return;clearTimeout(growthTimer);
+ if(resultStage!=='summary'||!$('trainingResultShade').classList.contains('open'))return;
+ resultStage='closed';runGrowthReveal();$('activitySettlementScreen').hidden=true;
  if(state?.statResultPending){
   const next=state.statResultPending.next;
   state.statResultPending=null;pendingStatContinuation=null;save();
@@ -959,7 +863,7 @@ function injuryRiskText(energy){
  return `경미 ${Math.round(r.minor*100)}% / 심각 ${Math.round(r.serious*100)}%`;
 }
 function train(mode){
- if(!state||state.debuted)return;normalizeState();
+ if(!state||state.debuted||state.trainingResultPending||state.statResultPending)return;normalizeState();
  if(state.pendingTraineeMini||((state.traineeTurns>=5&&!state.forcedRestTurns))||!['hard','steady','rest','safe'].includes(mode))return;
  if(state.forcedRestTurns>0&&mode!=='rest'){render();return;}
  const forcedRest=state.forcedRestTurns>0;
@@ -1855,34 +1759,21 @@ function beginAnnualAwards(){
  state.awardPresentation={year,step:0};save();renderAwardPresentation();
 }
 function renderAwardPresentation(){
- const presentation=state.awardPresentation;if(!presentation)return;
- const report=(state.awardsHistory||[]).find(a=>a.year===presentation.year);if(!report){state.awardPresentation=null;save();openCareer();return;}
+ const presentation=state?.awardPresentation;if(!presentation)return;
+ const report=(state.awardsHistory||[]).find(a=>a.year===presentation.year);
+ if(!report){state.awardPresentation=null;save();openCareer();return;}
  const cats=report.categories.filter(c=>c.nominated);
- const step=presentation.step;
  $('awardYear').textContent=`${report.year}년 · 연말 시상식`;
- if(step===0){
-  $('awardHeading').textContent='시상식 후보 발표';
-  $('awardIntro').textContent=report.grandNomination?'올해 대상 후보에 이름을 올렸습니다.':'올해의 성과로 시상식 후보에 올랐습니다.';
-  $('awardContent').innerHTML=`<div class="roll-tag">NOMINATIONS</div>${cats.map(c=>`<div class="roll-summary"><span>${c.name}</span><strong>${c.type==='grand'?'대상 후보':'후보'}</strong></div>`).join('')}`;
-  $('awardNext').textContent='수상 결과 확인 →';
- }else if(step<=cats.length){
-  const c=cats[step-1];$('awardHeading').textContent=c.name;
-  $('awardIntro').textContent=c.won?'수상을 축하합니다!':'올해의 수상자가 발표되었습니다.';
-  $('awardContent').innerHTML=`<div class="roll-tag">${c.type==='grand'?'GRAND PRIZE':'AWARDS'}</div><h2 style="margin:16px 0">${c.won?'🏆 '+state.name:c.winner.join(', ')}</h2><p class="hint">${c.won?'수상 성공 · 커리어 기록에 영구 저장':'후보에 오른 것만으로도 의미 있는 성과입니다.'}</p><p class="small-help">후보: ${c.nominees.map(x=>x.name).join(' · ')}</p>`;
-  $('awardNext').textContent=step===cats.length?'시상식 마무리 →':'다음 부문 →';
- }else{
-  $('awardHeading').textContent='시상식 종료';$('awardIntro').textContent='올해의 수상 기록이 커리어에 저장되었습니다.';
-  $('awardContent').innerHTML=`<div class="roll-tag">YEARLY RECORD</div><h2>${report.wins.length?report.wins.length+'개 부문 수상':'수상 없음'}</h2><p class="hint">${report.wins.length?report.wins.map(id=>awardCategories.find(c=>c.id===id).name).join(' · '):'다음 해의 도전을 기대해 주세요.'}</p>`;
-  $('awardNext').textContent='다음 시즌으로 →';
- }
+ $('awardHeading').textContent=report.wins.length?`🏆 ${report.wins.length}개 부문 수상`:'올해의 시상식 결과';
+ $('awardIntro').textContent='후보와 수상 결과를 한눈에 확인하세요. 수상 보상과 기록은 이미 반영되었습니다.';
+ $('awardContent').innerHTML=cats.map(c=>`<section class="award-summary-card ${c.won?'award-won':''}"><div class="roll-summary"><span>${escapeCharacterText(c.name)}</span><strong>${c.won?'🏆 수상':'후보'}</strong></div><p class="small-help">수상자: ${c.winner.map(escapeCharacterText).join(', ')}</p><details><summary>후보 보기</summary><p class="small-help">${c.nominees.map(x=>escapeCharacterText(x.name)).join(' · ')}</p></details></section>`).join('')||'<p class="hint">올해는 후보에 오른 부문이 없습니다.</p>';
+ $('awardNext').textContent='육성으로 돌아가기 →';
  go('annualAwards');
 }
 function nextAwardReveal(){
  if(!state?.awardPresentation)return;
- const r=state.awardsHistory.find(a=>a.year===state.awardPresentation.year);
- const max=r.categories.filter(c=>c.nominated).length+1;
- if(state.awardPresentation.step>=max){state.awardPresentation=null;save();if(state.pendingAwardYears.length)beginAnnualAwards();else openCareer();return;}
- state.awardPresentation.step++;save();renderAwardPresentation();
+ state.awardPresentation=null;save();
+ if(state.pendingAwardYears?.length)beginAnnualAwards();else openCareer();
 }
 
 function openCareer(){if(!state?.debuted)return;if(state.careerEnded){showCareerEnd();return;}normalizeState();if(state.injuryRecovery){renderInjuryRecovery();return;}if(state.militaryReport){renderMilitaryReport();return;}if(state.pendingMilitaryHomecoming){renderMilitaryHomecoming();return;}if(state.awardPresentation){renderAwardPresentation();return;}if(state.pendingAwardYears?.length){beginAnnualAwards();return;}if(checkMilitaryMilestone())return;if(state.pendingRetirementCrisis){renderRetirementCrisis();return;}if(state.pendingCareerTwist){renderCareerTwist();return;}if(state.pendingCareerEvent){renderCareerSpecial();return;}advanceCareerFlow();}
@@ -1954,7 +1845,7 @@ function renderOtherActivity(){
 }
 
 function openAlbumScreen(){if(!state?.debuted||state.careerEnded)return;renderCareer();go('careerAlbum');}
-function openGrowthScreen(){if(!state?.debuted||state.careerEnded||!state.albumThisSeason)return;renderCareer();go('careerGrowth');}
+function openGrowthScreen(){if(!state?.debuted||state.careerEnded||!state.albumThisSeason)return;renderCareer();go('careerAlbumResult');}
 function renderCareer(){
  const f=state.activeFocus;
  const months=(state.traineeMonths||0)+state.careerSeason*6+(state.extraMonths||0);$('careerYear').textContent=`${2028+Math.floor(months/12)}년 · ${Math.floor(months%12/6)===0?'상반기':'하반기'}`;
@@ -2103,7 +1994,7 @@ function finishAlbum(){
 }
 
 function investCareer(kind){
- if(!state?.debuted||state.switchOffer||!state.albumThisSeason)return;
+ if(!state?.debuted||state.switchOffer||!state.albumThisSeason||state.statResultPending)return;
  const before=statSnapshot();
  const oldCalendarYear=gameYear();
  const f=state.activeFocus;
@@ -2175,35 +2066,7 @@ function renderStatus(){
 }
 migrateLegacyCharacter();refreshCharacterSlots();syncSound();
 
-// One deliberate selection + explicit confirmation for every consequential action.
-// Capture-phase handler prevents existing inline onclick handlers from firing prematurely.
-let confirmedChoiceClick=false;
-let pendingChoiceButton=null;
-function clearPendingChoice(){
- document.querySelectorAll('.choice-confirm-row').forEach(el=>el.remove());
- document.querySelectorAll('.growth-choice.pending-confirm').forEach(el=>el.classList.remove('pending-confirm'));
- pendingChoiceButton=null;
-}
-document.addEventListener('click',function(event){
- const button=event.target.closest('button.growth-choice');
- if(!button||confirmedChoiceClick||button.disabled)return;
- const action=button.getAttribute('onclick')||'';
- if(!/^(?:train|resolveEvent|investCareer|resolveSwitch)\(/.test(action.trim()))return;
- event.preventDefault();event.stopImmediatePropagation();
- if(pendingChoiceButton===button)return;
- clearPendingChoice();pendingChoiceButton=button;
- button.classList.add('pending-confirm');
- const row=document.createElement('div');row.className='choice-confirm-row';
- const yes=document.createElement('button');yes.type='button';yes.className='choice-confirm-yes';yes.textContent='이 선택 확정하기 →';
- const cancel=document.createElement('button');cancel.type='button';cancel.className='choice-confirm-cancel';cancel.textContent='취소';
- row.append(yes,cancel);button.insertAdjacentElement('afterend',row);
- cancel.addEventListener('click',()=>clearPendingChoice());
- yes.addEventListener('click',()=>{
-   if(pendingChoiceButton!==button||!button.isConnected)return;
-   clearPendingChoice();confirmedChoiceClick=true;
-   try{button.click()}finally{confirmedChoiceClick=false;clearPendingChoice()}
- });
-},true);
+// Repeated training, events, growth, and focus choices execute in one tap.
 </script>
 <style>
 #traineeMiniOverlay{position:fixed;inset:0;background:#101719f5;z-index:99999;display:none;align-items:center;justify-content:center;padding:18px;color:#f4f8ed}
@@ -2289,6 +2152,19 @@ growthTone=function(freq=600,length=.035){
  if(isResult&&freq>=600){setTimeout(()=>stageSfx(freq*1.26,.15,'triangle',.038,170),85);}
 };
 </script>
+
+<style>
+.training-result-dialog #trainingResultNarrative{white-space:pre-line}
+.training-result-dialog #trainingResultNext{position:sticky;bottom:0;z-index:2;box-shadow:0 -8px 16px #222a2ee8}
+.compact-result-enter .result-stat-row{animation:compactResultEnter .22s ease-out both}
+@keyframes compactResultEnter{from{opacity:.5;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.award-summary-card{border:1px solid #ffffff24;border-radius:14px;padding:12px 15px;margin:10px 0;background:#ffffff06}
+.award-summary-card.award-won{border-color:#d8fa5966;background:#d8fa5909}
+.award-summary-card .roll-summary{margin-top:0;padding-top:0;border-top:0}
+.award-summary-card summary{font-size:12px;cursor:pointer;color:#c9c4de}
+@media(prefers-reduced-motion:reduce){.compact-result-enter .result-stat-row{animation:none}}
+</style>
+
 </body></html>
 
 <style>
