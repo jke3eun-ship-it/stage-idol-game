@@ -207,7 +207,7 @@ body{background:var(--stage-bg);color:var(--stage-text)}
 .result-empty{border:1px dashed #42504b;background:#192125;border-radius:11px;padding:16px;color:#aab8b1;font-size:13px;text-align:center}
 .result-footer-note{color:#94a69e;font-size:11px;line-height:1.5;margin-top:2px}
 @media(max-width:600px){.training-result-shade{padding:10px;align-items:center}.training-result-dialog{padding:20px 15px 14px;max-height:calc(100dvh - 24px);width:100%;border-radius:16px}.training-result-values{margin:12px 0;gap:7px}.result-stat-row{padding:10px 11px;min-height:48px;gap:8px}.training-result-dialog h2{margin:7px 0 9px}.training-result-next{min-height:52px}}
-.activity-settlement-screen{position:fixed;inset:0;z-index:111;overflow-y:auto;background:#151c1f;padding:max(28px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom))}.activity-settlement-screen[hidden]{display:none!important}.activity-settlement-content{max-width:440px;margin:0 auto;min-height:calc(100dvh - 70px);display:flex;flex-direction:column}.activity-settlement-content h2{font-size:clamp(26px,7vw,34px);margin:12px 0 4px;color:#f3f7ee}.activity-settlement-subtitle{font-size:13px;color:#aabbb2;margin:0 0 14px}.activity-settlement-content .training-result-values{margin:8px 0 24px}.activity-settlement-content .training-result-next{margin-top:auto;position:sticky;bottom:0;flex-shrink:0}
+.activity-settlement-screen{position:fixed;inset:0;z-index:111;overflow-y:auto;background:#151c1f;padding:max(28px,env(safe-area-inset-top)) 18px max(24px,env(safe-area-inset-bottom))}.activity-settlement-screen[hidden]{display:none!important}.activity-settlement-content{max-width:440px;margin:0 auto;min-height:calc(100dvh - 70px);display:flex;flex-direction:column}.activity-settlement-content h2{font-size:clamp(26px,7vw,34px);margin:12px 0 4px;color:#f3f7ee}.activity-settlement-subtitle{font-size:13px;color:#aabbb2;margin:0 0 14px}.activity-settlement-content .training-result-values{margin:8px 0 24px}.activity-settlement-content .growth-reveal{margin:14px 0 20px}.activity-settlement-content .growth-options{max-width:100%}.activity-settlement-content .training-result-next{margin-top:auto;position:sticky;bottom:0;flex-shrink:0}
 .training-result-next{width:100%;min-height:54px;background:#d8fa59;color:#182019;border:0;border-radius:11px;font-weight:900;font-size:15px;position:sticky;bottom:0;cursor:pointer}
 .growth-reveal{background:#11191b;border:1px solid #46564c;border-radius:16px;padding:18px 15px 16px;margin:17px 0 4px;overflow:hidden}.growth-reveal[hidden]{display:none}.growth-top{display:flex;justify-content:space-between;gap:8px;color:#c5d3cd;font-size:12px;font-weight:800}.growth-top span:last-child{color:#d8fa59}.growth-final{text-align:center;font-size:18px;font-weight:900;margin-top:16px;min-height:26px;color:#d8fa59}.growth-reveal.finished{border-color:#9ab65b;box-shadow:0 0 26px #d8fa5916}.growth-reveal.negative .growth-final{color:#ff9f9e}.training-result-next:disabled{opacity:.4;cursor:wait}body.training-result-open{overflow:hidden}
 
@@ -250,6 +250,28 @@ body{background:var(--stage-bg);color:var(--stage-text)}
 html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipulation}
 
 .saved-character-list{margin:16px 0 0;display:grid;gap:9px}.saved-character-title{font-size:12px;letter-spacing:.08em;color:#a7b4ad}.saved-character-row{display:flex;align-items:center;gap:8px;padding:11px 12px;border:1px solid #48524e;border-radius:12px;background:#222a2a}.saved-character-info{flex:1;min-width:0}.saved-character-info strong{display:block;font-size:15px;color:#eef5e8;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.saved-character-info small{font-size:11px;color:#a7b4ad}.saved-character-row button{border:1px solid #68746a;background:#303b37;color:#f1f5ee;border-radius:8px;padding:9px 10px;font-size:12px;cursor:pointer}.saved-character-row .delete-character{color:#f3b5b5;border-color:#805252}
+
+/* STAGE mobile readability and restored result fanfare */
+@media(max-width:600px){
+ .training-result-shade{padding:16px;align-items:center}
+ .training-result-dialog{width:100%;max-width:420px;padding:20px 18px 16px;border-radius:20px;max-height:calc(100dvh - 60px)}
+ .training-result-dialog h2{font-size:clamp(19px,5.3vw,23px);line-height:1.38;margin:10px 0 14px;letter-spacing:-.045em}
+ .training-result-dialog p{font-size:15px;line-height:1.7;color:#e2e9e4}
+ .training-result-next{min-height:56px;font-size:16px}
+ .activity-settlement-content h2{font-size:28px}
+ .activity-settlement-screen{padding-left:16px;padding-right:16px}
+}
+.story-choice{font-size:13px;line-height:1.55;color:#d8fa59;background:#182326;border:1px solid #3d5146;border-radius:10px;padding:11px 13px;margin:0 0 13px;font-weight:700}
+.story-outcome{font-size:15px;line-height:1.7;color:#e2e9e4;word-break:keep-all}
+.activity-settlement-screen.settlement-animated .result-stat-row{animation:stageResultRise .45s cubic-bezier(.18,.75,.22,1) both}
+.activity-settlement-screen.settlement-animated .result-stat-row:nth-child(2){animation-delay:.08s}
+.activity-settlement-screen.settlement-animated .result-stat-row:nth-child(3){animation-delay:.16s}
+.activity-settlement-screen.settlement-animated .result-stat-row:nth-child(4){animation-delay:.24s}
+.activity-settlement-screen.settlement-animated .result-stat-row:nth-child(5){animation-delay:.32s}
+.activity-settlement-screen.settlement-animated .result-delta.up{animation:stageResultGlow .65s ease-out both}
+@keyframes stageResultRise{from{opacity:0;transform:translateY(13px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes stageResultGlow{from{filter:brightness(2.5)}to{filter:brightness(1)}}
+@media(prefers-reduced-motion:reduce){.activity-settlement-screen.settlement-animated .result-stat-row,.activity-settlement-screen.settlement-animated .result-delta.up{animation:none}}
 </style><style id="idol-name-style">
 .name-gender-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .name-gender{min-height:48px;border:1px solid #4b5565;border-radius:12px;background:#1c222e;color:#d3d9e2;font-size:16px;font-weight:750;cursor:pointer}
@@ -367,7 +389,7 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 <div class="status-panel-head"><div><div class="roll-tag">PLAYER / STATUS</div><h2 id="panelName">플레이어</h2></div><button class="status-close" type="button" onclick="toggleStatus(false)" aria-label="닫기">×</button></div>
 <div class="panel-tabs"><button id="tabStats" class="on" onclick="setStatusTab('stats')">능력치</button><button id="tabRelations" onclick="setStatusTab('relations')">관계 · 커리어</button><button id="tabPopularity" onclick="setStatusTab('popularity')">멤버 인기</button></div>
 <div id="panelStats"></div><div id="panelRelations" hidden></div><div id="panelPopularity" hidden></div>
-</aside><div id="chapterTransition" class="chapter-transition" role="status" aria-live="polite" aria-hidden="true"><div class="chapter-transition-inner"><div class="chapter-kicker" id="chapterKicker">STAGE</div><h2 id="chapterTitle">새로운 시작</h2><p id="chapterDescription">당신의 이야기가 시작됩니다.</p><div class="chapter-loading" aria-hidden="true"><i></i></div><div class="chapter-serial">STAGE / YOUR LIFE. YOUR DEBUT.</div></div></div><section id="activitySettlementScreen" class="activity-settlement-screen" hidden aria-label="활동 정산"><div class="activity-settlement-content"><div class="training-result-kicker">STAGE / ACTIVITY SETTLEMENT</div><h2>활동 정산</h2><p class="activity-settlement-subtitle">이번 선택으로 달라진 기록</p><div id="activitySettlementValues" class="training-result-values"></div><button id="activitySettlementContinue" class="training-result-next" type="button" onclick="continueAfterTraining()">다음으로 →</button></div></section><div id="trainingResultShade" class="training-result-shade" aria-hidden="true"><div class="training-result-dialog" role="dialog" aria-modal="true" aria-labelledby="trainingResultTitle"><div class="training-result-kicker" id="trainingResultKicker">TRAINING RESULT</div><h2 id="trainingResultTitle">훈련 결과</h2><p id="trainingResultNarrative"></p><div id="growthReveal" class="growth-reveal" hidden><div class="growth-top"><span id="growthTarget">보컬 성장 판정</span><span id="growthPhase">판정 중</span></div><div id="growthOptionsMount"></div><div class="growth-final" id="growthFinal">판정 수치 계산 중…</div></div><div class="training-result-values" id="trainingResultValues"></div><button class="training-result-next" id="trainingResultNext" type="button" onclick="continueAfterTraining()">계속하기 →</button></div></div><script>
+</aside><div id="chapterTransition" class="chapter-transition" role="status" aria-live="polite" aria-hidden="true"><div class="chapter-transition-inner"><div class="chapter-kicker" id="chapterKicker">STAGE</div><h2 id="chapterTitle">새로운 시작</h2><p id="chapterDescription">당신의 이야기가 시작됩니다.</p><div class="chapter-loading" aria-hidden="true"><i></i></div><div class="chapter-serial">STAGE / YOUR LIFE. YOUR DEBUT.</div></div></div><section id="activitySettlementScreen" class="activity-settlement-screen" hidden aria-label="활동 정산"><div class="activity-settlement-content"><div class="training-result-kicker">STAGE / ACTIVITY SETTLEMENT</div><h2>활동 정산</h2><p class="activity-settlement-subtitle">이번 선택으로 달라진 기록</p><div id="activityGrowthRevealMount"></div><div id="activitySettlementValues" class="training-result-values"></div><button id="activitySettlementContinue" class="training-result-next" type="button" onclick="continueAfterTraining()">다음으로 →</button></div></section><div id="trainingResultShade" class="training-result-shade" aria-hidden="true"><div class="training-result-dialog" role="dialog" aria-modal="true" aria-labelledby="trainingResultTitle"><div class="training-result-kicker" id="trainingResultKicker">TRAINING RESULT</div><h2 id="trainingResultTitle">훈련 결과</h2><p id="trainingResultNarrative"></p><div id="growthReveal" class="growth-reveal" hidden><div class="growth-top"><span id="growthTarget">보컬 성장 판정</span><span id="growthPhase">판정 중</span></div><div id="growthOptionsMount"></div><div class="growth-final" id="growthFinal">판정 수치 계산 중…</div></div><div class="training-result-values" id="trainingResultValues"></div><button class="training-result-next" id="trainingResultNext" type="button" onclick="continueAfterTraining()">계속하기 →</button></div></div><script>
 const soundOnIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
 const soundOffIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="m16 9 5 6m0-6-5 6"/></svg>';
 let soundEnabled=localStorage.getItem('stage-sound-enabled')!=='false';
@@ -585,6 +607,7 @@ function runGrowthReveal(items){
  if(!main){panel.hidden=true;$('trainingResultValues').hidden=false;$('trainingResultNarrative').hidden=false;$('trainingResultNext').disabled=false;return;}
  panel.hidden=false;panel.className='growth-reveal growth-list-mode';
  $('trainingResultValues').hidden=true;$('trainingResultNarrative').hidden=true;
+ if(resultStage==='settlement'){$('activitySettlementValues').hidden=true;$('activitySettlementContinue').disabled=true;}
  $('growthTarget').textContent=main.label+' 성장 판정';$('growthPhase').textContent='판정 중';
  $('growthFinal').textContent='화면을 터치하면 판정을 건너뜁니다';$('trainingResultNext').disabled=true;
  const diff=main.now-main.old;
@@ -618,6 +641,7 @@ function runGrowthReveal(items){
   $('growthPhase').textContent='판정 확정';
   $('growthFinal').textContent=diff>0?'성장 확정  ·  +'+diff:diff<0?'성장 하락  ·  '+diff:'변화 없음';
   $('trainingResultValues').hidden=false;$('trainingResultNarrative').hidden=false;$('trainingResultNext').disabled=false;
+  if(resultStage==='settlement'){$('activitySettlementValues').hidden=false;$('activitySettlementContinue').disabled=false;}
   if(!skipped)growthTone(diff>0?1040:350,.18);
   growthFinish=null;
  }
@@ -637,6 +661,7 @@ function runGrowthReveal(items){
  light(0);growthFrame=requestAnimationFrame(frame);
 }
 // Tap anywhere on the result overlay to reveal the predetermined outcome immediately.
+$('activitySettlementScreen').addEventListener('pointerdown',e=>{if(growthRevealActive&&!e.target.closest('button'))skipGrowthReveal();});
 $('trainingResultShade').addEventListener('pointerdown',e=>{
  if(!growthRevealActive)return;
  if(e.target.closest('button'))return;
@@ -649,6 +674,9 @@ function showStatResult(){
  $('trainingResultTitle').textContent=r.title||'이벤트 결과';
  $('trainingResultNarrative').textContent=r.description;
  const parsed=(r.rows||[]).map(text=>{const match=text.match(/^(.*?)\s+(-?\d+)\s*→\s*(-?\d+)\s*\([+-]?\d+\)$/);return match?{label:match[1],old:Number(match[2]),now:Number(match[3])}:null;}).filter(Boolean);
+ const bonusLine=(r.description||'').match(/(?:데뷔 평가 보정|데뷔 평가 영향)\s*:\s*([+-]?\d+)/);
+ if(bonusLine){parsed.push({label:'데뷔 평가 보정',old:0,now:Number(bonusLine[1])});}
+ $('trainingResultNarrative').textContent=(r.description||'').replace(/\n?데뷔 평가 보정\s*:\s*[+-]?\d+/g,'');
  beginMobileResult(parsed);
 }
 let pendingTrainingContinuation=null;
@@ -660,6 +688,18 @@ function beginMobileResult(items){
  $('growthReveal').hidden=true;
  $('trainingResultValues').hidden=true;
  $('trainingResultNarrative').hidden=false;
+ const narrative=$('trainingResultNarrative');
+ const raw=narrative.textContent;
+ if(raw.includes('선택:')&&raw.includes('결과:')){
+   const choice=(raw.match(/(?:^|\n)선택:\s*([^\n]*)/)||[])[1];
+   const outcome=(raw.match(/(?:^|\n)결과:\s*([\s\S]*?)(?=\n(?:변화|판정 성공률|데뷔 평가)|$)/)||[])[1];
+   if(choice&&outcome){
+     narrative.replaceChildren();
+     const selected=document.createElement('div');selected.className='story-choice';selected.textContent='나의 선택 · '+choice.trim();
+     const story=document.createElement('div');story.className='story-outcome';story.textContent=outcome.trim();
+     narrative.append(selected,story);
+   }
+ }
  $('trainingResultNext').disabled=false;
  $('trainingResultNext').textContent='닫기';
  $('trainingResultShade').classList.add('open');
@@ -679,6 +719,17 @@ function showMobileSettlement(){
  showResultRows(resultItems);
  rows.replaceChildren(...Array.from(source.children));
  screen.hidden=false;
+ // Reuse the ORIGINAL three-choice arrow roulette in the settlement screen.
+ // Move the existing DOM instead of replacing the original animation with generic fades.
+ const mount=$('activityGrowthRevealMount');
+ mount.appendChild($('growthReveal'));
+ $('activitySettlementValues').hidden=false;
+ $('activitySettlementContinue').disabled=false;
+ runGrowthReveal(resultItems);
+ if(!$('growthReveal').hidden){
+   $('activitySettlementValues').hidden=true;
+   $('activitySettlementContinue').disabled=true;
+ }
  screen.scrollTop=0;
  $('activitySettlementContinue').focus();
 }
@@ -694,7 +745,7 @@ function showTrainingResult(){
  beginMobileResult(items);
 }
 function continueAfterTraining(){
- if(resultStage==='story'){if(!$('trainingResultShade').classList.contains('open'))return;showMobileSettlement();return;}if($('activitySettlementScreen').hidden)return;$('activitySettlementScreen').hidden=true;if(growthRevealActive){skipGrowthReveal();return;}if($('trainingResultNext').disabled)return;clearTimeout(growthTimer);
+ if(resultStage==='story'){if(!$('trainingResultShade').classList.contains('open'))return;showMobileSettlement();return;}if($('activitySettlementScreen').hidden)return;if(growthRevealActive){skipGrowthReveal();return;}$('activitySettlementScreen').hidden=true;if($('trainingResultNext').disabled)return;clearTimeout(growthTimer);
  if(state?.statResultPending){
   const next=state.statResultPending.next;
   state.statResultPending=null;pendingStatContinuation=null;save();
