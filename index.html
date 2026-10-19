@@ -1251,7 +1251,7 @@ function finalScore(){
  const hit=albums.filter(a=>a.score>=65).length,smash=albums.filter(a=>a.score>=83).length;
  const chartValue=albums.reduce((a,x)=>a+(x.chartRank?Math.max(0,1001-x.chartRank):0),0);
  const awardPoints=Math.min(1500,(state.awardsHistory||[]).reduce((t,a)=>t+a.wins.reduce((v,w)=>v+({artist:180,album:180,song:180,top10:45,performance:45,vocal:45,rookie:80,fan:30,viral:30}[w]||0),0),0));
- const vals=[1800*log(sum('sales'),30000000),1800*log(chartValue,18000),awardPoints,1050*log(Math.max(state.peakFans||0,state.fans||0),5000000)+450*Math.max(state.peakSupport||0,state.fanSupport||0)/100,12*(top[0]*.45+top[1]*.35+top[2]*.2),1000*log(sum('revenue'),5000000),800*years/20+400*Math.min(1,(hit+smash*2)/25)];
+ const vals=[1800*log(sum('sales'),30000000),1800*log(chartValue,18000),awardPoints,1050*log(Math.max(state.peakFans||0,state.fans||0),5000000)+450*Math.max(state.peakSupport||0,state.fanSupport||0)/100,12*(top[0]*.45+top[1]*.35+top[2]*.2),1000*log(sum('revenue')+(state.activityHistory||[]).filter(x=>x.kind!=='album').reduce((t,x)=>t+(Number(x.revenue)||0),0),5000000),800*years/20+400*Math.min(1,(hit+smash*2)/25)];
  // 커리어 점수 보정: 6,000점 안팎의 기존 원점수를 약 3,500점으로 재배치.
  // 10,000점은 유지하고 상위 성과는 비선형으로 차별화한다.
  const raw=scoreRules.map(([name,max],i)=>({name,max,value:Math.max(0,Math.min(max,Math.round(vals[i])))}));
@@ -1826,58 +1826,137 @@ const specialtyActivities={
  fanMeet:{label:'팬 소통 행사',stat:'인성',threshold:70,kind:'concert',detail:'팬들과 직접 만나 오랜 시간 소통했다.',follow:'팬덤 기념 행사'}
 };
 function specialtyAvailable(id){const a=specialtyActivities[id];return !!(a&&state?.debuted&&!state.careerEnded&&state.seasonActivity===a.kind&&state.stats[a.stat]>=a.threshold&&state.energy>0);}
+// Shared, deterministic performance model. Preview calls use roll=.5 and consume no RNG.
+const activityProfiles={
+ concert:{small:{'보컬':.50,'댄스':.25,'랩':.15,'스타성':.10},medium:{'보컬':.30,'댄스':.40,'랩':.20,'스타성':.10},large:{'보컬':.25,'댄스':.45,'랩':.20,'스타성':.10}},
+ broadcast:{variety:{'스타성':.60,'비주얼':.20,'인성':.20},content:{'스타성':.35,'인성':.30,'비주얼':.20,'보컬':.15},radio:{'보컬':.45,'랩':.35,'인성':.20},commercial:{'비주얼':.80,'스타성':.20}},
+ specialty:{ost:{'보컬':.85,'인성':.15},choreography:{'댄스':.80,'스타성':.20},feature:{'랩':.85,'스타성':.15},commercial:{'비주얼':.80,'스타성':.20},varietyStar:{'스타성':.85,'인성':.15},fanMeet:{'인성':.85,'스타성':.15}}
+};
+function masteryBonus(n){return n>=95?.08:n>=85?.05:n>=70?.02:0;}
+function masteryName(n){return n>=95?'최정상':n>=85?'숙련':n>=70?'전문':'성장 중';}
+function weightedTalent(stats,weights){return Object.entries(weights).reduce((v,[k,w])=>v+clamp(Number(stats?.[k])||0,0,100)*w,0);}
+function activityPerformance(weights,{roll=.5,groupShare=0}={}){
+ const player=weightedTalent(state.stats,weights);
+ const peers=state.group?.members?.filter(m=>!m.isPlayer)||[];
+ const team=peers.length?peers.reduce((v,m)=>v+weightedTalent(m.stats,weights),0)/peers.length:player;
+ const effective=player*(1-groupShare)+team*groupShare;
+ const relevant=Object.entries(weights).sort((a,b)=>b[1]-a[1]);
+ const mastery=relevant.reduce((v,[k,w])=>v+masteryBonus(state.stats[k]||0)*w,0);
+ const synergy=relevant.length>1?Math.min(state.stats[relevant[0][0]]||0,state.stats[relevant[1][0]]||0)*.05:0;
+ const condition=.65+clamp(state.energy||0,0,100)*.0035;
+ const spread=clamp(.20-player*.0012-mastery*.2,.055,.20);
+ const luck=1+(clamp(roll,0,1)-.5)*2*spread;
+ const quality=clamp((effective+mastery*100+synergy)*condition*luck,0,100);
+ return {weights:{...weights},player,team,groupShare,effective,mastery,synergy,condition,spread,luck,quality,multiplier:.45+quality*.011};
+}
+function performanceExplanation(p){
+ if(!p)return '';
+ const top=Object.entries(p.weights).sort((a,b)=>b[1]-a[1]).slice(0,2);
+ const names=top.map(([k])=>`${k} ${Math.round((p.statValues||state.stats)[k]||0)}`).join(' · ');
+ const lines=[`${names} → 개인 적합도 ${Math.round(p.player)}/100`];
+ if(p.groupShare)lines.push(`동료들의 관련 실력 ${Math.round(p.team)}/100을 함께 반영했습니다.`);
+ if(p.mastery>0)lines.push(`70·85·95 숙련 보상이 완성도를 높이고 현장 반응의 변동률을 줄입니다.`);
+ if(p.synergy>=1)lines.push(`함께 키운 두 분야의 조합이 완성도를 보완했습니다.`);
+ if(p.condition<.96)lines.push(`현재 컨디션으로 완성도가 ${Math.round((1-p.condition)*100)}% 감소했습니다.`);
+ lines.push(`이번 활동 완성도 ${Math.round(p.quality)}/100 · ${(p.reception??p.luck)<.97?'현장 반응은 기대 이하':(p.reception??p.luck)>1.03?'현장 반응이 기대 이상':'현장 반응은 예상 범위'}`);
+ return `<div class="performance-explanation"><strong>성과에 영향을 준 요인</strong><ul>${lines.map(t=>`<li>${escapeCharacterText(t)}</li>`).join('')}</ul></div>`;
+}
+function activityFitHint(weights,groupShare=0){
+ const p=activityPerformance(weights,{groupShare});
+ const names=Object.keys(weights).join('·');
+ return `${names} 반영 · 현재 예상 완성도 ${Math.round(p.quality)}/100`;
+}
+function recordActivityPerformance(kind,plan,before,p,metrics={}){
+ if(p)p.statValues={...before.stats};
+ const entry={year:gameYear(),season:state.careerSeason,kind,plan,fans:state.fans-before.fans,personal:state.cash-before.cash,energy:state.energy-before.energy,performance:p, ...metrics};
+ state.activityHistory??=[];state.activityHistory.push(entry);
+ if(state.activityHistory.length>240)state.activityHistory.shift();
+ state.lastActivityPerformance=entry;
+ // Personal attention is earned from the player's own performance, not the group's size alone.
+ if(state.group&&entry.fans>0){const share=clamp(.15+(p?.player||0)*.004,.15,.55);state.personalFans=Math.min(state.fans,(state.personalFans||0)+Math.round(entry.fans*share));state.group.fanCount=state.fans;}
+ return entry;
+}
+function buildProgressSummary(){
+ const strongest=keys.slice().sort((a,b)=>state.stats[b]-state.stats[a]).slice(0,2);
+ return `<div class="build-progress"><strong>나의 성장 단계</strong><p>${strongest.map(k=>`${k} ${state.stats[k]} · ${masteryName(state.stats[k])}`).join(' / ')}</p><small>70 전문 활동 · 85 숙련 보상 · 95 최정상 보상<br>관련 능력치가 높을수록 활동 성과와 안정성이 함께 좋아집니다.</small></div>`;
+}
 function completeSpecialtyActivity(id){
  if(!specialtyAvailable(id)||state.albumThisSeason)return;
  const a=specialtyActivities[id],prior=state.specialtyCounts?.[id]||0,follow=prior>=2;
- const before={fans:state.fans,cash:state.cash,energy:state.energy,trust:state.agencyTrust};
- const talent=state.stats[a.stat],factor=.8+Math.random()*.4;
- const gain=Math.round((follow?2300:1300)*(talent/80)*factor*(state.energy<20?.65:1));
- const cash=Math.round((follow?700:350)*factor);
+ const before={fans:state.fans,cash:state.cash,energy:state.energy,trust:state.agencyTrust,support:state.fanSupport,stats:{...state.stats}};
+ const p=activityPerformance(activityProfiles.specialty[id],{roll:Math.random()});
+ const scale=.55+.45*Math.max(.4,Math.log10(Math.max(100,state.fans))/5);
+ const baseFans={ost:1900,choreography:2400,feature:2000,commercial:1100,varietyStar:2600,fanMeet:1600}[id];
+ const baseCash={ost:500,choreography:400,feature:550,commercial:1400,varietyStar:650,fanMeet:350}[id];
+ const gain=Math.round(baseFans*scale*p.multiplier*(follow?1.3:1));
+ const cash=Math.round(baseCash*(.4+p.quality*.012)*(follow?1.3:1));
  state.fans+=gain;state.cash+=cash;state.energy=clamp(state.energy-(follow?13:9),0,100);
- if(id==='fanMeet')state.fanSupport=clamp(state.fanSupport+3,0,100);
- if(id==='commercial')state.cash+=Math.round(cash*.5);
- state.peakFans=Math.max(state.peakFans||0,state.fans);
+ if(id==='fanMeet')state.fanSupport=clamp(state.fanSupport+(p.quality>=75?5:3),0,100);
+ state.peakFans=Math.max(state.peakFans||0,state.fans);state.peakSupport=Math.max(state.peakSupport||0,state.fanSupport);
  state.specialtyCounts??={};state.specialtyHistory??=[];state.specialtyCounts[id]=prior+1;
- const year=gameYear();
  const label=follow?a.follow:a.label;
- state.specialtyHistory.push({id,label,year,season:state.careerSeason,fans:gain});
- state.careerHistory.push(`${year}년 · ${label} · 신규 팬 ${gain.toLocaleString()}명`);
- if(typeof storyMemory==='function')storyMemory('specialty_'+id+'_'+state.careerSeason,`${label} 활동을 마쳤다.`,'achievement');
- const sign=n=>(n>0?'+':'')+n.toLocaleString('ko-KR');
- state.seasonActivityResult=`<section class="album-verdict average"><div class="album-verdict-kicker">전문 활동 · ${escapeCharacterText(a.stat)} ${talent}</div><div class="album-verdict-title">${escapeCharacterText(label)}</div><p class="album-verdict-note">${escapeCharacterText(a.detail)} ${follow?'이전 활동 경력이 쌓여 후속 프로젝트에 참여할 수 있었다.':'같은 분야 활동을 이어가면 후속 프로젝트에 도전할 수 있다.'}</p><div class="album-result-grid"><div><span>신규 팬덤</span><strong>${sign(state.fans-before.fans)}명</strong></div><div><span>개인 자산</span><strong>${sign(state.cash-before.cash)}만원</strong></div><div><span>컨디션</span><strong>${sign(state.energy-before.energy)}</strong></div></div></section>`;
+ state.specialtyHistory.push({id,label,year:gameYear(),season:state.careerSeason,fans:gain,quality:Math.round(p.quality)});
+ state.careerHistory.push(`${gameYear()}년 · ${label} · 완성도 ${Math.round(p.quality)} · 신규 팬 ${gain.toLocaleString()}명 · 개인 보수 +${cash}만원`);
+ storyMemory('specialty_'+id+'_'+state.careerSeason,`${label} 활동을 마쳤다.`,'achievement');
+ recordActivityPerformance('specialty',id,before,p,{revenue:cash,cost:0});
+ state.seasonActivityResult=`<section class="album-verdict average"><div class="album-verdict-kicker">전문 활동 · ${escapeCharacterText(a.stat)} ${state.stats[a.stat]} · ${masteryName(state.stats[a.stat])}</div><div class="album-verdict-title">${escapeCharacterText(label)}</div><p class="album-verdict-note">${escapeCharacterText(a.detail)} ${follow?'경력이 쌓여 후속 프로젝트에 참여했습니다.':'동일 분야 2회 완료 후 후속 프로젝트로 확장됩니다.'}</p><div class="album-result-grid"><div><span>신규 팬덤</span><strong>+${gain.toLocaleString()}명</strong></div><div><span>개인 보수</span><strong>+${cash.toLocaleString()}만원</strong></div><div><span>활동 완성도</span><strong>${Math.round(p.quality)} / 100</strong></div><div><span>팬 지지도 변화</span><strong>${state.fanSupport-before.support>=0?'+':''}${state.fanSupport-before.support}</strong></div></div>${performanceExplanation(p)}</section>`;
  state.albumThisSeason=true;checkCareerInjury(id);save();renderCareer();go('careerAlbumResult');
 }
 function completeOtherActivity(plan){
  if(!state?.debuted||state.albumThisSeason||!['concert','broadcast','rest'].includes(state.seasonActivity))return;
- const kind=state.seasonActivity;if(state.energy<=0&&kind!=='rest')return;if(independent()&&kind==='concert'&&state.cash<({small:1500,medium:11500,large:43500}[plan]||1500)){alert('개인 제작비가 부족합니다. 더 작은 공연이나 다른 활동을 선택하세요.');return;}const before={fans:state.fans,cash:state.cash,energy:state.energy,trust:state.agencyTrust};
- const scale=Math.max(0.4,Math.log10(Math.max(100,state.fans))/5),luck=.75+Math.random()*.6;
- let headline='',detail='';
+ const kind=state.seasonActivity;
+ const allowed={concert:['small','medium','large'],broadcast:['variety','content','radio','commercial'],rest:['full','training','light']};
+ if(!allowed[kind].includes(plan)||(state.energy<=0&&kind!=='rest'))return;
+ const costs={small:1500,medium:11500,large:43500};
+ if(independent()&&kind==='concert'&&state.cash<costs[plan]){alert('개인 제작비가 부족합니다. 더 작은 공연이나 다른 활동을 선택하세요.');return;}
+ const before={fans:state.fans,cash:state.cash,energy:state.energy,trust:state.agencyTrust,support:state.fanSupport,stats:{...state.stats}};
+ const scale=Math.max(.4,Math.log10(Math.max(100,state.fans))/5);
+ const p=kind==='rest'?null:activityPerformance(activityProfiles[kind][plan],{roll:Math.random(),groupShare:kind==='concert'?.25:0});
+ let headline='',detail='',revenue=0,cost=0;
  if(kind==='concert'){
-  const capacity=plan==='large'?15000:plan==='medium'?5000:1000,filled=clamp(Math.round((state.fanSupport/100)*scale*luck*100),15,100);
-  const realisticDemand=Math.min(capacity,Math.max(120,Math.round(state.fans*(plan==='large'?.065:plan==='medium'?.09:.13))));const sold=Math.min(Math.round(capacity*filled/100),realisticDemand);const actualFill=Math.round(sold/capacity*100);const revenue=Math.round(sold*(plan==='large'?5:plan==='medium'?4:3));const cost=Math.round(capacity*(plan==='large'?2.9:plan==='medium'?2.3:1.5));const profit=revenue-cost;
-  state.cash=Math.max(0,state.cash+(independent()?profit:Math.max(0,Math.round(profit*.22))));state.fans+=Math.round(sold*.30*(state.energy<20?.65:1));state.energy=clamp(state.energy-(plan==='large'?18:plan==='medium'?12:7),0,100);state.fanSupport=clamp(state.fanSupport+Math.round(actualFill/35)-1,0,100);state.agencyTrust=clamp(state.agencyTrust+(profit>=0?2:-5),0,100);
-  storyTrackActivity('concert',actualFill>=35,{solo:true});headline=capacity.toLocaleString()+'석 공연 · 실제 객석 점유율 '+actualFill+'%';detail=`${sold.toLocaleString('ko-KR')}명의 관객이 입장했습니다. ${profit>=0?'공연 수입이 운영비를 넘었습니다.':'관객 수가 운영비를 충당하지 못해 적자가 났습니다.'} 팬덤과 충성도가 티켓 수요에 영향을 주었습니다. ${independent()?'독립 제작: 개인 자산에서 제작비를 부담하고 손익 전액을 반영합니다.':'소속사 제작: 적자는 회사 부담, 흑자의 22%를 개인 정산합니다.'}`;
+  const capacity={small:1000,medium:5000,large:15000}[plan];
+  const reach={small:.13,medium:.09,large:.065}[plan];
+  const demand=Math.max(120,Math.round(state.fans*reach*(.65+p.quality*.007)));
+  const willingness=clamp((.35+state.fanSupport*.0065)*(.85+p.quality*.003),.2,1);
+  const sold=Math.min(capacity,Math.round(demand*willingness)),fill=Math.round(sold/capacity*100);
+  revenue=sold*({small:3,medium:4,large:5}[plan]);cost=costs[plan];const profit=revenue-cost;
+  state.cash=Math.max(0,state.cash+(independent()?profit:Math.max(0,Math.round(profit*.22))));
+  state.fans+=Math.round(sold*(.20+p.quality*.0035));
+  state.energy=clamp(state.energy-({small:7,medium:12,large:18}[plan]),0,100);
+  const loyalty=p.quality>=75?3:p.quality>=55?1:p.quality<35?-2:0;state.fanSupport=clamp(state.fanSupport+loyalty,0,100);
+  state.agencyTrust=clamp(state.agencyTrust+(profit>=0?2:-5),0,100);
+  storyTrackActivity('concert',fill>=35&&p.quality>=50,{solo:true});
+  headline=`${capacity.toLocaleString()}석 공연 · 객석 ${fill}%`;
+  detail=`관객 ${sold.toLocaleString()}명 · 공연 만족도 ${Math.round(p.quality)}/100. ${profit<0?'팬 수요에 비해 제작비가 커서 적자가 났습니다.':'티켓 매출이 제작비를 넘었습니다.'} ${independent()?'제작비 개인 부담·손익 전액 귀속.':'제작비·적자 회사 부담, 흑자 22% 개인 정산.'}`;
  }else if(kind==='broadcast'){
-  const popularity=Math.round((state.stats['스타성']*.7+state.stats['인성']*.3)*luck);
-  const gain=Math.round((plan==='variety'?1250:plan==='content'?850:600)*scale*(.5+popularity/80));state.fans+=Math.round(gain*2.5*(state.energy<20?.65:1));state.cash+=Math.round((plan==='variety'?500:plan==='content'?250:150)*luck);state.energy=clamp(state.energy-(plan==='variety'?11:plan==='content'?7:4),0,100);state.agencyTrust=clamp(state.agencyTrust+2,0,100);
-  storyTrackActivity('broadcast',popularity>=55);headline=popularity>=55?'방송 화제성 상승':'방송 활동 완료';detail=`${popularity>=55?'방송 반응이 좋아 신규 시청자를 확보했습니다.':'방송에 출연했지만 큰 화제성은 얻지 못했습니다.'} 스타성 ${state.stats['스타성']}·인성 ${state.stats['인성']}과 매체 선택이 결과에 영향을 주었습니다.`;
+  const baseFans={variety:2000,content:1700,radio:1200,commercial:900}[plan];
+  const baseCash={variety:500,content:300,radio:220,commercial:900}[plan];
+  const fans=Math.round(baseFans*scale*p.multiplier);revenue=Math.round(baseCash*(.4+p.quality*.012));
+  state.fans+=fans;state.cash+=revenue;state.energy=clamp(state.energy-({variety:11,content:7,radio:4,commercial:8}[plan]),0,100);
+  state.agencyTrust=clamp(state.agencyTrust+2,0,100);
+  if(plan==='content')state.fanSupport=clamp(state.fanSupport+(p.quality>=65?2:p.quality>=45?1:0),0,100);
+  storyTrackActivity('broadcast',p.quality>=55);
+  headline=plan==='commercial'?'광고·화보 활동 완료':p.quality>=65?'방송 활동에 좋은 반응':'방송 활동 완료';
+  detail=plan==='commercial'?'비주얼·스타성이 촬영 평가와 광고 보수에 반영되었습니다.':'매체별로 요구하는 능력이 달라 팬 유입과 출연 보수에 차이가 생깁니다.';
  }else{
-  const recovery=plan==='full'?48:plan==='training'?24:36;state.energy=clamp(state.energy+recovery,0,100);
-  if(plan==='training'){const k=state.activeFocus[0];state.stats[k]=clamp(state.stats[k]+2,0,100);detail=k+' 집중 연습으로 능력치 +2, 컨디션을 일부 회복했습니다.';}else detail='활동을 줄여 컨디션을 회복했습니다. 팬덤 성장 기회는 상대적으로 적었습니다.';
+  state.energy=clamp(state.energy+({full:48,training:24,light:36}[plan]),0,100);
+  if(plan==='training'){const k=state.activeFocus[0];state.stats[k]=clamp(state.stats[k]+2,0,100);detail=k+' +2 · 훈련을 병행해 회복량은 적습니다.';}else detail='컨디션을 회복하며 팬덤 지지도를 유지했습니다.';
   headline=plan==='training'?'재충전과 집중 연습':'휴식과 컨디션 회복';
  }
  state.peakFans=Math.max(state.peakFans||0,state.fans);state.peakSupport=Math.max(state.peakSupport||0,state.fanSupport);
+ recordActivityPerformance(kind,plan,before,p,{revenue,cost});
  const sign=n=>(n>0?'+':'')+n.toLocaleString('ko-KR');
- state.seasonActivityResult=`<section class="album-verdict average"><div class="album-verdict-kicker">${seasonActivityNames[kind]} · 활동 결과</div><div class="album-verdict-title">${headline}</div><p class="album-verdict-note">${detail}</p><div class="album-result-grid"><div><span>팬덤 변화</span><strong>${sign(state.fans-before.fans)}명</strong></div><div><span>개인 자산 변화</span><strong>${sign(state.cash-before.cash)}만원</strong></div><div><span>컨디션 변화</span><strong>${sign(state.energy-before.energy)}</strong></div><div><span>회사 신뢰 변화</span><strong>${sign(state.agencyTrust-before.trust)}</strong></div></div></section>`;
- state.albumThisSeason=true;if(kind!=='rest')checkCareerInjury(kind);state.careerHistory.push(`${gameYear()}년 · ${seasonActivityNames[kind]} · ${headline}`);save();renderCareer();go('careerAlbumResult');
+ state.seasonActivityResult=`<section class="album-verdict average"><div class="album-verdict-kicker">${seasonActivityNames[kind]} · 활동 결과</div><div class="album-verdict-title">${headline}</div><p class="album-verdict-note">${detail}</p><div class="album-result-grid"><div><span>팬덤 변화</span><strong>${sign(state.fans-before.fans)}명</strong></div><div><span>개인 자산 변화</span><strong>${sign(state.cash-before.cash)}만원</strong></div><div><span>컨디션 변화</span><strong>${sign(state.energy-before.energy)}</strong></div><div><span>팬 지지도 변화</span><strong>${sign(state.fanSupport-before.support)}</strong></div></div>${performanceExplanation(p)}</section>`;
+ state.albumThisSeason=true;if(kind!=='rest')checkCareerInjury(plan==='radio'?'vocal':kind);state.careerHistory.push(`${gameYear()}년 · ${seasonActivityNames[kind]} · ${headline}`);save();renderCareer();go('careerAlbumResult');
 }
+
 function renderOtherActivity(){
  const kind=state.seasonActivity;if(!kind||kind==='album')return;
  $('otherActivityTitle').textContent='① '+seasonActivityNames[kind];
- const opts=kind==='concert'?[['small','소규모 팬 콘서트','적은 제작비 · 피로도 낮음'],['medium','중형 단독 콘서트','적당한 규모와 위험'],['large','대형 투어','큰 수익 가능 · 흥행 실패 위험 · 피로도 높음']]:kind==='broadcast'?[['variety','방송 예능 출연','대중 노출 증가 · 피로도 높음'],['content','자체 콘텐츠 제작','팬덤 성장 · 중간 피로도'],['radio','라디오 · 인터뷰','안정적 활동 · 피로도 낮음']]:[['full','충분한 휴식','컨디션 크게 회복'],['training','집중 자기계발','주력 능력치 +2 · 컨디션 일부 회복'],['light','가벼운 휴식','컨디션 회복 · 팬덤 유지']];
- $('otherActivityHint').textContent='세부 활동을 선택하면 바로 결과를 확인합니다. 능력치 70 이상이면 전용 활동이 열립니다. '+(independent()?'독립 공연 제작비: 소형 1,500 / 중형 11,500 / 대형 43,500만원. 개인 부담, 손익 전액 귀속.':'공연 제작비와 적자는 소속사 부담, 흑자 22%를 개인 정산.');
+ const opts=kind==='concert'?[['small','소규모 팬 콘서트','적은 제작비 · 피로도 낮음'],['medium','중형 단독 콘서트','적당한 규모와 위험'],['large','대형 투어','큰 수익 가능 · 흥행 실패 위험 · 피로도 높음']]:kind==='broadcast'?[['variety','방송 예능 출연','대중 노출 증가 · 피로도 높음'],['content','자체 콘텐츠 제작','팬덤 성장 · 중간 피로도'],['radio','라디오 · 인터뷰','보컬·랩 중심 · 피로도 낮음'],['commercial','광고 · 화보','비주얼 중심 · 보수 확보']]:[['full','충분한 휴식','컨디션 크게 회복'],['training','집중 자기계발','주력 능력치 +2 · 컨디션 일부 회복'],['light','가벼운 휴식','컨디션 회복 · 팬덤 유지']];
+ $('otherActivityHint').textContent='예상 완성도는 현재 실력·컨디션 기준이며 실제 현장 반응에 따라 달라집니다. 관련 능력치 70·85·95에서 추가 보상을 받습니다. '+(independent()?'독립 공연 제작비: 소형 1,500 / 중형 11,500 / 대형 43,500만원. 개인 부담, 손익 전액 귀속.':'공연 제작비와 적자는 소속사 부담, 흑자 22%를 개인 정산.');
  const specials=Object.entries(specialtyActivities).filter(([id,a])=>a.kind===kind&&state.stats[a.stat]>=a.threshold);
- $('otherActivityOptions').innerHTML=opts.map(([v,t,d])=>`<button class="growth-choice" onclick="completeOtherActivity('${v}')"><strong>${t}</strong><small>${d}</small></button>`).join('')+specials.map(([id,a])=>{const count=state.specialtyCounts?.[id]||0;const label=count>=2?a.follow:a.label;return `<button class="growth-choice" onclick="completeSpecialtyActivity('${id}')"><strong>✦ ${escapeCharacterText(label)}</strong><small>${a.stat} ${a.threshold} 이상 · ${count>=2?'이전 활동 경력으로 후속 기회 해금':'전문 활동 · 누적 '+count+'회'}</small></button>`;}).join('');
+ $('otherActivityOptions').innerHTML=opts.map(([v,t,d])=>`<button class="growth-choice" onclick="completeOtherActivity('${v}')"><strong>${t}</strong><small>${d}${kind!=='rest'?'<br>'+activityFitHint(activityProfiles[kind][v],kind==='concert'?.25:0):''}</small></button>`).join('')+specials.map(([id,a])=>{const count=state.specialtyCounts?.[id]||0;const label=count>=2?a.follow:a.label;return `<button class="growth-choice" onclick="completeSpecialtyActivity('${id}')"><strong>✦ ${escapeCharacterText(label)}</strong><small>${a.stat} ${a.threshold} 이상 · ${count>=2?'후속 프로젝트':'전문 활동 · 누적 '+count+'회'}<br>${activityFitHint(activityProfiles.specialty[id])}</small></button>`;}).join('');
 }
 
 function openAlbumScreen(){if(!state?.debuted||state.careerEnded)return;renderCareer();go('careerAlbum');}
@@ -1892,7 +1971,7 @@ function renderCareer(){
 
  renderScorePreview();
  renderMilitaryBar();$('injurySummary').textContent=(state.injuryRecords||[]).filter(x=>x.permanent).map(x=>x.name+' 후유증 '+x.level+'단계').join(' · ')||'부상 후유증 없음';
- $('storyCareerPanel').innerHTML=storyWidget()+(state.specialtyHistory?.length?'<div class="roll-card" style="margin-top:10px"><div class="roll-tag">나의 전문 커리어</div>'+state.specialtyHistory.slice(-3).reverse().map(x=>'<p class="small-help">'+escapeCharacterText(x.year+'년 · '+x.label)+'</p>').join('')+'</div>':'');
+ $('storyCareerPanel').innerHTML=buildProgressSummary()+storyWidget()+(state.specialtyHistory?.length?'<div class="roll-card" style="margin-top:10px"><div class="roll-tag">나의 전문 커리어</div>'+state.specialtyHistory.slice(-3).reverse().map(x=>'<p class="small-help">'+escapeCharacterText(x.year+'년 · '+x.label)+'</p>').join('')+'</div>':'');
  $('careerEconomy').innerHTML=`<div class="roll-summary"><span>시상식 누적 수상</span><strong>${(state.awardsHistory||[]).reduce((n,a)=>n+a.wins.length,0)}회</strong></div><div class="roll-summary"><span>팬덤</span><strong>${state.fans.toLocaleString('ko-KR')}명</strong></div><div class="roll-summary"><span>개인 자산</span><strong>${state.cash.toLocaleString('ko-KR')}만원</strong></div><div class="roll-summary"><span>발매 앨범</span><strong>${state.albumCount}장</strong></div>`;
  $('activitySeasonLabel').textContent=$('careerYear').textContent;
  $('activityOptions').innerHTML=(state.energy<=0?'<p class="album-muted">⚠ 컨디션이 0입니다. 이번 시즌은 휴식만 선택할 수 있습니다.</p>':'')+Object.entries(seasonActivityNames).map(([k,v])=>`<button class="growth-choice" ${state.energy<=0&&k!=='rest'?'disabled aria-disabled="true"':''} onclick="chooseSeasonActivity('${k}')"><strong>${v}</strong><small>${({album:'앨범 제작 · 흥행 결과',concert:'티켓 판매 · 공연 수익',broadcast:'대중 인지도 · 팬덤 확대',rest:'컨디션 회복 · 능력 강화'})[k]}</small></button>`).join('');
@@ -1917,7 +1996,7 @@ function renderAlbumVerdict(){
  const comparison=ratio>=1?`기대치의 ${(ratio*100).toFixed(0)}% 달성`:`기대치의 ${(ratio*100).toFixed(0)}% · 목표 미달`;
  const signed=n=>(n>0?'+':'')+n.toLocaleString('ko-KR');
  const note=score>=83?'이번 앨범은 대중과 팬덤 모두에서 강한 성과를 냈습니다.':score>=65?'이번 앨범은 종합적으로 흥행에 성공했습니다.':score>=45?'기대만큼 폭발적이지는 않았지만 의미 있는 성적을 남겼습니다.':'이번 앨범은 종합 성적이 부진했습니다. 다음 컴백에서 반등을 노려보세요.';
- return `<section class="album-verdict ${tone}"><div class="album-verdict-kicker">앨범 활동 최종 결과 · ${r.year||''}년</div><div class="album-verdict-title">${verdict}</div><p class="album-verdict-note">${note}</p><div class="album-result-grid"><div><span>초동 판매량</span><strong>${Number(r.sales||0).toLocaleString()}장</strong><small>${comparison}</small></div><div><span>음원 최고 순위</span><strong>${r.chartRank?`${r.chartRank.toLocaleString()}위`:'기록 없음'}</strong><small>${r.chartRank<=100?'TOP 100 진입':'TOP 100 밖'}</small></div><div><span>음악성 평가</span><strong>${r.quality??'-'}점</strong></div><div><span>신규 팬덤</span><strong>+${Number(r.newFans||0).toLocaleString()}명</strong></div></div><div class="album-verdict-footer">개인 정산 <b>${(r.personal||0)>=0?'+':''}${albumMoney(r.personal||0)}</b> · ${r.independentFunding?'프로젝트 손익':'회사 손익'} <b>${signed(r.profit||0)}만원</b></div>${r.groupPerformance?`<p class="album-verdict-note">${escapeCharacterText(r.groupName||'그룹')} 팀 실력 ${r.groupPerformance.teamTalent}점 · 내 콘셉트 적합도 ${r.groupPerformance.playerTalent}점 · 멤버 ${r.groupPerformance.members}명 (흥행에 팀 전체 능력치 반영)</p>`:''}${r.twist&&r.twist!=='없음'?`<p class="album-verdict-note">특이사항: ${r.twist}</p>`:''}</section>`;
+ return `<section class="album-verdict ${tone}"><div class="album-verdict-kicker">앨범 활동 최종 결과 · ${r.year||''}년</div><div class="album-verdict-title">${verdict}</div><p class="album-verdict-note">${note}</p><div class="album-result-grid"><div><span>초동 판매량</span><strong>${Number(r.sales||0).toLocaleString()}장</strong><small>${comparison}</small></div><div><span>음원 최고 순위</span><strong>${r.chartRank?`${r.chartRank.toLocaleString()}위`:'기록 없음'}</strong><small>${r.chartRank<=100?'TOP 100 진입':'TOP 100 밖'}</small></div><div><span>음악성 평가</span><strong>${r.quality??'-'}점</strong></div><div><span>신규 팬덤</span><strong>+${Number(r.newFans||0).toLocaleString()}명</strong></div></div><div class="album-verdict-footer">개인 정산 <b>${(r.personal||0)>=0?'+':''}${albumMoney(r.personal||0)}</b> · ${r.independentFunding?'프로젝트 손익':'회사 손익'} <b>${signed(r.profit||0)}만원</b></div>${r.groupPerformance?`<p class="album-verdict-note">${escapeCharacterText(r.groupName||'그룹')} 팀 실력 ${r.groupPerformance.teamTalent}점 · 내 콘셉트 적합도 ${r.groupPerformance.playerTalent}점 · 멤버 ${r.groupPerformance.members}명 (흥행에 팀 전체 능력치 반영)</p>`:''}${r.twist&&r.twist!=='없음'?`<p class="album-verdict-note">특이사항: ${r.twist}</p>`:''}${performanceExplanation(r.performance)}<p class="small-help">${({public:'대중성 전략: 음원 노출 강화',fans:'팬덤 전략: 음반 판매 강화',art:'음악성 전략: 작품 평가 강화'})[r.strategy]||''} · 제작비와 기존 팬덤도 성적에 반영됩니다.</p></section>`;
 }
 const albumConcepts={fresh:['청량 팝','비주얼','스타성'],power:['퍼포먼스 팝','댄스','스타성'],dream:['몽환 팝','보컬','비주얼'],ballad:['발라드','보컬','인성'],experimental:['얼터너티브','랩','스타성'],hiphop:['힙합','랩','스타성'],rnb:['R&B / 소울','보컬','스타성'],dance:['댄스 / EDM','댄스','랩'],acoustic:['어쿠스틱','보컬','인성'],visual:['하이틴 팝','비주얼','스타성'],raprock:['랩 록','랩','댄스'],theatrical:['드라마틱 팝','보컬','댄스'],fan:['팬송 앨범','인성','보컬'],concept:['콘셉트 아트팝','비주얼','랩']};
 const albumFormats={digital:['디지털 싱글',.48],single:['싱글',.65],mini:['미니',1],ep:['스페셜 EP',1.2],full:['정규',1.6]};
@@ -1942,10 +2021,9 @@ function albumPick(field,value){
  state.albumDraft??=albumDefault();state.albumDraft[field]=value;save();renderCareer();
 }
 function albumRecommendedConcept(){
- const stats=state?.stats||{};
  return Object.keys(albumConcepts).reduce((best,key)=>{
-  const [,a,b]=albumConcepts[key];
-  const score=(Number(stats[a])||0)*.55+(Number(stats[b])||0)*.45;
+  const weights=Object.fromEntries(albumConcepts[key].slice(1).map((k,i)=>[k,i===0?.55:.45]));
+  const score=activityPerformance(weights,{groupShare:state.group?.members?.length>1?.65:0}).quality;
   return score>best.score?{key,score}:best;
  },{key:'fresh',score:-1}).key;
 }
@@ -1956,7 +2034,7 @@ function renderAlbumUI(){
  state.albumDraft??=albumDefault();state.albumDraft.mode='normal';
  const d=state.albumDraft,c=albumControl(),budget=albumBudget();
  const fmt=c>=3?Object.entries(albumFormats).map(([k,v])=>albumOption('format',k,v[0],k==='full'?'대규모 제작':k==='digital'?'디지털 중심':k==='single'?'짧은 발매':k==='ep'?'특별 기획':'균형형')).join(''):`<p class="album-muted">회사 결정: ${albumFormats[d.format][0]} 앨범 (신뢰도 70부터 변경 가능)</p>`;
- const concept=c>=2?Object.entries(albumConcepts).map(([k,v])=>albumOption('concept',k,v[0],v.slice(1).join(' · '))).join(''):`<p class="album-muted">회사 결정: ${albumConcepts[d.concept][0]} (신뢰도 50부터 선택 가능) · 현재 추천: ${albumConcepts[albumRecommendedConcept()][0]}</p>`;
+ const concept=c>=2?Object.entries(albumConcepts).map(([k,v])=>albumOption('concept',k,v[0],v.slice(1).join(' · ')+' · 예상 완성도 '+Math.round(activityPerformance(Object.fromEntries(v.slice(1).map((k,i)=>[k,i===0?.55:.45])),{groupShare:state.group?.members?.length>1?.65:0}).quality)+'/100')).join(''):`<p class="album-muted">회사 결정: ${albumConcepts[d.concept][0]} (신뢰도 50부터 선택 가능) · 현재 추천: ${albumConcepts[albumRecommendedConcept()][0]}</p>`;
  const strategy=c>=1?Object.entries(albumStrategies).map(([k,v])=>albumOption('strategy',k,v,'')).join(''):`<p class="album-muted">회사 결정: ${albumStrategies[d.strategy]} (신뢰도 30부터 변경 가능)</p>`;
  return `<div class="album-panel"><h3>${independent()?'독립 제작 계획':'소속사 컴백 제안서'}</h3><div class="album-budget"><span>${independent()?'개인 제작 한도':'회사 제작 예산'}</span><strong>${albumMoney(budget)}</strong></div><div class="album-budget"><span>${independent()?'제작 자율도':'회사 신뢰도'}</span><strong>${independent()?'독립 · 모든 제작 선택 가능':state.agencyTrust+' / 100'}</strong></div><p class="album-muted">기대 초동 ${Math.round(Math.max(500,state.fans*.65)).toLocaleString()}장 · ${independent()?'제작비 개인 부담 · 손익 전액 개인 귀속':'제작비·적자 회사 부담 · 흑자 13% 개인 정산'}</p><h3>① 앨범 종류</h3><div class="album-options">${fmt}</div><h3>② 콘셉트</h3><div class="album-options">${concept}</div><h3>③ 타이틀 전략</h3><div class="album-options">${strategy}</div><p class="album-muted">${independent()?'제작비는 개인 자산 범위 안에서 배분합니다. 기존 그룹 멤버들과 독립 프로젝트를 진행합니다.':'제작비는 소속사가 자동 배분합니다.'}${state.nextAlbumQualityBonus?' 프로듀서 협업: 이번 앨범 음악성 +'+state.nextAlbumQualityBonus:''}</p><button class="btn primary" onclick="startAlbum()">제작 확정 · 앨범 발매 →</button><p class="album-muted">발매 후 음악방송·예능·팬사인회가 자동 진행됩니다.</p></div>`;
 }
@@ -1984,19 +2062,22 @@ function startAlbum(){
  const budget=albumBudget();if(independent()&&budget<100){alert('독립 앨범 제작에는 개인 자산 100만원 이상이 필요합니다. 방송·전문 활동으로 제작비를 마련하세요.');return;}const spent=Math.round(budget*Math.min(1,albumFormats[d.format][1]));
  const skills=albumConcepts[d.concept].slice(1).map(k=>state.stats[k]||0),soloTalent=skills[0]*.55+skills[1]*.45;
  const groupPerformance=groupAlbumTalent(d.concept);
- const talent=groupPerformance?groupPerformance.teamTalent:soloTalent;
+ const weights=Object.fromEntries(albumConcepts[d.concept].slice(1).map((k,i)=>[k,i===0?.55:.45]));
+ const performance=activityPerformance(weights,{groupShare:groupPerformance?.65:0});performance.statValues={...state.stats};
+ const talent=performance.quality;
  const skill=clamp(talent/100,0,1),fan=clamp(Math.log10(Math.max(100,state.fans))/6,0,1),production=clamp(Math.log10(Math.max(1000,spent))/5.3,0,1);
- const luck=(Math.random()-.5)*.4;
+ const luck=(Math.random()-.5)*performance.spread*2;performance.reception=1+luck;
+ if(groupPerformance){groupPerformance.teamTalent=Math.round(performance.effective);groupPerformance.playerTalent=Math.round(performance.player);}
  const raw=clamp(.35*skill+.25*fan+.2*production+.2*(.5+luck*2),.03,.99);
  const deep=d.mode==='deep';const music=deep?d.alloc[0]/40:1,video=deep?d.alloc[1]/30:1,promo=deep?d.alloc[2]/30:1;
  const collaboration=clamp(state.nextAlbumQualityBonus||0,0,5);
- const quality=clamp(Math.round(35+raw*48+collaboration+(music-1)*11+(d.format==='full'?-5:0)+(deep&&d.producer==='famous'?7:deep&&d.producer==='rookie'?randomInt(-8,10):0)),0,100);
+ const quality=clamp(Math.round(35+raw*48+collaboration+(d.strategy==='art'?5:0)+(music-1)*11+(d.format==='full'?-5:0)+(deep&&d.producer==='famous'?7:deep&&d.producer==='rookie'?randomInt(-8,10):0)),0,100);
  const expected=Math.max(500,Math.round(state.fans*.65*albumFormats[d.format][1]));
  const surprise=Math.random();const twist=surprise<.045?'역주행':surprise>.965?'예상 밖의 부진':'없음';
  const baseSales=Math.max(100,Math.round(expected*(.45+raw*1.3)*(d.strategy==='fans'?1.2:1)*(deep&&d.promo==='fandom'?1.12:1)));
  const chartScore=clamp(Math.round(raw*92+(promo-1)*8+(video-1)*7+(d.strategy==='public'?8:0)+(twist==='역주행'?22:twist==='예상 밖의 부진'?-18:0)),0,100);
  const chartRank=Math.max(1,Math.round(1000*Math.pow(1-chartScore/105,2.3)));
- state.albumPending={draft:d,budget,spent,expected,quality,baseSales,chartScore,chartRank,twist,raw,year:gameYear(),independentFunding:independent(),title:albumConcepts[d.concept][0]+' '+albumFormats[d.format][0]+' '+(state.albumCount+1)+'집',groupPerformance,groupName:state.group?.name||null};
+ state.albumPending={draft:d,budget,spent,expected,quality,baseSales,chartScore,chartRank,twist,raw,year:gameYear(),independentFunding:independent(),performance,title:albumConcepts[d.concept][0]+' '+albumFormats[d.format][0]+' '+(state.albumCount+1)+'집',groupPerformance,groupName:state.group?.name||null};
  state.nextAlbumQualityBonus=0;state.albumDraft=null;save();finishAlbum();
 }
 function finishAlbum(){
@@ -2021,8 +2102,8 @@ function finishAlbum(){
  const groupGrowth=updateGroupIdentityAfterRelease(newFans,d.concept,score);
  state.energy=clamp(state.energy-(d.mode==='deep'&&d.promo==='broadcast'?11:8),0,100);
  state.agencyFinance=clamp((state.agencyFinance??100)+(profit>0?Math.min(10,profit/Math.max(1000,p.spent)*8):Math.max(-15,profit/Math.max(1000,p.spent)*10)),45,140);
- const record={independentFunding:!!p.independentFunding,groupGrowth,groupPerformance:p.groupPerformance||null,groupName:p.groupName||null,year:p.year,concept:d.concept,format:d.format,strategy:d.strategy,mode:d.mode,activity,score,tier,sales,revenue,newFans,luck:p.raw,twist:p.twist,quality:p.quality,chartRank,expectRatio,expected:p.expected,budget:p.budget,spent:p.spent,profit,personal};
- record.activity='자동 종합 활동';state.albumHistory.push(record);state.albumCount++;storyTrackActivity('album',score>=65,{chartRank});state.albumThisSeason=true;checkCareerInjury('album');state.seasonActivity='album';state.seasonActivityResult=null;state.albumPending=null;
+ const record={performance:p.performance||null,independentFunding:!!p.independentFunding,groupGrowth,groupPerformance:p.groupPerformance||null,groupName:p.groupName||null,year:p.year,concept:d.concept,format:d.format,strategy:d.strategy,mode:d.mode,activity,score,tier,sales,revenue,newFans,luck:p.raw,twist:p.twist,quality:p.quality,chartRank,expectRatio,expected:p.expected,budget:p.budget,spent:p.spent,profit,personal};
+ record.activity='자동 종합 활동';state.albumHistory.push(record);state.activityHistory??=[];state.activityHistory.push({year:p.year,season:state.careerSeason,kind:'album',plan:d.concept,fans:newFans,personal,revenue,cost:p.spent,performance:p.performance||null});if(state.activityHistory.length>240)state.activityHistory.shift();state.lastActivityPerformance=state.activityHistory.at(-1);state.albumCount++;storyTrackActivity('album',score>=65,{chartRank});state.albumThisSeason=true;checkCareerInjury('album');state.seasonActivity='album';state.seasonActivityResult=null;state.albumPending=null;
  state.careerHistory.push(`${p.year}년 · ${p.title} · ${tier} · 초동 ${sales.toLocaleString()}장 · 음원 ${chartRank}위 · 개인 정산 ${personal>=0?'+':''}${personal.toLocaleString()}만원`);
  state.lastAlbumResult=`${p.title} · ${tier} (${score}점)\n초동 ${sales.toLocaleString()}장 / 기대 ${p.expected.toLocaleString()}장 · 음원 최고 ${chartRank}위\n음악성 ${p.quality}점 · 팬덤 +${newFans.toLocaleString()}명\n${p.independentFunding?'개인 제작비':'회사 제작비'} ${albumMoney(p.spent)} · 앨범 매출 ${albumMoney(revenue)} · ${p.independentFunding?'프로젝트 손익':'회사 손익'} ${albumMoney(profit)}\n개인 정산 ${personal>=0?'+':''}${albumMoney(personal)} · ${p.independentFunding?'독립 제작':('회사 신뢰 '+(trust>=0?'+':'')+trust)} · ${p.twist==='없음'?'활동 종료':p.twist}`;
  if(groupGrowth){state.lastAlbumResult+=`\n그룹 팬덤 ${state.fans.toLocaleString()}명 · 내 개인 팬 ${state.personalFans.toLocaleString()}명 (+${groupGrowth.gained.toLocaleString()})`+(groupGrowth.bonus?.gain?`\n★ 그룹 에이스 보너스: ${groupGrowth.bonus.key} +${groupGrowth.bonus.gain}`:'');}
@@ -2253,6 +2334,13 @@ growthTone=function(freq=600,length=.035){
 .event-result .training-result-kicker{color:var(--event-accent);font-size:12px;letter-spacing:.04em}
 .event-result .training-result-next{background:var(--event-accent);color:#201c29;box-shadow:0 -8px 16px #22232fe8}
 @media(max-width:350px){.event-banner{padding:14px 12px;gap:10px}.event-overline{font-size:19px}}
+</style>
+
+
+<style>
+.performance-explanation{margin:15px 0 4px;padding:13px 14px;border:1px solid #d8fa5930;border-radius:12px;background:#d8fa5908;color:#d7e1d5;font-size:12px;line-height:1.7}
+.performance-explanation>strong{color:#e6f3d5;font-size:13px}.performance-explanation ul{padding-left:17px;margin:8px 0 0}.performance-explanation li+li{margin-top:5px}
+.build-progress{border:1px solid #d8fa5930;border-radius:13px;padding:14px;margin:12px 0;background:#d8fa5906;font-size:12px;line-height:1.7;color:#d8e0d5}.build-progress strong{color:#d8fa59}.build-progress p{margin:7px 0}.build-progress small{color:#b4c0b5}
 </style>
 
 </body></html>
