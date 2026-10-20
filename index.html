@@ -397,6 +397,8 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 /* Isolated balance development UI; original layout retained. */
 .balance-lab-note{padding:9px 12px;border:1px solid #5d6a3a;color:#d8fa59;font-size:12px;line-height:1.6;margin:12px 0}
 .archive-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0}.archive-card{text-align:left;min-width:0;min-height:145px;border:1px solid #40494b;background:#1e2528;color:#f0f4e9;padding:15px;border-radius:9px;overflow-wrap:anywhere}.archive-card strong{display:block;font-size:17px;line-height:1.5;margin:12px 0}.archive-card small,.archive-card span{font-size:11px;color:#abb7b0}.archive-card.discovered{border-color:#a0b64e}.archive-card.discovered.rare{border-color:#d3af61;background:#2c2b24}.archive-card.locked strong{color:#8f9b95;letter-spacing:.2em}.archive-end{border-left:3px solid #d8fa59;padding:12px 15px;margin:16px 0;background:#20292a}.archive-tools{display:grid;gap:9px;margin-top:24px}.archive-tools button{width:100%}.archive-unlock{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:12000;background:#d8fa59;color:#172018;max-width:calc(100% - 28px);width:380px;padding:14px 16px;border-radius:12px;box-shadow:0 8px 24px #0008;font-weight:800;font-size:14px;animation:archiveEnter .3s ease-out}.archive-unlock button{margin-left:10px;border:1px solid #71843c;background:transparent;color:#172018;border-radius:5px;padding:6px}.archive-unlock[hidden]{display:none}@keyframes archiveEnter{from{opacity:0;bottom:7px}to{opacity:1;bottom:20px}}@media(prefers-reduced-motion:reduce){.archive-unlock{animation:none}}@media(max-width:350px){.archive-grid{grid-template-columns:1fr}}#endingArchive{padding-bottom:100px}#endingArchive h2{font-size:21px}
+
+.music-timeline{margin:10px 0;padding:8px 10px;border:1px solid #43514d;border-radius:8px;overflow-wrap:anywhere}.music-timeline summary{min-height:44px;display:list-item;cursor:pointer;font-weight:700;line-height:1.5;padding:8px 2px}.music-timeline ol{padding-left:20px}.music-timeline li{margin:8px 0}.music-timeline p,.music-return p{font-size:13px;color:#b9c7bc}.music-encore{display:block;width:100%;min-height:44px;padding:12px;margin:8px 0;background:#263135;color:#eaf0e4;border:1px solid #6c7d57;border-radius:8px;font-size:14px;text-align:left;white-space:normal;overflow-wrap:anywhere}.music-encore[aria-pressed=true]{border-color:#c8ea65;color:#d8fa59}.music-return{padding:12px 0}
 </style><style id="idol-name-style">
 .name-gender-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .name-gender{min-height:48px;border:1px solid #4b5565;border-radius:12px;background:#1c222e;color:#d3d9e2;font-size:16px;font-weight:750;cursor:pointer}
@@ -2841,7 +2843,7 @@ function liveSetPerformance(plan='small',solo=false){
   const q=clamp(p.quality*(.7+energy*.003)-(duplicate?7:0)-streak+(song.remasters.length?3:0),0,100);
   const memory=i===2?Math.min(1.12,1+song.plays*.012+(song.score>=65?.04:0)):1;
   const opening=i===0&&song.score>=65?1.06:1;
-  demand+=musicAudienceFit(style)*(activeSongBuzz(song.id)?1.2:1)*memory*opening*(duplicate?.94:1);
+  demand+=musicDemand([musicAudienceFit(style),activeSongBuzz(song.id)?1.2:1,memory,opening])*(duplicate?.94:1);
   energy=Math.max(0,energy-effort-streak);if(slot.arrangement==='fan')energy=Math.min(state.energy,energy+3);
   const preparation=slot.arrangement==='original'?0:({small:80,medium:200,large:500}[plan]||80);cost+=preparation;
   rows.push({songId:song.id,title:song.title,arrangement:slot.arrangement,style,quality:Math.round(q),startEnergy:i?rows[i-1].endEnergy:state.energy,endEnergy:energy,original: song.originalStats?Math.round(weightedTalent(song.originalStats,weights)):null,current:Math.round(weightedTalent(state.stats,weights)),weights});
@@ -2895,11 +2897,11 @@ function personalProjectModel(roll=.5){
   const weights=d.type==='showcase'&&live?live.rows.reduce((out,row)=>{for(const [k,w] of Object.entries(row.weights))out[k]=(out[k]||0)+w/3;return out;},{}):songWeights(song);p=activityPerformance(weights,{roll});
   if(d.type==='remaster'){
    quality=clamp(p.quality+[0,4,7][tier],0,100);fatigue=7+tier*2;
-   const fit=musicAudienceFit(songStyle(song.concept))*(activeSongBuzz(song.id)?1.2:1);
+   const audienceFit=musicAudienceFit(songStyle(song.concept)),buzz=activeSongBuzz(song.id)?1.2:1;
    const current=weightedTalent(state.stats,weights),original=song.originalStats?weightedTalent(song.originalStats,weights):current;
-   const improvement=clamp(1+(current-original)*.006,.8,1.3);
-   revenue=Math.round((350+Math.sqrt(Math.max(0,state.fans))*10)*(.25+quality*.015)*[1,1.65,2.35][tier]*fit*improvement*(.7+roll*.6));
-   fans=Math.round((80+Math.sqrt(Math.max(0,state.fans))*3)*(quality/100)*fit*improvement);
+   const improvement=clamp(1+(current-original)*.006,.8,1.3),fit=musicDemand([audienceFit,buzz,improvement]);
+   revenue=Math.round((350+Math.sqrt(Math.max(0,state.fans))*10)*(.25+quality*.015)*[1,1.65,2.35][tier]*fit*(.7+roll*.6));
+   fans=Math.round((80+Math.sqrt(Math.max(0,state.fans))*3)*(quality/100)*fit);
   }else{
    quality=clamp((live?.quality||0)*(.9+roll*.2),0,100);capacity=[350,900,2000][tier];fatigue=8+(live?.fatigue||0)+tier*3;
    const personal=state.personalFans??Math.round(state.fans*.12);
@@ -3018,7 +3020,7 @@ finalScore=function(){if(state?.scoreSnapshot&&state.scoreSnapshot.version===(st
 const trialGrades=[[8800,'SSS · 시대를 초월한 전설'],[7800,'SS · 역사에 남을 슈퍼스타'],[6800,'S · 시대를 대표하는 스타'],[5800,'A+ · 최정상급 아이돌'],[4800,'A · 대중적으로 성공한 인기 아이돌'],[3800,'B+ · 안정적인 중견 아이돌'],[2800,'B · 자신만의 무대를 완성한 아이돌'],[1800,'C · 자신만의 팬덤을 구축한 아이돌'],[800,'D · 무명 아이돌'],[0,'E · 짧지만 빛나는 커리어']];
 function trialRank(n){return trialGrades.find(([min])=>n>=min)?.[1]||trialGrades.at(-1)[1]}
 finalRank=function(n){return state?.scoreVersion===2?trialRank(n)+' · 시험 기준':finalRankV1(n)};
-const archiveCatalog={...careerEndingCatalog,brand:['브랜드의 얼굴','촬영 현장에서 쌓은 실력과 좋은 광고 성과로 자신의 이미지를 남겼습니다.'],broadcaster:['대중의 사랑을 받은 스타','다양한 방송 현장에서 실력을 보여주며 오랫동안 대중과 만났습니다.'],maker:['자신의 길을 만든 제작자','개인 자금으로 완성한 공연·재녹음 프로젝트가 실제 성과와 수익으로 이어졌습니다.']};
+const archiveCatalog={...careerEndingCatalog,legend:['시대를 남긴 전설','자신의 분야에서 뛰어난 성과를 쌓아, 한 시대에 남을 커리어를 만들었습니다.'],talented:['숨겨진 실력파','갈고닦은 능력과 전문 실력이 커리어에 뚜렷하게 남았습니다.'],comeback:['끝내 돌아온 사람','어려움을 겪은 뒤 다시 좋은 성과를 남겼습니다.'],brand:['브랜드의 얼굴','촬영 현장에서 쌓은 실력과 좋은 광고 성과로 자신의 이미지를 남겼습니다.'],broadcaster:['대중의 사랑을 받은 스타','다양한 방송 현장에서 실력을 보여주며 오랫동안 대중과 만났습니다.'],maker:['자신의 길을 만든 제작자','개인 자금으로 완성한 공연·재녹음 프로젝트가 실제 성과와 수익으로 이어졌습니다.']};
 const archiveHints={legend:'한 시대를 떠올릴 때, 무대 위의 이름 하나가 남는다.',grand:'오래 기다렸던 호명이 가장 큰 무대에서 울린다.',hitmaker:'노래들이 차례로 사람들의 일상에 스며든다.',albumKing:'책장마다, 누군가의 시간마다 나의 음악이 쌓인다.',ace:'함께 서는 무대에서 누구보다 믿음직한 사람이 된다.',team:'나의 빛이 모두의 빛과 만나는 순간이 있다.',underdog:'처음의 기대가 마지막의 크기를 정하지는 못한다.',fan:'오랜 시간이 지나도 같은 목소리가 나를 부른다.',veteran:'오래 선 무대에 실력과 기억이 함께 남는다.',comeback:'한 번의 부진 뒤에도 다음 무대는 기다린다.',talented:'화려한 소식보다 먼저, 실력이 나를 말한다.',brief:'짧은 계절에도 오래 남는 무대가 있다.',quiet:'크지 않은 발자국도 하나의 인생을 이룬다.',brand:'카메라 앞의 한 순간이 오래 기억되는 얼굴이 된다.',broadcaster:'낯선 현장들이 어느새 익숙한 나의 무대가 된다.',maker:'내가 준비한 무대가 나의 다음 길을 연다.'};
 const representativeIds=Object.keys(archiveCatalog).filter(id=>id!=='free');
 function calculateEndingV2(){
@@ -3048,7 +3050,9 @@ function calculateEndingV2(){
  if(!serious.length)serious.push({id:years<3?'brief':'quiet',strength:0});
  const winner=serious[0],extras=serious.slice(1).filter(x=>x.id!==winner.id).map(x=>({id:x.id,title:archiveCatalog[x.id][0]}));
  if(years>=15&&winner.id!=='veteran')extras.push({id:'longcareer',title:'15년 이상 함께한 무대'});
- const [title,description]=archiveCatalog[winner.id];
+ const [title,baseDescription]=archiveCatalog[winner.id];
+ const description=phase1EndingDescription(winner.id,{baseDescription,grands,f,stageLegend,mediaLegend,musicLegend});
+ for(const a of extras)if(a.id==='talented')a.title='갈고닦은 전문 실력';
  return {version:2,ruleset:BALANCE_RULESET,id:winner.id,title,description,achievements:extras.slice(0,3),retirement:state.endReason==='자발적 은퇴'?'스스로 내린 마지막 인사':state.endReason||'활동 종료',eligible:serious.map(x=>x.id)};
 }
 careerEnding=function(){if(state?.scoreVersion!==2)return careerEndingV1();return state.endingSnapshot?.version===2?state.endingSnapshot:calculateEndingV2()};
@@ -3156,6 +3160,156 @@ resolveRetirementCrisis=function(index){
 };
 renderRetirementCrisis=function(){const ok=retirementRenderV1();if(ok&&state.scoreVersion===2&&state.pendingRetirementCrisis?.pressure)$('retirementOdds').textContent+=' · 성공만으로 경고가 사라지지는 않습니다. 건강·관계·손익·팬덤을 안정시킨 3시즌마다 경고 1회 해소.';return ok};
 renderCareer=function(){careerRenderBeforePressure();if(state?.scoreVersion!==2)return;const p=pressurePreview();const help=p.grace?'데뷔 초기 3년은 누적 위기에 따른 강제 은퇴 유예 기간입니다.':p.value>=2?p.label+' 주의 · '+(p.risk?'최근 상태의 위기 발생률 '+p.risk+'% · 다음 시즌 상태에 따라 재계산':'누적되기 전에 운영을 조정하세요'):'현재 활동은 안정적입니다.';$('careerEconomy').innerHTML+='<div class="archive-end" role="status"><strong>활동 지속성 · 은퇴 경고 '+(state.retirementWarnings||0)+'/3</strong><p>'+help+'</p><p class="small-help">휴식으로 피로를 낮추고, 무리한 투자·공연 규모를 줄이며, 관계와 팬덤을 관리하세요. 세 번의 위기 대응 실패 시 활동을 마칩니다.</p></div>'};
+
+/* Phase 1: factual presentation and budget feedback. Scores/rewards/eligibility unchanged. */
+function phase1EndingDescription(id,c){
+ if(id!=='legend')return c.baseDescription;
+ if(c.grands>0)return '대상 '+c.grands+'회 수상과 커리어의 성과가 쌓여, 한 시대에 남을 이름이 되었습니다.';
+ if(c.stageLegend)return '오랜 시간 쌓은 뛰어난 무대와 팬들의 반응으로, 공연 커리어에 한 시대의 흔적을 남겼습니다.';
+ if(c.mediaLegend){const ads=c.f.ads.filter(e=>e.quality>=85).length,media=c.f.media.filter(e=>e.quality>=85).length;return (ads>=media?'광고·브랜드 현장':'방송 현장')+'에서 오랫동안 뛰어난 성과를 쌓아, 대중에게 기억될 이름을 남겼습니다.';}
+ if(c.musicLegend)return '오랫동안 이어 온 음악 활동과 뛰어난 작품 성과로, 자신의 분야에 깊은 흔적을 남겼습니다.';
+ return c.baseDescription;
+}
+// Consume exactly one draw as the previous epilogue did, preserving later RNG order.
+addEpilogue=function(){
+ if(!state||state.lifeEvents?.epilogue)return;
+ const roll=Math.random(),songs=state.repertoire?.songs||[],activities=state.activityHistory||[];
+ const performed=activities.some(e=>e.kind==='concert'||e.kind==='project'&&e.plan==='showcase')||songs.some(s=>s.plays>0)||!!state.personalStory?.journey?.hadConcert;
+ const recorded=(state.albumHistory||[]).length>0;
+ const choices=performed?['활동을 마무리하며, 직접 올랐던 무대의 기록을 돌아봅니다.','그동안의 공연과 선택이 커리어의 한 장으로 남았습니다.']:recorded?['활동을 마무리하며, 발표했던 앨범과 성장의 기록을 돌아봅니다.','발표한 음악과 그때의 선택이 커리어의 한 장으로 남았습니다.']:['활동을 마무리하며, 도전과 성장의 기록을 돌아봅니다.','이번 도전에서 내렸던 선택들이 하나의 커리어로 남았습니다.'];
+ state.lifeEvents??={};state.lifeEvents.epilogue=1;state.careerHistory??=[];state.careerHistory.push('에필로그 · '+choices[Math.min(1,Math.floor(roll*2))]);
+};
+// Expose the full live preparation budget before commitment; do not change its calculation.
+const renderOtherBeforePhase1=renderOtherActivity;
+renderOtherActivity=function(){
+ renderOtherBeforePhase1();if(state?.seasonActivity!=='concert'||!independent())return;
+ const live=plan=>liveSetPerformance(plan),cost=plan=>({small:1500,medium:11500,large:43500}[plan])+(live(plan)?.cost||0);
+ const labels={small:'소형',medium:'중형',large:'대형'},short=Object.keys(labels).filter(k=>state.cash<cost(k));
+ $('otherActivityHint').textContent+=' 현재 선곡·편곡 포함 제작비: '+Object.keys(labels).map(k=>labels[k]+' '+cost(k).toLocaleString()+'만원'+(state.cash<cost(k)?' (자금 부족)':'')).join(' / ')+'. 자금이 부족하면 선곡·편곡이나 규모를 바꾸거나 활동 선택으로 돌아갈 수 있습니다.';
+ for(const k of short){const action="onclick=\"completeOtherActivity('"+k+"')\"";$('otherActivityOptions').innerHTML=$('otherActivityOptions').innerHTML.replace(action,'disabled aria-disabled="true" '+action);}
+ if(short.length)$('otherActivityOptions').innerHTML='<p class="small-help" role="status">보유 자산 '+state.cash.toLocaleString()+'만원 · 제작비는 편곡 준비비를 포함합니다.</p>'+$('otherActivityOptions').innerHTML;
+};
+
+/* Phase 2: stable works, factual music life, earned rediscovery, bounded demand. */
+function musicHash(value){let x=2166136261;for(const c of String(value)){x^=c.charCodeAt(0);x=Math.imul(x,16777619)}return x>>>0}
+const initRepertoireBeforePhase2=initRepertoire;
+initRepertoire=function(){
+ if(!state?.debuted)return;
+ if(state.careerEnded){if(!state.repertoire)initRepertoireBeforePhase2();return}
+ const b=state.repertoire??={songs:[],audience:{vocal:1,dance:1,rap:1,pop:1},observations:0,lastDiscoverySeason:-4};
+ b.songs??=[];b.audience??={vocal:1,dance:1,rap:1,pop:1};b.observations??=0;b.lastDiscoverySeason??=-4;b.nextWorkSerial=Math.max(1,Math.trunc(Number(b.nextWorkSerial)||1));
+ const used=new Set((state.albumHistory||[]).map(a=>a.workId).filter(Boolean)),seen=new Set(),assigned=new Set();
+ for(const [i,a] of (state.albumHistory||[]).entries()){
+  let s=a.workId?b.songs.find(s=>s.albumId===a.workId&&!assigned.has(s.id)):null;
+  if(!s&&!a.workId)s=b.songs.find(s=>s.albumIndex===i&&!s.albumId&&!assigned.has(s.id));
+  if(!a.workId||seen.has(a.workId)){let id;do{id='work-'+b.nextWorkSerial++}while(used.has(id));a.workId=id;used.add(id)}seen.add(a.workId);
+  if(!s){let id='song-'+i;if(b.songs.some(s=>s.id===id)){let n=b.nextWorkSerial;do{id='song-work-'+n++}while(b.songs.some(s=>s.id===id));b.nextWorkSerial=Math.max(b.nextWorkSerial,n)}s={id,title:(a.title||((albumConcepts[a.concept]||['앨범'])[0]+' '+(i+1)+'집'))+' · 대표곡',concept:a.concept||'fresh',score:a.score??null,originalStats:a.performance?.statValues?{...a.performance.statValues}:null,plays:0,remasters:[],bestLive:null};b.songs.push(s)}
+  assigned.add(s.id);s.albumId=a.workId;s.albumIndex=i;s.year=Number.isFinite(a.year)?a.year:null;s.releasedMonths=Number.isFinite(a.releasedMonths)?a.releasedMonths:null;s.season=Number.isFinite(a.season)?a.season:null;s.knownByMonths??=gameMonths();s.remasters??=[];s.plays=Math.max(0,Number(s.plays)||0);s.bestLive??=null;
+ }
+ b.schema=2;b.history??={schema:1,startedMonths:gameMonths(),seed:musicHash(state.name+'|'+JSON.stringify(state.selected)+'|'+(state.traineeMonths||0)),events:{},attempts:{}};b.history.events??={};b.history.attempts??={};
+};
+function musicHistory(){initRepertoire();return state?.repertoire?.history||null}
+function songLifeEvents(songId){return Object.values(state?.repertoire?.history?.events||{}).filter(e=>e.songId===songId).sort((a,b)=>a.season-b.season||a.id.localeCompare(b.id))}
+function songAgeMonths(s){if(Number.isFinite(s.releasedMonths))return gameMonths()-s.releasedMonths;if(Number.isFinite(s.year))return (gameYear()-s.year)*12;if(Number.isFinite(s.knownByMonths))return Math.max(0,gameMonths()-s.knownByMonths);return null}
+function musicActivityRef(entry){return 'season:'+entry.season}
+function enrichMusicActivity(entry){
+ entry.activityId=musicActivityRef(entry);const annual=state.annualReview?.current?.activities?.find(e=>e.season===entry.season);if(annual){annual.activityId=entry.activityId;if(entry.songId)annual.songId=entry.songId;if(entry.setlist)annual.setlist=JSON.parse(JSON.stringify(entry.setlist))}
+ const metric=state.careerMetrics?.entries?.[entry.activityId];if(metric){metric.activityId=entry.activityId;if(entry.songId)metric.songId=entry.songId;if(entry.setlist)metric.setlist=JSON.parse(JSON.stringify(entry.setlist))}
+}
+const finishLiveBeforePhase2=finishLiveSet;
+finishLiveSet=function(live,entry){
+ if(!live||!entry||!Number.isFinite(entry.season))return;
+ const h=musicHistory();if(!h)return finishLiveBeforePhase2(live,entry);
+ const activityId=musicActivityRef(entry),guard='completed:'+activityId;if(h.events[guard])return;
+ finishLiveBeforePhase2(live,entry);enrichMusicActivity(entry);h.events[guard]={id:guard,kind:'completed',season:entry.season,months:gameMonths(),activityId};
+ const unique=new Map();for(const row of live.rows){if(!state.repertoire.songs.some(s=>s.id===row.songId))continue;const old=unique.get(row.songId);if(!old||row.quality>old.quality)unique.set(row.songId,row)}
+ for(const row of unique.values()){const id='live:'+activityId+':'+row.songId;h.events[id]={id,kind:'live',songId:row.songId,season:entry.season,months:gameMonths(),year:gameYear(),activityId,quality:row.quality,attendance:Number.isFinite(entry.attendance)?entry.attendance:null,arrangement:row.arrangement,original:row.original,current:row.current,encore:live.rows.at(-1).songId===row.songId}}
+};
+const completeProjectBeforePhase2=completePersonalProject;
+completePersonalProject=function(){
+ const wasDone=state?.albumThisSeason;completeProjectBeforePhase2();if(wasDone||!state?.albumThisSeason)return;
+ const e=state.lastActivityPerformance;if(e?.kind!=='project'||e.plan!=='remaster'||!e.songId)return;
+ const h=musicHistory();if(!h)return;const activityId=musicActivityRef(e),id='remaster:'+activityId+':'+e.songId;if(h.events[id])return;
+ enrichMusicActivity(e);h.events[id]={id,kind:'remaster',songId:e.songId,season:e.season,months:gameMonths(),year:gameYear(),activityId,quality:e.quality,personal:e.personal,revenue:e.revenue,cost:e.cost};
+ state.seasonActivityResult+='<aside class="journey-moment"><strong>다시 들려준 나의 음악</strong><p>'+escapeCharacterText(state.repertoire.songs.find(s=>s.id===e.songId)?.title||'대표곡')+' · 기록된 재녹음 '+songLifeEvents(e.songId).filter(x=>x.kind==='remaster').length+'회 · 이번 완성도 '+e.quality+'/100</p></aside>';save();renderCareer();
+};
+function rediscoveryEvidence(s){const events=songLifeEvents(s.id),live=events.filter(e=>e.kind==='live'&&e.quality>=65&&e.attendance>0),remasters=events.filter(e=>e.kind==='remaster'&&e.quality>=70&&e.personal>=0),best=live.length?Math.max(...live.map(e=>e.quality)):0;return {events,live,remasters,best,ready:live.length>=2&&live.length+remasters.length>=3&&best>=75}}
+maybeRediscoverSong=function(){
+ initRepertoire();const b=state?.repertoire,h=b?.history;if(!h||state.careerEnded||state.careerSeason-b.lastDiscoverySeason<4||b.buzz&&state.careerSeason<b.buzz.expiresSeason)return;
+ const candidates=b.songs.filter(s=>!s.rediscovered&&songAgeMonths(s)!==null&&songAgeMonths(s)>=24).map(s=>({s,e:rediscoveryEvidence(s)})).filter(x=>x.e.ready).sort((a,b)=>b.e.best-a.e.best||a.s.id.localeCompare(b.s.id));
+ for(const {s,e} of candidates){const evidence=[...e.live,...e.remasters].map(e=>e.id).sort(),attemptId=s.id+'|'+evidence.join('|');if(h.attempts[attemptId])continue;
+  const chance=Math.min(.55,.10+e.live.length*.045+e.remasters.length*.025+Math.max(0,e.best-75)*.004),roll=musicHash(h.seed+'|'+attemptId)/4294967296;h.attempts[attemptId]={season:state.careerSeason,chance,success:roll<chance};if(roll>=chance)continue;
+  const id='rediscovery:'+s.id;s.rediscovered=true;b.lastDiscoverySeason=state.careerSeason;b.buzz={songId:s.id,expiresSeason:state.careerSeason+2,eventId:id};h.events[id]={id,kind:'rediscovery',songId:s.id,season:state.careerSeason,months:gameMonths(),year:gameYear(),sourceActivityIds:[...new Set([...e.live,...e.remasters].map(e=>e.activityId))],evidenceIds:evidence};
+  state.careerHistory.push(gameYear()+'년 · '+s.title+' · 실제 공연·재해석의 반응이 쌓여 다시 주목 · 두 시즌 동안 재녹음·공연 수요 상승');storyMemory('music_'+id,s.title+'을 다시 무대에 올린 기록이 쌓여, 시간이 지난 뒤 재평가의 계기가 되었다.','achievement');break;
+ }
+};
+function musicDemand(factors){return clamp(factors.reduce((p,n)=>p*n,1),.8,1.35)}
+function songLifeLine(s){
+ if(!state.repertoire?.history)return '이전 저장의 상세 무대 연결 기록은 없습니다.';
+ const es=songLifeEvents(s.id),live=es.filter(e=>e.kind==='live'),rediscovery=es.find(e=>e.kind==='rediscovery'),encore=live.filter(e=>e.encore&&e.quality>=65&&e.attendance>0);
+ if(rediscovery){const sourceLives=(rediscovery.evidenceIds||[]).filter(id=>state.repertoire.history.events[id]?.kind==='live').length;return rediscovery.year+'년 · '+sourceLives+'회의 좋은 무대 기록을 바탕으로 다시 주목 · 이후 포함 누적 무대 '+live.length+'회'}
+ if(encore.length>=3)return encore.length+'번의 좋은 마지막 무대에 남긴 앙코르곡';if(live.length)return live.length+'개의 공연에서 다시 불렀던 곡 · 최고 완성도 '+Math.max(...live.map(e=>e.quality))+'/100';return '기록 시작 이후 아직 다시 무대에 올리지 않은 곡';
+}
+renderRepertoireSummary=function(){
+ initRepertoire();const b=state?.repertoire;if(!b)return '';const esc=escapeCharacterText,total=Object.values(b.audience).reduce((a,n)=>a+n,0),buzz=b.songs.find(s=>activeSongBuzz(s.id));
+ const audience=b.observations?Object.entries(b.audience).sort((a,c)=>c[1]-a[1]).map(([k,n])=>repertoireStyles[k]+' '+Math.round(n/total*100)+'%').join(' · '):'새 활동부터 반응을 기록합니다. 과거 팬의 취향은 추정하지 않습니다.';
+ return '<section class="repertoire-panel"><h3>시간이 쌓이는 나의 음악</h3><p>최근 음악 활동 반응 · '+esc(audience)+'</p><p class="small-help">실제 팬 인원과 다른 반응 비중입니다. 같은 곡을 어떤 무대로 다시 들려줬는지 기록합니다. 좋은 무대가 쌓여도 재발견은 보장되지 않습니다.</p>'+(buzz?'<div class="repertoire-buzz">'+esc(buzz.title)+' · '+(b.buzz.eventId?'공연·재해석 기록을 통해 다시 주목받고 있습니다.':'이전 저장의 재발견 기록입니다. 당시의 구체적 경위는 새로 추정하지 않습니다.')+' 남은 '+(b.buzz.expiresSeason-state.careerSeason)+'시즌 · 재발견 수요 +20% (취향·익숙함·성장 효과와 합산 적용 상한 +35%)</div>':'')+'<details><summary>대표곡 '+b.songs.length+'곡 · 내 작품 보기</summary>'+b.songs.slice().reverse().map(s=>'<div class="repertoire-song"><strong>'+esc(s.title)+'</strong><small>'+(Number.isFinite(s.year)?s.year+'년':'발매연도 미상')+' · '+esc(repertoireStyles[songStyle(s.concept)])+' · 무대 '+s.plays+'구간 · 재녹음 '+s.remasters.length+'회'+(s.originalStats?' · 발매 당시 관련 실력 '+Math.round(weightedTalent(s.originalStats,songWeights(s))):' · 발매 당시 개인 실력 미기록')+'</small><small>'+esc(songLifeLine(s))+'</small>'+renderMusicTimeline(s)+'</div>').join('')+'</details><p class="small-help">예전 무대의 상세 기록이 없으면 이번 기록 시작 이후의 이력만 연결합니다. 같은 공연에서 반복한 곡은 장기 이력에 한 번만 셉니다.</p><p>자산 '+state.cash.toLocaleString()+'만원 · 재녹음 / 특별 공연 / 집중 육성에 투자할 수 있습니다.</p></section>';
+};
+const journeyEndBeforePhase2=journeyEndSummary;
+journeyEndSummary=function(){const base=journeyEndBeforePhase2(),songs=state.repertoire?.songs||[];if(!state.repertoire?.history)return base;const ranked=songs.map(s=>({s,events:songLifeEvents(s.id)})).sort((a,b)=>Number(b.events.some(e=>e.kind==='rediscovery'))-Number(a.events.some(e=>e.kind==='rediscovery'))||b.events.filter(e=>e.kind==='live').length-a.events.filter(e=>e.kind==='live').length).slice(0,2);if(!ranked.length)return base;return base+'<section class="journey-end"><h2>나와 함께 시간이 쌓인 음악</h2>'+ranked.map(({s})=>'<p><strong>'+escapeCharacterText(s.title)+'</strong> · '+(Number.isFinite(s.year)?s.year+'년 발매':'발매연도 미상')+(Number.isFinite(s.score)?' · 발매 당시 흥행 '+s.score+'점':'')+'</p><p>'+escapeCharacterText(songLifeLine(s))+'</p>').join('')+'</section>'};
+const liveResultBeforePhase2=liveResultHTML;
+liveResultHTML=function(live){const base=liveResultBeforePhase2(live);if(!live)return base;const songs=[...new Set(live.rows.map(r=>r.songId))].map(id=>state.repertoire?.songs?.find(s=>s.id===id)).filter(s=>s&&songAgeMonths(s)>=12).slice(0,2);if(!songs.length)return base;return base+'<aside class="journey-moment"><strong>이 곡에 쌓인 시간</strong>'+songs.map(s=>'<p>'+escapeCharacterText(s.title)+' · '+escapeCharacterText(songLifeLine(s))+'</p>').join('')+'</aside>'};
+
+/* Phase 2 completion: inspectable cause/effect, free encore editing, safe backups. */
+function musicEventText(e){
+ const when=Number.isFinite(e.year)?e.year+'년':'시점 미기록';
+ if(e.kind==='live')return when+' · '+(e.encore?'마지막 무대':'공연')+' · 완성도 '+e.quality+'/100 · '+(Number.isFinite(e.attendance)?'관객 '+e.attendance.toLocaleString('ko-KR')+'명':'관객 수 미기록');
+ if(e.kind==='remaster')return when+' · 재녹음 · 완성도 '+e.quality+'/100 · 개인 손익 '+(e.personal>=0?'+':'')+e.personal.toLocaleString('ko-KR')+'만원';
+ if(e.kind==='rediscovery'){const sources=(e.evidenceIds||[]).map(id=>state.repertoire.history.events[id]).filter(Boolean);return when+' · 재평가 · 좋은 공연 '+sources.filter(x=>x.kind==='live').length+'회와 재녹음 '+sources.filter(x=>x.kind==='remaster').length+'회의 실제 반응이 계기';}
+ return '';
+}
+function renderMusicTimeline(song){
+ const all=songLifeEvents(song.id),live=all.filter(e=>e.kind==='live'),firstLive=live[0],best=live.slice().sort((a,b)=>b.quality-a.quality||a.season-b.season)[0];
+ const picks=[firstLive,best,all.find(e=>e.kind==='remaster'),all.find(e=>e.kind==='rediscovery'),live.at(-1)].filter(Boolean),unique=[...new Map(picks.map(e=>[e.id,e])).values()].sort((a,b)=>a.months-b.months||a.season-b.season||a.id.localeCompare(b.id));
+ const release=(Number.isFinite(song.year)?song.year+'년 발매':'발매연도 미상')+(Number.isFinite(song.score)?' · 당시 흥행 '+song.score+'점':' · 당시 흥행 평가 미기록');
+ return '<details class="music-timeline"><summary>'+escapeCharacterText(song.title)+' · 이 곡의 시간 펼치기</summary><ol><li>'+escapeCharacterText(release)+'</li>'+unique.map(e=>'<li>'+escapeCharacterText(musicEventText(e))+'</li>').join('')+'</ol>'+(all.length?'<p>전체 '+all.length+'개 연결 기록 중 첫 무대·최고 무대·재녹음·재평가·최근 무대를 보여줍니다.</p>':'<p>연결된 상세 이력이 아직 없습니다. 과거에 공연하지 않았다는 뜻은 아닙니다.</p>')+'<p>관객은 해당 공연의 전체 관객 수이며, 이 곡의 신규 팬 수와는 다릅니다.</p></details>';
+}
+function canEditMusicEncore(){return !!(state?.debuted&&!state.careerEnded&&!state.albumThisSeason&&(state.seasonActivity==='concert'||state.seasonActivity==='project'&&state.personalProjectDraft?.type==='showcase'))}
+function useSongAsEncore(id){
+ if(!canEditMusicEncore()||!state.repertoire.songs.some(s=>s.id===id))return;
+ setLiveSlot(2,'songId',id);
+}
+const livePlannerBeforeCompletion=renderLivePlanner;
+renderLivePlanner=function(solo=false){
+ const base=livePlannerBeforeCompletion(solo);if(!canEditMusicEncore())return base;
+ const songs=(state.repertoire?.songs||[]).filter(s=>songAgeMonths(s)>=12).slice(0,4),selected=state.liveDraft?.slots?.[2]?.songId;if(!songs.length)return base;
+ return base+'<section class="music-return"><strong>예전 곡을 마지막 무대로</strong><p>선곡만 바꿉니다. 현재 편곡은 유지되며, 제작비는 공연을 확정할 때 정산합니다.</p>'+songs.map(s=>'<button type="button" class="music-encore" '+(selected===s.id?'disabled aria-pressed="true"':'aria-pressed="false"')+' onclick="useSongAsEncore('+escapeCharacterText(JSON.stringify(s.id))+')">'+(selected===s.id?'선택됨 · ':'마지막 무대로 · ')+escapeCharacterText(s.title)+'</button>').join('')+'</section>';
+};
+function validateMusicState(s){
+ const b=s?.repertoire,h=b?.history;if(!h)return;
+ const fail=()=>{throw Error('곡의 생애 기록 또는 사건 연결이 올바르지 않습니다. 기존 저장은 변경하지 않았습니다.')};
+ const obj=x=>!!x&&typeof x==='object'&&!Array.isArray(x),finite=x=>typeof x==='number'&&Number.isFinite(x),natural=x=>finite(x)&&x>=0,season=x=>Number.isInteger(x)&&x>=0;
+ if(!Array.isArray(b.songs)||h.schema!==1||!natural(h.startedMonths)||!Number.isInteger(h.seed)||h.seed<0||h.seed>4294967295||!obj(h.events)||!obj(h.attempts))fail();
+ const songs=new Set();for(const song of b.songs){if(typeof song.id!=='string'||songs.has(song.id))fail();songs.add(song.id)}
+ const kinds=new Set(['completed','live','remaster','rediscovery']);
+ for(const [id,e] of Object.entries(h.events)){
+  if(!obj(e)||e.id!==id||!kinds.has(e.kind)||!season(e.season)||!natural(e.months))fail();
+  if(e.kind==='completed'){if(e.activityId!=='season:'+e.season)fail();continue}
+  if(!songs.has(e.songId))fail();
+  if(e.kind==='live'||e.kind==='remaster'){
+   if(e.activityId!=='season:'+e.season||!natural(e.quality)||e.quality>100)fail();
+   if(e.kind==='live'&&e.attendance!==null&&!natural(e.attendance))fail();
+   if(e.kind==='remaster'&&(!finite(e.personal)||!natural(e.revenue)||!natural(e.cost)))fail();
+  }else{
+   if(!Array.isArray(e.evidenceIds)||!e.evidenceIds.length||new Set(e.evidenceIds).size!==e.evidenceIds.length||!Array.isArray(e.sourceActivityIds))fail();
+   const refs=[];for(const key of e.evidenceIds){const source=h.events[key];if(!source||!['live','remaster'].includes(source.kind)||source.songId!==e.songId||source.season>e.season||source.months>e.months)fail();refs.push(source.activityId)}
+   const expected=[...new Set(refs)].sort(),actual=[...new Set(e.sourceActivityIds)].sort();if(actual.length!==e.sourceActivityIds.length||JSON.stringify(actual)!==JSON.stringify(expected))fail();
+  }
+ }
+ for(const a of Object.values(h.attempts))if(!obj(a)||!season(a.season)||!natural(a.chance)||a.chance>.55||typeof a.success!=='boolean')fail();
+}
+const validateBackupBeforeCompletion=validateStageBackup;
+validateStageBackup=function(data){const parsed=validateBackupBeforeCompletion(data);for(const [key,raw] of Object.entries(parsed.entries))if(key==='stage-save-v17'||/^stage-character-(?!slots-v1$)/.test(key))validateMusicState(JSON.parse(raw));return parsed};
 
 migrateLegacyCharacter();refreshCharacterSlots();syncSound();renderDreamChoices();
 
