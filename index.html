@@ -3311,6 +3311,64 @@ function validateMusicState(s){
 const validateBackupBeforeCompletion=validateStageBackup;
 validateStageBackup=function(data){const parsed=validateBackupBeforeCompletion(data);for(const [key,raw] of Object.entries(parsed.entries))if(key==='stage-save-v17'||/^stage-character-(?!slots-v1$)/.test(key))validateMusicState(JSON.parse(raw));return parsed};
 
+/* Activity experience: integer hundredths, prospective only; no extra RNG or payout. */
+const ACTIVITY_EXPERIENCE_RULES={base:80,cap:600,ceiling:85,repeatFloor:.5};
+function activityExperienceInit(){
+ if(!state?.debuted||state.careerEnded)return null;
+ if(!state.activityExperience)state.activityExperience={schema:1,startedSeason:state.careerSeason,lastSeason:state.careerSeason-(state.albumThisSeason?0:1),counts:{},pending:Object.fromEntries(keys.map(k=>[k,0])),earned:Object.fromEntries(keys.map(k=>[k,0]))};
+ return state.activityExperience;
+}
+const normalizeBeforeExperience=normalizeState;
+normalizeState=function(){normalizeBeforeExperience();activityExperienceInit()};
+function activityExperienceProfile(e){
+ if(e.kind==='album'){const k=(albumConcepts[e.plan]||[]).slice(1);return Object.fromEntries(k.map((s,i)=>[s,i===0?.65:.35]))}
+ if(e.kind==='specialty')return activityProfiles.specialty[e.plan]||{};
+ if(e.kind==='broadcast')return activityProfiles.broadcast[e.plan]||{};
+ if(e.kind==='concert')return {'보컬':.25,'댄스':.50,'랩':.10,'스타성':.15};
+ if(e.kind==='project'&&e.plan==='showcase')return {'보컬':.35,'댄스':.35,'랩':.10,'스타성':.20};
+ if(e.kind==='project'&&e.plan==='remaster'){const song=state.repertoire?.songs.find(s=>s.id===e.songId);return song?songWeights(song):{}}
+ return {};
+}
+function awardActivityExperience(e){
+ const h=activityExperienceInit();if(!h||!Number.isInteger(e.season)||e.season<0||e.season!==state.careerSeason||e.season<=h.lastSeason)return;
+ h.lastSeason=e.season;
+ const profile=activityExperienceProfile(e),weights=Object.entries(profile).filter(([k,w])=>keys.includes(k)&&k!=='인성'&&w>0);
+ if(!weights.length)return; // Rest, camps, service and events are not practice payouts.
+ const family=e.kind==='specialty'?'specialty:'+e.plan:e.kind==='project'?'project:'+e.plan:e.kind==='album'?'album:'+songStyle(e.plan):e.kind==='broadcast'?'broadcast:'+e.plan:'concert';
+ const count=h.counts[family]||0,repeat=Math.max(ACTIVITY_EXPERIENCE_RULES.repeatFloor,1/(1+count/8));h.counts[family]=count+1;
+ const units={},gains={},pending={},limits={};
+ for(const [k,w] of weights){
+  const n=state.stats[k],rate=n>=85?0:n>=70?.25:n>=50?.55:1;
+  const amount=Math.min(Math.max(0,ACTIVITY_EXPERIENCE_RULES.cap-h.earned[k]),Math.round(ACTIVITY_EXPERIENCE_RULES.base*w*rate*repeat));
+  if(!amount)continue;
+  const pooled=h.pending[k]+amount,gain=Math.min(Math.floor(pooled/100),Math.max(0,85-n));
+  h.earned[k]+=amount;h.pending[k]=n+gain>=85?0:pooled-gain*100;state.stats[k]+=gain;
+  units[k]=amount;gains[k]=gain;pending[k]=h.pending[k];limits[k]=h.earned[k]>=ACTIVITY_EXPERIENCE_RULES.cap||state.stats[k]>=ACTIVITY_EXPERIENCE_RULES.ceiling;
+ }
+ e.experience={schema:1,family,units,gains,pending,limits};
+}
+const annualRecordBeforeExperience=recordAnnualActivity;
+recordAnnualActivity=function(entry,extra={}){awardActivityExperience(entry);return annualRecordBeforeExperience(entry,extra)};
+function experienceResultHTML(e){
+ const x=e?.experience;if(!x||!Object.keys(x.units).length)return '';
+ return '<aside class="journey-moment"><strong>활동이 남긴 경험</strong>'+Object.keys(x.units).map(k=>'<p>'+escapeCharacterText(k)+' · 경험 +'+(x.units[k]/100).toFixed(2)+(x.gains[k]?' → 능력치 +'+x.gains[k]:'')+(x.limits?.[k]?' · 경험 성장 한도 도달':' · 다음 성장까지 '+((100-x.pending[k])/100).toFixed(2))+'</p>').join('')+'<p class="small-help">경험 1.00을 모으면 능력치 +1. 이번 활동 성과에는 반영되지 않으며 다음 활동부터 적용됩니다.</p></aside>';
+}
+const verdictBeforeExperience=renderAlbumVerdict;
+renderAlbumVerdict=function(){const html=verdictBeforeExperience();return html+(state?.albumThisSeason&&state.lastActivityPerformance?.season===state.careerSeason?experienceResultHTML(state.lastActivityPerformance):'')};
+const progressBeforeExperience=buildProgressSummary;
+buildProgressSummary=function(){const html=progressBeforeExperience(),h=state.activityExperience;if(!h)return html;const lines=keys.filter(k=>h.pending[k]>0&&state.stats[k]<85&&h.earned[k]<600).map(k=>escapeCharacterText(k)+' '+(h.pending[k]/100).toFixed(2)+'/1.00');return html+'<details class="repertoire-panel"><summary>활동 경험 성장'+(lines.length?' · '+lines.join(' / '):'')+'</summary><p class="small-help">활동에서 실제로 쓴 능력이 조금씩 성장합니다. 반복할수록 느려지고, 50·70부터 성장량이 줄며 85 이상은 훈련이 필요합니다. 경험 성장은 능력별 생애 최대 +6입니다. 인성은 자동으로 오르지 않습니다.</p></details>'};
+const annualViewBeforeExperience=renderAnnualReview;
+renderAnnualReview=function(r){const html=annualViewBeforeExperience(r),entries=(r.activities||[]).filter(e=>e.experience);if(!entries.length)return html;return html+'<details class="repertoire-panel"><summary>올해 활동 경험으로 얻은 성장</summary>'+keys.map(k=>{const u=entries.reduce((n,e)=>n+(e.experience.units[k]||0),0),g=entries.reduce((n,e)=>n+(e.experience.gains[k]||0),0);return u?'<p>'+escapeCharacterText(k)+' · 경험 +'+(u/100).toFixed(2)+' · 실제 능력치 +'+g+'</p>':''}).join('')+'<p class="small-help">전체 능력치 변화에 포함된 성장입니다. 별도로 다시 더하지 않습니다. 경험은 다음 해에도 이어집니다.</p></details>'};
+function validateActivityExperience(s){
+ const h=s.activityExperience;if(h===undefined)return;
+ const obj=x=>!!x&&typeof x==='object'&&!Array.isArray(x),nat=x=>Number.isInteger(x)&&x>=0,fail=()=>{throw Error('활동 경험 기록이 올바르지 않습니다. 기존 저장은 변경하지 않았습니다.')};
+ if(!obj(h)||h.schema!==1||!nat(h.startedSeason)||!Number.isInteger(h.lastSeason)||h.lastSeason<h.startedSeason-1||h.lastSeason>s.careerSeason||!obj(h.counts)||!obj(h.pending)||!obj(h.earned))fail();
+ for(const k of keys)if(!nat(h.pending[k])||h.pending[k]>=100||!nat(h.earned[k])||h.earned[k]>600||h.pending[k]>h.earned[k])fail();
+ for(const [k,v] of Object.entries(h.counts))if(!/^(concert|album:(vocal|dance|rap|pop)|broadcast:(variety|content|radio|commercial)|specialty:(ost|choreography|feature|commercial|varietyStar|fanMeet)|project:(showcase|remaster))$/.test(k)||!nat(v)||v>10000)fail();
+}
+const backupBeforeExperience=validateStageBackup;
+validateStageBackup=function(data){const parsed=backupBeforeExperience(data);for(const [key,raw] of Object.entries(parsed.entries))if(key==='stage-save-v17'||/^stage-character-(?!slots-v1$)/.test(key))validateActivityExperience(JSON.parse(raw));return parsed};
+
 migrateLegacyCharacter();refreshCharacterSlots();syncSound();renderDreamChoices();
 
 // First tap selects; a second tap on the same option commits. Navigation stays direct.
