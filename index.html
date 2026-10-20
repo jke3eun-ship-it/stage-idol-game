@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#111318" name="theme-color"/><title>STAGE 1.7 : 나의 아이돌 인생</title><style>
+<html lang="ko"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#111318" name="theme-color"/><title>STAGE 밸런스 v2 개발용 · 시험 기준</title><style>
 :root{font-family:system-ui,-apple-system,'Apple SD Gothic Neo',sans-serif;color:#f5f4ff;background:#0c1020}*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:radial-gradient(ellipse at 50% 22%,#353064 0%,#15182d 45%,#0b0e1b 100%)}button,input,select{font:inherit}button{cursor:pointer}.app{max-width:430px;min-height:100dvh;margin:auto;position:relative;overflow:hidden;padding:env(safe-area-inset-top) 24px env(safe-area-inset-bottom)}.screen{display:none;min-height:100dvh;flex-direction:column}.screen.active{display:flex}.top{display:flex;justify-content:space-between;align-items:center;padding-top:22px;font-size:12px;letter-spacing:.15em;color:#bdb8d5}.sound-toggle{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border:1px solid #746ba3;border-radius:13px;background:#ffffff12;color:#f5f4ff;cursor:pointer}.sound-toggle svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.top-right{display:flex;align-items:center;gap:9px}.pill{border:1px solid #746ba3;border-radius:99px;padding:7px 11px}.hero{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;min-height:430px}.halo{position:absolute;width:310px;height:310px;border:1px solid #b6a5fc40;border-radius:50%;box-shadow:0 0 90px #aa83ff30,inset 0 0 70px #b49eff15;top:50%;left:50%;transform:translate(-50%,-54%)}.halo:before,.halo:after{content:'';position:absolute;inset:35px;border:1px solid #b6a5fc26;border-radius:50%}.halo:after{inset:75px}.star{position:absolute;font-size:18px;color:#d6c8ff}.s1{top:17%;left:10%}.s2{top:24%;right:9%}.s3{bottom:21%;right:16%}.hero-content{position:relative;z-index:1}.eyebrow{font-size:11px;letter-spacing:.35em;color:#d1c3ff;margin-bottom:14px}.brand{font-size:clamp(64px,18vw,88px);font-weight:900;letter-spacing:-.09em;line-height:1;text-shadow:0 5px 35px #a48cff80;margin-right:8px}.subtitle{font-size:19px;font-weight:700;letter-spacing:.09em;margin-top:16px}.description{font-size:13px;color:#c7c3d6;line-height:1.8;margin-top:18px}.actions{padding-bottom:38px;display:grid;gap:12px}.btn{border:0;border-radius:15px;min-height:56px;font-weight:800;font-size:16px}.primary{background:linear-gradient(110deg,#c6adff,#9f9dff);color:#1a1432;box-shadow:0 12px 28px #9275e02f}.secondary{background:#ffffff12;color:#f4f1ff;border:1px solid #ffffff27}.btn:disabled{opacity:.35;cursor:not-allowed}.footer{text-align:center;font-size:11px;color:#9895ac;line-height:1.7}.back{border:0;background:none;color:#d7cffb;text-align:left;padding:24px 0;font-size:15px}.step{color:#b9a6ff;font-size:12px;letter-spacing:.15em;margin-top:20px}.heading{font-size:32px;letter-spacing:-.06em;margin:14px 0 10px}.hint{color:#bdbbd1;line-height:1.7;font-size:14px}.field{margin-top:30px}.field label{display:block;font-size:13px;color:#d2cde3;margin-bottom:10px}input,select{width:100%;height:54px;border:1px solid #77718f;background:#ffffff12;border-radius:12px;color:white;padding:0 14px;font-size:16px}select option{color:#111}.options{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}.option{padding:17px 10px;border:1px solid #ffffff36;background:#ffffff0b;border-radius:13px;color:#e5e2f4;font-size:14px}.option.selected{border-color:#cbb4ff;background:#a58af02b}.grow{flex:1}.preview{margin-top:28px;padding:20px;border:1px solid #a58af044;background:#ffffff0b;border-radius:16px}.preview strong{font-size:22px}.preview p{font-size:13px;color:#c8c5d7;line-height:1.7}.note{font-size:12px;color:#a8a2c3;margin-top:12px}.status{display:flex;justify-content:space-between;color:#c9c4de;font-size:13px;margin:24px 0}.stat{margin:16px 0}.stathead{display:flex;justify-content:space-between;font-size:13px}.bar{height:8px;background:#ffffff18;border-radius:10px;margin-top:8px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#aa8aff,#e3a6ff);border-radius:10px}.event{border:1px solid #b4a1ee66;background:#ffffff0d;border-radius:18px;padding:20px;margin:28px 0}.event h3{margin:0 0 12px;font-size:20px}.event p{font-size:14px;color:#ddd8ee;line-height:1.8}.mini{font-size:12px;color:#ad9dff}.result{color:#bdf0c7!important}.roll-card{margin:24px 0 12px;padding:20px;border:1px solid #a58af066;background:linear-gradient(155deg,#ffffff13,#ffffff06);border-radius:20px}.roll-head{display:flex;justify-content:space-between;align-items:center;gap:12px}.roll-tag{font-size:11px;letter-spacing:.12em;color:#c5afff}.roll-name{font-size:25px;font-weight:800;margin:7px 0 0}.roll-desc{font-size:13px;color:#c5c0d8;line-height:1.65;margin:12px 0 0}.roll-value{color:#e4d2ff;font-weight:800}.roll-summary{display:flex;justify-content:space-between;margin-top:20px;padding-top:15px;border-top:1px solid #ffffff20;font-size:13px;color:#cfc7e4}.roll-summary strong{color:#f6edff}.small-help{font-size:12px;color:#aaa3c1;line-height:1.7;margin:10px 0 20px}.reroll-count{font-size:12px;color:#c5b7e7;text-align:center}.roll-badge{background:#b9a0ff2b;border:1px solid #b9a0ff66;color:#eadfff;padding:7px 10px;border-radius:99px;font-size:11px}.screen .actions{margin-top:auto}.hidden{display:none!important}
 .training-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:10px}.training-grid button{padding:12px 3px;border:1px solid #74649e;background:#ffffff0b;color:#e9e4f7;border-radius:12px;font-size:13px;cursor:pointer}.training-grid button.selected{border-color:#c6adff;background:#a48af83b;color:white;font-weight:800}.training-grid button:disabled{opacity:.4}.stat .stathead{display:flex;justify-content:space-between}.training-grid button:focus-visible{outline:2px solid white}#logHistory{white-space:pre-line;border-top:1px solid #ffffff1c;padding-top:10px;margin-top:12px}.hidden{display:none!important}
 /* STAGE 0.5.2: training UI */
@@ -393,6 +393,10 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 #awardContent details,#careerEconomy details{border-top:1px solid #46514d;padding:14px 0;margin-top:8px}#awardContent summary,#careerEconomy summary{cursor:pointer;font-weight:750;line-height:1.5;min-height:30px}#awardContent .roll-summary{gap:10px;flex-wrap:wrap}#awardContent .roll-summary strong{overflow-wrap:anywhere}
 .annual-table-wrap{overflow-x:auto;margin:12px 0}.annual-table{border-collapse:collapse;width:100%;min-width:470px;font-size:12px;font-variant-numeric:tabular-nums}.annual-table th,.annual-table td{padding:10px 6px;border-bottom:1px solid #46514d;text-align:right;white-space:nowrap}.annual-table th:first-child{text-align:left}.annual-table th small{display:block;color:#b2c0b7;font-weight:400;margin-top:4px}#careerEconomy details button{display:block;width:100%;margin:9px 0}
 
+
+/* Isolated balance development UI; original layout retained. */
+.balance-lab-note{padding:9px 12px;border:1px solid #5d6a3a;color:#d8fa59;font-size:12px;line-height:1.6;margin:12px 0}
+.archive-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0}.archive-card{text-align:left;min-width:0;min-height:145px;border:1px solid #40494b;background:#1e2528;color:#f0f4e9;padding:15px;border-radius:9px;overflow-wrap:anywhere}.archive-card strong{display:block;font-size:17px;line-height:1.5;margin:12px 0}.archive-card small,.archive-card span{font-size:11px;color:#abb7b0}.archive-card.discovered{border-color:#a0b64e}.archive-card.discovered.rare{border-color:#d3af61;background:#2c2b24}.archive-card.locked strong{color:#8f9b95;letter-spacing:.2em}.archive-end{border-left:3px solid #d8fa59;padding:12px 15px;margin:16px 0;background:#20292a}.archive-tools{display:grid;gap:9px;margin-top:24px}.archive-tools button{width:100%}.archive-unlock{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:12000;background:#d8fa59;color:#172018;max-width:calc(100% - 28px);width:380px;padding:14px 16px;border-radius:12px;box-shadow:0 8px 24px #0008;font-weight:800;font-size:14px;animation:archiveEnter .3s ease-out}.archive-unlock button{margin-left:10px;border:1px solid #71843c;background:transparent;color:#172018;border-radius:5px;padding:6px}.archive-unlock[hidden]{display:none}@keyframes archiveEnter{from{opacity:0;bottom:7px}to{opacity:1;bottom:20px}}@media(prefers-reduced-motion:reduce){.archive-unlock{animation:none}}@media(max-width:350px){.archive-grid{grid-template-columns:1fr}}#endingArchive{padding-bottom:100px}#endingArchive h2{font-size:21px}
 </style><style id="idol-name-style">
 .name-gender-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .name-gender{min-height:48px;border:1px solid #4b5565;border-radius:12px;background:#1c222e;color:#d3d9e2;font-size:16px;font-weight:750;cursor:pointer}
@@ -417,7 +421,7 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 </div>
 <div class="poster-bottom">
 <div class="poster-tagline"><span class="poster-small-kicker">YOUR LIFE. YOUR DEBUT.</span><h1>당신의 이름으로<br/>무대에 서는 순간.</h1><p>데뷔는 시작이고, 성공은 결과다.<br/>선택과 우연이 만드는 단 하나의 아이돌 인생.</p></div>
-<div class="poster-actions"><button class="poster-start" onclick="go('create')"><span>나의 아이돌 인생 시작</span><span class="poster-arrow">↗</span></button><button class="poster-continue" disabled id="continue" onclick="loadGame()">이어하기 <span>→</span></button></div>
+<p class="balance-lab-note">밸런스 v2 개발용 · 점수·등급·엔딩 조건 시험 중<br>기존 게임과 저장 공간을 분리했습니다.</p><div class="poster-actions"><button class="poster-start" onclick="go('create')"><span>나의 아이돌 인생 시작</span><span class="poster-arrow">↗</span></button><button class="poster-continue" disabled id="continue" onclick="loadGame()">이어하기 <span>→</span></button><button class="poster-continue" onclick="showEndingArchive()">엔딩 도감 <span>↗</span></button></div>
 <div id="savedCharacterList" class="saved-character-list"></div><div class="poster-footnote"><span>FREE TO PLAY · AUTO SAVE</span><span>© STAGE</span></div>
 </div>
 </section>
@@ -517,21 +521,22 @@ html,body{touch-action:manipulation}button,a,[role="button"]{touch-action:manipu
 <section class="screen" id="militaryScreen"><div class="top">STAGE / MILITARY</div><div class="step" id="militaryStage"></div><div class="roll-card"><div class="roll-tag">병역 · 커리어의 분기점</div><h1 class="heading" id="militaryTitle"></h1><p class="hint" id="militaryText"></p><div class="growth-choices" id="militaryChoices"></div></div></section>
 <section class="screen" id="injuryScreen"><div class="top">STAGE / RECOVERY</div><div class="roll-card"><div class="roll-tag">부상 · 수술 · 재활</div><h1 class="heading" id="injuryTitle"></h1><p class="hint" id="injuryText"></p><button class="btn primary" onclick="finishInjuryRecovery()">3개월 치료 및 재활 완료 →</button></div></section>
 <section class="screen" id="retirementCrisis"><div class="top">STAGE / CAREER CROSSROADS</div><div class="event-banner"><span class="event-emblem" id="retirementCrisisIcon" aria-hidden="true"></span><div><div class="event-overline" id="retirementCrisisLabel"></div><p class="event-subtitle" id="retirementCrisisSubtitle"></p></div></div><p class="event-context" id="retirementCrisisContext"></p><div class="step" id="retirementStage"></div><div class="roll-card"><div class="roll-tag">은퇴 위기 · 선택의 순간</div><h1 class="heading" id="retirementTitle"></h1><p class="hint" id="retirementText"></p><div id="retirementOdds" class="small-help" style="margin:12px 0"></div><div class="growth-choices" id="retirementChoices"></div></div></section><section class="screen" id="careerSpecial"><div class="top">STAGE / SPECIAL EVENT</div><div class="event-banner"><span class="event-emblem" id="careerSpecialIcon" aria-hidden="true"></span><div><div class="event-overline" id="careerSpecialLabel"></div><p class="event-subtitle" id="careerSpecialSubtitle"></p></div></div><p class="event-context" id="careerSpecialContext"></p><div class="step" id="careerEventStage"></div><div class="roll-card"><div class="roll-tag" id="careerEventTag"></div><h1 class="heading" id="careerEventTitle"></h1><p class="hint" id="careerEventText"></p><div class="growth-choices" id="careerEventChoices" style="margin-top:20px"></div></div></section><section class="screen" id="annualAwards"><div class="top">STAGE / MUSIC AWARDS</div><div class="event-banner"><span class="event-emblem" id="annualAwardsIcon" aria-hidden="true"></span><div><div class="event-overline" id="annualAwardsLabel"></div><p class="event-subtitle" id="annualAwardsSubtitle"></p></div></div><p class="event-context" id="annualAwardsContext"></p><div class="step" id="awardYear"></div><h1 class="heading" id="awardHeading">STAGE MUSIC AWARDS</h1><p class="hint" id="awardIntro"></p><div class="roll-card" id="awardContent"></div><div class="actions"><button class="btn primary" onclick="nextAwardReveal()" id="awardNext">다음 →</button></div></section><section class="screen" id="stageHall"><div class="top">STAGE / HALL OF FAME</div><h1 class="heading">명예의 전당</h1><div id="stageHallList"></div><button class="btn secondary" onclick="go('home')">돌아가기</button></section><section class="screen" id="careerEnd"><div class="top">STAGE / FINAL REPORT</div><h1 class="heading" id="endTitle"></h1><div class="roll-card"><div id="endReport"></div></div><div id="storyEndPanel"></div><p class="small-help" id="endHistory" style="white-space:pre-line"></p><button class="btn primary" onclick="go('home')">타이틀로 돌아가기</button></section><section class="screen" id="switchOffer"><div class="top">STAGE / PRODUCER</div><div class="event-banner"><span class="event-emblem" id="switchOfferIcon" aria-hidden="true"></span><div><div class="event-overline" id="switchOfferLabel"></div><p class="event-subtitle" id="switchOfferSubtitle"></p></div></div><p class="event-context" id="switchOfferContext"></p><div class="step">SPECIAL EVENT</div><div class="roll-card" style="margin:24px 0"><div class="roll-tag">전향 제안</div><h1 class="heading" id="switchTitle"></h1><p class="hint" id="switchText"></p><p class="small-help" id="switchOdds"></p><div class="growth-choices"><button class="growth-choice" onclick="resolveSwitch(true)"><strong>전향에 도전한다</strong><small>성공 시 새로운 유형과 성장 보너스</small></button><button class="growth-choice" onclick="resolveSwitch(false)"><strong>기존 유형을 유지한다</strong><small>현재 주력 능력치 +1</small></button></div></div></section>
-</main>
+<section class="screen" id="endingArchive"><button class="back" onclick="go('home')">← 타이틀</button><div class="step">STAGE ARCHIVE · DEVELOPMENT</div><h1 class="heading">엔딩 도감</h1><p class="hint">우리가 살아온 무대의 기록. 이름을 모르는 엔딩에는 짧은 힌트만 남아 있습니다.</p><strong id="archiveProgress"></strong><div class="bar"><div class="fill" id="archiveProgressBar"></div></div><div id="archiveCards" class="archive-grid"></div><div id="archiveDetail" class="roll-card" hidden aria-live="polite"></div><div class="archive-tools"><button class="btn secondary" onclick="downloadStageBackup()">도감·캐릭터 백업 내보내기</button><button class="btn secondary" onclick="document.getElementById('archiveImport').click()">백업 JSON 가져오기</button><input id="archiveImport" type="file" accept="application/json,.json" hidden onchange="importStageBackupFile(this)"><button class="btn secondary" onclick="copyExistingSaves()">이 브라우저의 기존 게임 저장 복사</button></div><p id="archiveNotice" class="small-help" aria-live="polite"></p><p class="small-help">이 도감은 개발용 저장입니다. 브라우저 저장소 삭제·기기 변경·주소의 도메인 변경 시 자동으로 이전되지 않습니다. 이전 주소에서 백업을 내보내 새 주소에서 가져오세요. 기존 버전에 내보내기 기능이 없다면 자동 이전할 수 없습니다.</p></section><aside id="archiveUnlock" class="archive-unlock" hidden aria-live="polite"></aside></main>
 <button id="statusToggle" class="status-toggle" type="button" onclick="toggleStatus()" hidden aria-controls="statusPanel" aria-expanded="false">내 정보 <span>↗</span></button>
 <div id="statusShade" class="status-shade" onclick="toggleStatus(false)"></div>
 <aside id="statusPanel" class="status-panel" aria-label="플레이어 상태">
 <div class="status-panel-head"><div><div class="roll-tag">PLAYER / STATUS</div><h2 id="panelName">플레이어</h2></div><button class="status-close" type="button" onclick="toggleStatus(false)" aria-label="닫기">×</button></div>
 <div class="panel-tabs"><button id="tabStats" class="on" onclick="setStatusTab('stats')">능력치</button><button id="tabRelations" onclick="setStatusTab('relations')">관계 · 커리어</button><button id="tabPopularity" onclick="setStatusTab('popularity')">멤버 인기</button></div>
 <div id="panelStats"></div><div id="panelRelations" hidden></div><div id="panelPopularity" hidden></div>
-</aside><div id="chapterTransition" class="chapter-transition" role="status" aria-live="polite" aria-hidden="true"><div class="chapter-transition-inner"><div class="chapter-kicker" id="chapterKicker">STAGE</div><h2 id="chapterTitle">새로운 시작</h2><p id="chapterDescription">당신의 이야기가 시작됩니다.</p><div class="chapter-loading" aria-hidden="true"><i></i></div><div class="chapter-serial">STAGE / YOUR LIFE. YOUR DEBUT.</div></div></div><section id="activitySettlementScreen" class="activity-settlement-screen" hidden aria-label="활동 정산"><div class="activity-settlement-content"><div class="training-result-kicker">STAGE / ACTIVITY SETTLEMENT</div><h2>성장 판정</h2><div id="activityGrowthRevealMount"></div><div id="activitySettlementValues" class="training-result-values"></div><button id="activitySettlementContinue" class="training-result-next" type="button" onclick="continueAfterTraining()">결과 보기 →</button></div></section><div id="trainingResultShade" class="training-result-shade" aria-hidden="true"><div class="training-result-dialog" role="dialog" aria-modal="true" aria-labelledby="trainingResultTitle"><div class="training-result-kicker" id="trainingResultKicker">TRAINING RESULT</div><h2 id="trainingResultTitle">훈련 결과</h2><p id="trainingResultNarrative"></p><div id="growthReveal" class="growth-reveal" hidden><div class="growth-top"><span id="growthTarget">보컬 성장 판정</span><span id="growthPhase">판정 중</span></div><div id="growthOptionsMount"></div><div class="growth-final" id="growthFinal">판정 수치 계산 중…</div></div><div class="training-result-values" id="trainingResultValues"></div><button class="training-result-next" id="trainingResultNext" type="button" onclick="continueAfterTraining()">계속하기 →</button></div></div><script>
+</aside><div id="chapterTransition" class="chapter-transition" role="status" aria-live="polite" aria-hidden="true"><div class="chapter-transition-inner"><div class="chapter-kicker" id="chapterKicker">STAGE</div><h2 id="chapterTitle">새로운 시작</h2><p id="chapterDescription">당신의 이야기가 시작됩니다.</p><div class="chapter-loading" aria-hidden="true"><i></i></div><div class="chapter-serial">STAGE / YOUR LIFE. YOUR DEBUT.</div></div></div><section id="activitySettlementScreen" class="activity-settlement-screen" hidden aria-label="활동 정산"><div class="activity-settlement-content"><div class="training-result-kicker">STAGE / ACTIVITY SETTLEMENT</div><h2>성장 판정</h2><div id="activityGrowthRevealMount"></div><div id="activitySettlementValues" class="training-result-values"></div><button id="activitySettlementContinue" class="training-result-next" type="button" onclick="continueAfterTraining()">결과 보기 →</button></div></section><div id="trainingResultShade" class="training-result-shade" aria-hidden="true"><div class="training-result-dialog" role="dialog" aria-modal="true" aria-labelledby="trainingResultTitle"><div class="training-result-kicker" id="trainingResultKicker">TRAINING RESULT</div><h2 id="trainingResultTitle">훈련 결과</h2><p id="trainingResultNarrative"></p><div id="growthReveal" class="growth-reveal" hidden><div class="growth-top"><span id="growthTarget">보컬 성장 판정</span><span id="growthPhase">판정 중</span></div><div id="growthOptionsMount"></div><div class="growth-final" id="growthFinal">판정 수치 계산 중…</div></div><div class="training-result-values" id="trainingResultValues"></div><button class="training-result-next" id="trainingResultNext" type="button" onclick="continueAfterTraining()">계속하기 →</button></div></div><script>const stageNativeStorage=localStorage;const STAGE_DEV_PREFIX='stage-balance-v2-lab:';const stageDevStorage={getItem:k=>stageNativeStorage.getItem(STAGE_DEV_PREFIX+k),setItem:(k,v)=>stageNativeStorage.setItem(STAGE_DEV_PREFIX+k,v),removeItem:k=>stageNativeStorage.removeItem(STAGE_DEV_PREFIX+k)};
+
 const soundOnIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
 const soundOffIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z"/><path d="m16 9 5 6m0-6-5 6"/></svg>';
-let soundEnabled=localStorage.getItem('stage-sound-enabled')!=='false';
+let soundEnabled=stageDevStorage.getItem('stage-sound-enabled')!=='false';
 // BGM 파일이 준비되면 src에 경로를 지정하세요. 사용자 터치 이후 재생합니다.
 const bgm=new Audio();bgm.loop=true;bgm.volume=0.35;bgm.preload='none';
 function syncSound(){const b=document.getElementById('soundToggle');b.innerHTML=soundEnabled?soundOnIcon:soundOffIcon;b.setAttribute('aria-label',soundEnabled?'사운드 끄기':'사운드 켜기');b.setAttribute('aria-pressed',String(soundEnabled));bgm.muted=!soundEnabled;if(!soundEnabled)bgm.pause();}
-function toggleSound(){soundEnabled=!soundEnabled;localStorage.setItem('stage-sound-enabled',String(soundEnabled));syncSound();if(soundEnabled&&bgm.src)bgm.play().catch(()=>{});}
+function toggleSound(){soundEnabled=!soundEnabled;stageDevStorage.setItem('stage-sound-enabled',String(soundEnabled));syncSound();if(soundEnabled&&bgm.src)bgm.play().catch(()=>{});}
 function beginBgm(){if(soundEnabled&&bgm.src)bgm.play().catch(()=>{});}
 let state=null;let selected=[];let draft=null;let trainingFocus='보컬';const keys=['보컬','댄스','랩','비주얼','스타성','인성'];const $=id=>document.getElementById(id);
 let chapterTransitionTimer=null;
@@ -594,16 +599,16 @@ function updateSelection(){document.querySelectorAll('[data-spec]').forEach(b=>b
 document.querySelectorAll('[data-spec]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.spec;if(selected.includes(k))selected=selected.filter(v=>v!==k);else if(selected.length<2)selected.push(k);if(draft)draft.selected=[...selected];updateSelection()}));
 const STAGE_SLOTS_KEY='stage-character-slots-v1';
 const STAGE_ACTIVE_KEY='stage-active-character-v1';
-let activeCharacterId=localStorage.getItem(STAGE_ACTIVE_KEY)||null;
-function readCharacterSlots(){try{const v=JSON.parse(localStorage.getItem(STAGE_SLOTS_KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return []}}
+let activeCharacterId=stageDevStorage.getItem(STAGE_ACTIVE_KEY)||null;
+function readCharacterSlots(){try{const v=JSON.parse(stageDevStorage.getItem(STAGE_SLOTS_KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return []}}
 function characterSlotKey(id){return 'stage-character-'+id}
-function migrateLegacyCharacter(){const legacy=localStorage.getItem('stage-save-v17');if(!legacy||readCharacterSlots().length)return;try{const old=JSON.parse(legacy);if(!old||!old.name)return;const id='legacy';localStorage.setItem(characterSlotKey(id),legacy);localStorage.setItem(STAGE_SLOTS_KEY,JSON.stringify([{id,name:old.name,gender:old.gender||'female',updated:Date.now()}]));activeCharacterId=id;localStorage.setItem(STAGE_ACTIVE_KEY,id)}catch(e){}}
-function refreshCharacterSlots(){const el=$('savedCharacterList');if(!el)return;const slots=readCharacterSlots().filter(x=>localStorage.getItem(characterSlotKey(x.id)));el.innerHTML=slots.length?'<div class="saved-character-title">내 브라우저에 저장된 캐릭터</div>'+slots.map(x=>`<div class="saved-character-row"><div class="saved-character-info"><strong>${escapeCharacterText(x.name)}</strong><small>${x.gender==='male'?'남자':'여자'} 아이돌 · 자동 저장</small></div><button type="button" onclick="loadCharacterSlot('${x.id}')">이어하기</button><button type="button" class="delete-character" onclick="deleteCharacterSlot('${x.id}')">삭제</button></div>`).join(''):'';const active=slots.find(x=>x.id===activeCharacterId);$('continue').disabled=!active}
+function migrateLegacyCharacter(){const legacy=stageDevStorage.getItem('stage-save-v17');if(!legacy||readCharacterSlots().length)return;try{const old=JSON.parse(legacy);if(!old||!old.name)return;const id='legacy';stageDevStorage.setItem(characterSlotKey(id),legacy);stageDevStorage.setItem(STAGE_SLOTS_KEY,JSON.stringify([{id,name:old.name,gender:old.gender||'female',updated:Date.now()}]));activeCharacterId=id;stageDevStorage.setItem(STAGE_ACTIVE_KEY,id)}catch(e){}}
+function refreshCharacterSlots(){const el=$('savedCharacterList');if(!el)return;const slots=readCharacterSlots().filter(x=>stageDevStorage.getItem(characterSlotKey(x.id)));el.innerHTML=slots.length?'<div class="saved-character-title">내 브라우저에 저장된 캐릭터</div>'+slots.map(x=>`<div class="saved-character-row"><div class="saved-character-info"><strong>${escapeCharacterText(x.name)}</strong><small>${x.gender==='male'?'남자':'여자'} 아이돌 · 자동 저장</small></div><button type="button" onclick="loadCharacterSlot('${x.id}')">이어하기</button><button type="button" class="delete-character" onclick="deleteCharacterSlot('${x.id}')">삭제</button></div>`).join(''):'';const active=slots.find(x=>x.id===activeCharacterId);$('continue').disabled=!active}
 function escapeCharacterText(v){return String(v||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function loadCharacterSlot(id){const raw=localStorage.getItem(characterSlotKey(id));if(!raw){refreshCharacterSlots();return}activeCharacterId=id;localStorage.setItem(STAGE_ACTIVE_KEY,id);localStorage.setItem('stage-save-v17',raw);loadGame()}
-function deleteCharacterSlot(id){const slot=readCharacterSlots().find(x=>x.id===id);if(!slot||!confirm('"'+slot.name+'" 캐릭터의 저장 데이터를 삭제할까요? 복구할 수 없습니다.'))return;localStorage.removeItem(characterSlotKey(id));const slots=readCharacterSlots().filter(x=>x.id!==id);localStorage.setItem(STAGE_SLOTS_KEY,JSON.stringify(slots));if(activeCharacterId===id){activeCharacterId=slots[0]?.id||null;if(activeCharacterId){localStorage.setItem(STAGE_ACTIVE_KEY,activeCharacterId);localStorage.setItem('stage-save-v17',localStorage.getItem(characterSlotKey(activeCharacterId)))}else{localStorage.removeItem(STAGE_ACTIVE_KEY);localStorage.removeItem('stage-save-v17')}}refreshCharacterSlots()}
-function save(){if(!state)return;renderStatus();syncAnnualReview();updateStageDate(document.querySelector('.screen.active')?.id);if(!activeCharacterId){activeCharacterId='c'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);localStorage.setItem(STAGE_ACTIVE_KEY,activeCharacterId)}const raw=JSON.stringify(state);try{localStorage.setItem(characterSlotKey(activeCharacterId),raw);localStorage.setItem('stage-save-v17',raw);const slots=readCharacterSlots().filter(x=>x.id!==activeCharacterId);slots.unshift({id:activeCharacterId,name:state.name,gender:state.gender||'female',updated:Date.now()});localStorage.setItem(STAGE_SLOTS_KEY,JSON.stringify(slots));refreshCharacterSlots()}catch(e){alert('브라우저 저장 공간이 부족하거나 저장이 차단되어 있습니다.')}}
-function loadGame(){try{state=JSON.parse(localStorage.getItem('stage-save-v17'));if(!state)throw 0;normalizeState();render();if(state.careerEnded&&!state.debuted){endTraineeSchoolView()}else if(state.pendingTraineeMini&&!state.debuted&&!state.trainingResultPending&&!state.statResultPending){go('game');openTraineeMini()}else if(state.careerEnded){showCareerEnd()}else if(state.awardPresentation&&!state.statResultPending){renderAwardPresentation()}else if(state.injuryRecovery&&!state.statResultPending){renderInjuryRecovery()}else if(state.militaryReport&&!state.statResultPending){renderMilitaryReport()}else if(state.pendingMilitaryHomecoming&&!state.statResultPending){renderMilitaryHomecoming()}else if(state.pendingRetirementCrisis&&!state.statResultPending){renderRetirementCrisis()}else if(state.pendingCareerTwist&&!state.statResultPending){renderCareerTwist()}else if(state.pendingCareerEvent&&!state.statResultPending){renderCareerSpecial()}else if(state.statResultPending){go(state.debuted?'career':'game');showStatResult()}else if(state.trainingResultPending&&state.lastTrainingResult){go('game');pendingTrainingContinuation=state.auditionResults?'audition':state.pendingEvent?'event':'game';showTrainingResult()}else if(state.auditionResults&&!state.debuted){renderAudition();go('audition')}else if(state.debuted){if(state.switchOffer)renderSwitchOffer();else if(state.careerSeason>0||state.seasonActivity||state.albumPending||state.albumThisSeason)openCareer();else showDebutDetails()}else if(state.pendingEvent){renderEvent();go('traineeEvent')}else go('game')}catch(e){alert('저장된 게임이 없습니다.')}}
+function loadCharacterSlot(id){const raw=stageDevStorage.getItem(characterSlotKey(id));if(!raw){refreshCharacterSlots();return}activeCharacterId=id;stageDevStorage.setItem(STAGE_ACTIVE_KEY,id);stageDevStorage.setItem('stage-save-v17',raw);loadGame()}
+function deleteCharacterSlot(id){const slot=readCharacterSlots().find(x=>x.id===id);if(!slot||!confirm('"'+slot.name+'" 캐릭터의 저장 데이터를 삭제할까요? 복구할 수 없습니다.'))return;stageDevStorage.removeItem(characterSlotKey(id));const slots=readCharacterSlots().filter(x=>x.id!==id);stageDevStorage.setItem(STAGE_SLOTS_KEY,JSON.stringify(slots));if(activeCharacterId===id){activeCharacterId=slots[0]?.id||null;if(activeCharacterId){stageDevStorage.setItem(STAGE_ACTIVE_KEY,activeCharacterId);stageDevStorage.setItem('stage-save-v17',stageDevStorage.getItem(characterSlotKey(activeCharacterId)))}else{stageDevStorage.removeItem(STAGE_ACTIVE_KEY);stageDevStorage.removeItem('stage-save-v17')}}refreshCharacterSlots()}
+function save(){if(!state)return;renderStatus();syncAnnualReview();updateStageDate(document.querySelector('.screen.active')?.id);if(!activeCharacterId){activeCharacterId='c'+Date.now().toString(36)+Math.random().toString(36).slice(2,7);stageDevStorage.setItem(STAGE_ACTIVE_KEY,activeCharacterId)}const raw=JSON.stringify(state);try{stageDevStorage.setItem(characterSlotKey(activeCharacterId),raw);stageDevStorage.setItem('stage-save-v17',raw);const slots=readCharacterSlots().filter(x=>x.id!==activeCharacterId);slots.unshift({id:activeCharacterId,name:state.name,gender:state.gender||'female',updated:Date.now()});stageDevStorage.setItem(STAGE_SLOTS_KEY,JSON.stringify(slots));refreshCharacterSlots()}catch(e){alert('브라우저 저장 공간이 부족하거나 저장이 차단되어 있습니다.')}}
+function loadGame(){try{state=JSON.parse(stageDevStorage.getItem('stage-save-v17'));if(!state)throw 0;normalizeState();render();if(state.careerEnded&&!state.debuted){endTraineeSchoolView()}else if(state.pendingTraineeMini&&!state.debuted&&!state.trainingResultPending&&!state.statResultPending){go('game');openTraineeMini()}else if(state.careerEnded){showCareerEnd()}else if(state.awardPresentation&&!state.statResultPending){renderAwardPresentation()}else if(state.injuryRecovery&&!state.statResultPending){renderInjuryRecovery()}else if(state.militaryReport&&!state.statResultPending){renderMilitaryReport()}else if(state.pendingMilitaryHomecoming&&!state.statResultPending){renderMilitaryHomecoming()}else if(state.pendingRetirementCrisis&&!state.statResultPending){renderRetirementCrisis()}else if(state.pendingCareerTwist&&!state.statResultPending){renderCareerTwist()}else if(state.pendingCareerEvent&&!state.statResultPending){renderCareerSpecial()}else if(state.statResultPending){go(state.debuted?'career':'game');showStatResult()}else if(state.trainingResultPending&&state.lastTrainingResult){go('game');pendingTrainingContinuation=state.auditionResults?'audition':state.pendingEvent?'event':'game';showTrainingResult()}else if(state.auditionResults&&!state.debuted){renderAudition();go('audition')}else if(state.debuted){if(state.switchOffer)renderSwitchOffer();else if(state.careerSeason>0||state.seasonActivity||state.albumPending||state.albumThisSeason)openCareer();else showDebutDetails()}else if(state.pendingEvent){renderEvent();go('traineeEvent')}else go('game')}catch(e){alert('저장된 게임이 없습니다.')}}
 function randomInt(min,max){return Math.floor(Math.random()*(max-min+1))+min}
 function rollStats(profile=null){
   // 시작 총합 60 고정. 균형형 / 특화형 / 극단형이 공존하도록 프로필별 분포를 사용한다.
@@ -700,8 +705,8 @@ function renderRoll(){if(!draft)return;
  $('focusSelection').hidden=!draft.confirmed;
  updateSelection();$('confirmTalent').disabled=!draft.confirmed||(selected.length<1||selected.length>2);
 }
-function confirmRoll(){if(!draft||!draft.confirmed||draft.choice<0||(selected.length<1||selected.length>2))return;activeCharacterId=null;localStorage.removeItem(STAGE_ACTIVE_KEY);
- state={name:draft.name,gender:draft.gender||'female',selected:[...selected],stats:{...draft.candidates[draft.choice]},energy:80,month:1,year:2028,startAge:16,actions:0,trainingLog:[],monthsCompleted:0,lastReport:'',careerHistory:[],traineeTurns:0,traineeMonths:0,debuted:false};
+function confirmRoll(){if(!draft||!draft.confirmed||draft.choice<0||(selected.length<1||selected.length>2))return;activeCharacterId=null;stageDevStorage.removeItem(STAGE_ACTIVE_KEY);
+ state={scoreVersion:2,name:draft.name,gender:draft.gender||'female',selected:[...selected],stats:{...draft.candidates[draft.choice]},energy:80,month:1,year:2028,startAge:16,actions:0,trainingLog:[],monthsCompleted:0,lastReport:'',careerHistory:[],traineeTurns:0,traineeMonths:0,debuted:false};
  trainingFocus=state.selected[0]||'보컬';startPersonalJourney(draft.dreamId||selectedDreamId);save();render();go('game');}
 // STAGE PERSONAL STORY v1: self-contained, backward-compatible character memories.
 const STAGE_HALL_KEY='stage-hall-of-fame-v1';
@@ -938,16 +943,16 @@ function storyTrackActivity(kind,success,details={}){
  storyGoal();
 }
 function storyWidget(){return personalStoryWidget();}
-function readStageHall(){try{const v=JSON.parse(localStorage.getItem(STAGE_HALL_KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return []}}
+function readStageHall(){try{const v=JSON.parse(stageDevStorage.getItem(STAGE_HALL_KEY)||'[]');return Array.isArray(v)?v:[]}catch(e){return []}}
 function archiveStageCareer(){
  if(!state?.careerEnded)return;storyInit();const p=state.personalStory;
  const id=activeCharacterId||('legacy-'+state.name+'-'+state.startAge);
  const entry={id,repertoire:state.repertoire?JSON.parse(JSON.stringify(state.repertoire)):null,name:state.name,gender:state.gender,trait:p.trait,reason:state.endReason,year:storyYear(),fans:state.peakFans||state.fans,albums:state.albumCount||0,memories:p.memories.slice(-30),dream:p.dream,dreamCompleted:p.journey?.dreamCompleted||null,representative:representativeRecords(),score:finalScore().total};
- try{const list=readStageHall().filter(x=>x.id!==id);list.unshift(entry);localStorage.setItem(STAGE_HALL_KEY,JSON.stringify(list.slice(0,40)));}catch(e){}
+ try{const list=readStageHall().filter(x=>x.id!==id);list.unshift(entry);stageDevStorage.setItem(STAGE_HALL_KEY,JSON.stringify(list.slice(0,40)));}catch(e){}
 }
 function showStageHall(){
  const list=readStageHall(),el=$('stageHallList');if(!el)return;
- el.innerHTML=list.length?list.map(x=>'<div class="roll-card" style="margin:12px 0"><strong>'+escapeCharacterText(x.name)+'</strong> · '+(x.gender==='male'?'남자':'여자')+' 아이돌<p class="small-help">'+escapeCharacterText(x.year+'년 · '+x.reason)+' · 최고 팬 '+Number(x.fans||0).toLocaleString()+'명 · '+Number(x.albums||0)+'장 · '+Number(x.score||0).toLocaleString()+'점</p><p class="small-help">'+(x.memories||[]).slice(-3).map(m=>escapeCharacterText(m.text)).join(' / ')+'</p></div>').join(''):'<p class="hint">아직 은퇴한 아이돌이 없습니다.</p>';
+ el.innerHTML=list.length?list.map(x=>'<div class="roll-card" style="margin:12px 0"><strong>'+escapeCharacterText(x.name)+'</strong> · '+(x.gender==='male'?'남자':'여자')+' 아이돌<p class="small-help">'+escapeCharacterText(x.year+'년 · '+x.reason)+' · 최고 팬 '+Number(x.fans||0).toLocaleString()+'명 · '+Number(x.albums||0)+'장 · '+Number(x.score||0).toLocaleString()+'점 · '+(x.scoreVersion===2?'v2 시험':'v1 기존')+'</p><p class="small-help">'+(x.memories||[]).slice(-3).map(m=>escapeCharacterText(m.text)).join(' / ')+'</p></div>').join(''):'<p class="hint">아직 은퇴한 아이돌이 없습니다.</p>';
  go('stageHall');
 }
 function normalizeState(){
@@ -2020,7 +2025,7 @@ function resolveRetirementCrisis(index){
  const before=statSnapshot();
  const old={fans:state.fans,cash:state.cash,energy:state.energy,trust:state.agencyTrust};
  if(success){
-  state.retirementWarnings=Math.max(0,(state.retirementWarnings||0)-(index===1?1:0));
+  state.retirementWarnings=Math.max(0,(state.retirementWarnings||0)-(index===1&&!(state.scoreVersion===2&&crisis.pressure)?1:0));
   state.energy=clamp(state.energy+(crisis.type==='health'?[48,25,-16][index]:index===1?12:-5),0,100);
   state.agencyTrust=clamp(state.agencyTrust+(index===1?2:5),0,100);
   state.fans=Math.max(0,state.fans+Math.round((index===0?0.045:index===1?0.012:0.025)*state.fans));
@@ -2923,7 +2928,7 @@ function completePersonalProject(){
  if(m.type==='camp'){state.stats[m.target]=clamp(state.stats[m.target]+m.growth,0,100);state.energy=clamp(state.energy+18,0,100);}else state.energy=clamp(state.energy-m.fatigue,0,100);
  const name={remaster:'대표곡 재녹음·편곡',showcase:'개인 특별 공연',camp:'집중 육성'}[m.type];
  const label=name+(m.type==='remaster'?' · '+m.song.title:m.type==='camp'?' · '+m.target:'');
- const entry=recordActivityPerformance('project',m.type,before,m.p,{revenue:m.revenue,cost:m.cost,attendance:m.attendance,funding:'independent',label,songId:m.song?.id||null,quality:Math.round(m.quality),growth:m.type==='camp'?{key:m.target,delta:m.growth}:null});
+ const entry=recordActivityPerformance('project',m.type,before,m.p,{revenue:m.revenue,cost:m.cost,attendance:m.attendance,capacity:m.capacity,funding:'independent',label,songId:m.song?.id||null,quality:Math.round(m.quality),growth:m.type==='camp'?{key:m.target,delta:m.growth}:null});
  if(m.type==='showcase')finishLiveSet(m.live,entry);
  if(m.type==='remaster'){
   m.song.remasters.push({season:state.careerSeason,year:gameYear(),quality:Math.round(m.quality),personal:m.personal,cost:m.cost});
@@ -2937,6 +2942,221 @@ function completePersonalProject(){
  if(m.type!=='camp')checkCareerInjury(m.type==='showcase'?'concert':'vocal');
  save();renderCareer();go('careerAlbumResult');
 }
+/* STAGE balance v2 LAB. Provisional score curves and persistent retirement pressure; v1 preserved. */
+const BALANCE_RULESET='v2-distribution-20261020';
+const scoreRulesV2=[['음반 판매량',1200],['음원·차트 성적',1400],['공연·무대 성과',1200],['방송·광고·대중적 영향력',900],['어워드·수상',1200],['팬덤 규모·충성도',1400],['개인 능력치·특화',1000],['경제적 성취',700],['커리어 지속성·영향력',1000]];
+const finalScoreV1=finalScore,careerEndingV1=careerEnding,finalRankV1=finalRank;
+const originalNormalizeV1=normalizeState,originalAnnualRecordV1=recordAnnualActivity,originalEventRecordV1=recordCareerEvent,originalAcceptAgencyV1=acceptAgency,originalArchiveV1=archiveStageCareer,originalEndViewV1=showCareerEnd,originalSchoolEndV1=endTraineeSchool,originalSchoolViewV1=endTraineeSchoolView;
+function finiteMetric(n){return Number.isFinite(Number(n))?Number(n):0}
+function positiveMetric(n){return Math.max(0,finiteMetric(n))}
+function balanceLog(n,t){return Math.min(1,Math.log1p(positiveMetric(n))/Math.log1p(t))}
+function metricsInit(){
+ if(!state)return null;
+ state.scoreVersion=state.scoreVersion===2?2:1;
+ if(state.careerMetrics?.schema===2)return state.careerMetrics;
+ const m=state.careerMetrics={schema:2,ruleset:BALANCE_RULESET,coverage:state.scoreVersion===2&&!(state.careerSeason>0||state.albumCount>0)?'complete':'partial',initialStats:state.scoreVersion===2&&!(state.careerSeason>0||state.albumCount>0)?{...state.stats}:null,initialCareerCash:null,debutScore:state.debut?.score??null,entries:{},events:{}};
+ // Annual copies may contain richer data, but never form a second source of credits.
+ const records=new Map();
+ for(const book of [...(state.annualReview?.history||[]),state.annualReview?.current].filter(Boolean))for(const e of book.activities||[])if(Number.isFinite(e.season))records.set('season:'+e.season,e);
+ for(const e of state.activityHistory||[])if(Number.isFinite(e.season)){const id='season:'+e.season;records.set(id,{...e,...(records.get(id)||{})})}
+ for(const e of records.values())metricsRecord(e);
+ return m;
+}
+function metricsRecord(e){
+ const m=state.careerMetrics;if(!m||!Number.isFinite(e.season))return;
+ const id='season:'+e.season;if(m.entries[id])return;
+ const quality=Number.isFinite(e.quality)?e.quality:Number.isFinite(e.performance?.quality)?e.performance.quality:null;
+ const capacity=e.kind==='concert'?({small:1000,medium:5000,large:15000}[e.plan]??null):e.kind==='project'&&e.plan==='showcase'?(e.capacity??null):null;
+ m.entries[id]={id,year:e.year,season:e.season,kind:e.kind,plan:e.plan,quality:quality===null?null:clamp(quality,0,100),player:typeof e.performance?.player==='number'?e.performance.player:null,attendance:Number.isFinite(e.attendance)?Math.max(0,e.attendance):null,capacity,personal:finiteMetric(e.personal),revenue:positiveMetric(e.revenue),cost:positiveMetric(e.cost),funding:e.funding||null,score:Number.isFinite(e.score)?e.score:null,growth:e.growth||null};
+}
+normalizeState=function(){originalNormalizeV1();metricsInit()};
+recordAnnualActivity=function(entry,extra={}){originalAnnualRecordV1(entry,extra);metricsInit();metricsRecord({...entry,...extra})};
+recordCareerEvent=function(e,choice,p,before,success=null){const entry=originalEventRecordV1(e,choice,p,before,success);const m=metricsInit(),id='event:'+e.id+':'+entry.season+':'+choice;if(!m.events[id])m.events[id]={...entry,id,sourceId:e.id};return entry};
+acceptAgency=function(size){const prior=state?.debuted;originalAcceptAgencyV1(size);if(!prior&&state?.debuted){const m=metricsInit();m.initialCareerCash=state.cash;m.debutScore=state.debut?.score??null}};
+function balanceFacts(){
+ const m=metricsInit(),entries=Object.values(m.entries),events=Object.values(m.events);
+ const stage=entries.filter(e=>e.kind==='concert'||e.kind==='project'&&e.plan==='showcase'||e.kind==='specialty'&&['choreography','fanMeet'].includes(e.plan));
+ const ads=entries.filter(e=>['broadcast','specialty'].includes(e.kind)&&e.plan==='commercial');
+ const media=entries.filter(e=>e.kind==='broadcast'&&['variety','content','radio'].includes(e.plan)||e.kind==='specialty'&&e.plan==='varietyStar');
+ const music=entries.filter(e=>e.kind==='specialty'&&['ost','feature'].includes(e.plan)||e.kind==='project'&&e.plan==='remaster');
+ const qualityUnits=xs=>xs.reduce((s,e)=>s+(e.quality>=40?Math.pow(e.quality/100,3):0),0);
+ const audience=stage.reduce((s,e)=>s+(e.quality!==null&&e.attendance!==null?e.attendance*Math.pow(e.quality/100,2):0),0);
+ const specialistUnits=qualityUnits(stage.filter(e=>e.kind==='specialty'));
+ const projects=entries.filter(e=>e.kind==='project'&&e.plan!=='camp');
+ const productiveYears=[...new Set(entries.filter(e=>e.kind!=='rest'&&(e.quality>=50||e.kind==='album'&&e.score>=65)).map(e=>e.year))];
+ const ordered=entries.slice().sort((a,b)=>a.season-b.season),recoverySeasons=new Set();
+ for(const [i,e] of ordered.entries()){
+  const failure=e.kind==='album'?e.score!==null&&e.score<45:e.kind==='project'&&e.plan!=='camp'?e.personal<=-500:e.kind==='concert'?e.quality!==null&&e.quality<35&&e.revenue<e.cost:false;
+  if(failure&&ordered.slice(i+1).some(next=>next.kind===e.kind&&next.season>e.season&&(next.kind==='album'?next.score>=65:next.quality>=65&&next.personal>=0)))recoverySeasons.add(e.season);
+ }
+ for(const injury of state.injuryRecords||[])if(injury.permanent&&Number.isFinite(injury.atSeason)&&ordered.some(e=>e.season>injury.atSeason&&e.quality>=65))recoverySeasons.add(injury.atSeason);
+
+ return {entries,events,stage,ads,media,music,projects,recoveries:recoverySeasons.size,qualityUnits,audience,specialistUnits,stageUnits:qualityUnits(stage),adUnits:qualityUnits(ads),mediaUnits:qualityUnits(media),musicUnits:qualityUnits(music),productiveYears,projectProfit:projects.reduce((s,e)=>s+e.personal,0),operatingNet:entries.reduce((s,e)=>s+e.personal,0)+events.reduce((s,e)=>s+e.cash,0),attendance:stage.reduce((s,e)=>s+(e.attendance||0),0),adRevenue:ads.reduce((s,e)=>s+e.revenue,0),revenue:entries.reduce((s,e)=>s+e.revenue,0),personal:entries.reduce((s,e)=>s+e.personal,0)};
+}
+// Rational saturation avoids logarithmic front-loading. Each domain has its own scale.
+function balanceCurve(n,t,k=.12){const x=positiveMetric(n)/t;return Math.min(1,(1+k)*x/(x+k))}
+function masteryScore(n){const knots=[[0,0],[40,.08],[70,.35],[85,.65],[95,.9],[100,1]],v=clamp(finiteMetric(n),0,100);for(let i=1;i<knots.length;i++)if(v<=knots[i][0]){const [a,b]=knots[i-1],[c,d]=knots[i];return b+(d-b)*(v-a)/(c-a)}return 1}
+function calculateScoreV2(){
+ if(!state)return {version:2,ruleset:BALANCE_RULESET,rows:scoreRulesV2.map(([name,max])=>({name,max,value:0})),total:0};
+ const f=balanceFacts(),albums=state.albumHistory||[],sum=k=>albums.reduce((s,a)=>s+positiveMetric(a[k]),0),top=keys.map(k=>clamp(finiteMetric(state.stats[k]),0,100)).sort((a,b)=>b-a);
+ const stage=Math.max(.70*balanceCurve(f.audience,160000,.25)+.30*balanceCurve(f.stageUnits,20,.25),balanceCurve(f.specialistUnits,14,.25));
+ const ad=balanceCurve(f.adUnits,14,.25),media=balanceCurve(f.mediaUnits,16,.25);
+ const wins=(state.awardsHistory||[]).flatMap(a=>a.wins||[]),awardWeights={artist:180,album:180,song:180,top10:45,performance:45,vocal:45,rookie:80,fan:30,viral:30},awardCounts={};let awards=0;
+ for(const w of wins){const times=awardCounts[w]||0;awards+=(awardWeights[w]||0)/Math.sqrt(1+times*.35);awardCounts[w]=times+1}
+ const years=positiveMetric(state.careerSeason)/2,peak=Math.max(positiveMetric(state.peakFans),positiveMetric(state.fans));
+ const chart=albums.reduce((s,a)=>s+(a.chartRank>0?Math.max(0,1001-a.chartRank):0),0);
+ const wealth=Number.isFinite(state.careerMetrics.initialCareerCash)?Math.max(0,finiteMetric(state.cash)-state.careerMetrics.initialCareerCash):0;
+ const economy=Math.max(balanceCurve(wealth,150000,.25),balanceCurve(Math.max(0,f.operatingNet),180000,.25));
+ const annualQuality={};for(const e of f.entries){if(e.kind==='rest')continue;const q=e.kind==='album'?e.score:e.quality;if(q!==null&&Number.isFinite(e.year))annualQuality[e.year]=Math.max(annualQuality[e.year]||0,Math.pow(clamp((q-50)/50,0,1),1.5))}
+ const sustained=Object.values(annualQuality).reduce((a,b)=>a+b,0);
+ const loyalty=clamp(positiveMetric(state.peakSupport??state.fanSupport),0,100)/100;
+ const values=[1200*balanceCurve(sum('sales'),12000000),1100*balanceCurve(chart,18000,.25)+300*balanceCurve(f.musicUnits,12,.25),1200*stage,900*(.85*Math.max(ad,media)+.15*Math.min(ad,media)),1200*Math.min(1,awards/1500),1000*balanceCurve(peak,2000000)+400*loyalty*balanceCurve(peak,150000,.25),1000*(masteryScore(top[0])*.70+masteryScore(top[1])*.20+masteryScore(top[2])*.10),700*economy,250*Math.min(1,years/25)+750*Math.min(1,sustained/14)];
+ const rows=scoreRulesV2.map(([name,max],i)=>({name,max,value:clamp(Math.round(values[i]),0,max)}));
+ return {version:2,ruleset:BALANCE_RULESET,coverage:state.careerMetrics.coverage,rows,total:rows.reduce((s,r)=>s+r.value,0)};
+}
+finalScore=function(){if(state?.scoreSnapshot&&state.scoreSnapshot.version===(state.scoreVersion===2?2:1))return state.scoreSnapshot;return state?.scoreVersion===2?calculateScoreV2():finalScoreV1()};
+const trialGrades=[[8800,'SSS · 시대를 초월한 전설'],[7800,'SS · 역사에 남을 슈퍼스타'],[6800,'S · 시대를 대표하는 스타'],[5800,'A+ · 최정상급 아이돌'],[4800,'A · 대중적으로 성공한 인기 아이돌'],[3800,'B+ · 안정적인 중견 아이돌'],[2800,'B · 자신만의 무대를 완성한 아이돌'],[1800,'C · 자신만의 팬덤을 구축한 아이돌'],[800,'D · 무명 아이돌'],[0,'E · 짧지만 빛나는 커리어']];
+function trialRank(n){return trialGrades.find(([min])=>n>=min)?.[1]||trialGrades.at(-1)[1]}
+finalRank=function(n){return state?.scoreVersion===2?trialRank(n)+' · 시험 기준':finalRankV1(n)};
+const archiveCatalog={...careerEndingCatalog,brand:['브랜드의 얼굴','촬영 현장에서 쌓은 실력과 좋은 광고 성과로 자신의 이미지를 남겼습니다.'],broadcaster:['대중의 사랑을 받은 스타','다양한 방송 현장에서 실력을 보여주며 오랫동안 대중과 만났습니다.'],maker:['자신의 길을 만든 제작자','개인 자금으로 완성한 공연·재녹음 프로젝트가 실제 성과와 수익으로 이어졌습니다.']};
+const archiveHints={legend:'한 시대를 떠올릴 때, 무대 위의 이름 하나가 남는다.',grand:'오래 기다렸던 호명이 가장 큰 무대에서 울린다.',hitmaker:'노래들이 차례로 사람들의 일상에 스며든다.',albumKing:'책장마다, 누군가의 시간마다 나의 음악이 쌓인다.',ace:'함께 서는 무대에서 누구보다 믿음직한 사람이 된다.',team:'나의 빛이 모두의 빛과 만나는 순간이 있다.',underdog:'처음의 기대가 마지막의 크기를 정하지는 못한다.',fan:'오랜 시간이 지나도 같은 목소리가 나를 부른다.',veteran:'오래 선 무대에 실력과 기억이 함께 남는다.',comeback:'한 번의 부진 뒤에도 다음 무대는 기다린다.',talented:'화려한 소식보다 먼저, 실력이 나를 말한다.',brief:'짧은 계절에도 오래 남는 무대가 있다.',quiet:'크지 않은 발자국도 하나의 인생을 이룬다.',brand:'카메라 앞의 한 순간이 오래 기억되는 얼굴이 된다.',broadcaster:'낯선 현장들이 어느새 익숙한 나의 무대가 된다.',maker:'내가 준비한 무대가 나의 다음 길을 연다.'};
+const representativeIds=Object.keys(archiveCatalog).filter(id=>id!=='free');
+function calculateEndingV2(){
+ if(!state.debuted)return {version:2,ruleset:BALANCE_RULESET,id:'school',title:'이제는 다른 꿈을 향해',description:'데뷔 도전을 마치고 다른 길을 선택했습니다.',achievements:[],retirement:state.endReason||'연습생 종료',eligible:[]};
+ const f=balanceFacts(),score=calculateScoreV2(),part=i=>score.rows[i].value,albums=state.albumHistory||[],wins=(state.awardsHistory||[]).flatMap(a=>a.wins||[]),grands=wins.filter(w=>['artist','album','song'].includes(w)).length;
+ const years=positiveMetric(state.careerSeason)/2,best=Math.max(...keys.map(k=>finiteMetric(state.stats[k]))),peak=Math.max(positiveMetric(state.peakFans),positiveMetric(state.fans)),sales=albums.reduce((s,a)=>s+positiveMetric(a.sales),0);
+ const candidates=[],add=(id,ok,strength)=>{if(ok)candidates.push({id,strength})};
+ const stageLegend=f.stage.filter(e=>e.quality>=85).length>=10&&part(2)>=1000;
+ const mediaLegend=Math.max(f.ads.filter(e=>e.quality>=85).length,f.media.filter(e=>e.quality>=85).length)>=10&&part(3)>=730;
+ const musicLegend=albums.filter(a=>a.chartRank>0&&a.chartRank<=10&&a.score>=85).length>=4||f.music.filter(e=>e.quality>=85).length>=10;
+ const nonAlbumLegend=years>=12&&best>=95&&peak>=200000&&f.productiveYears.length>=8&&(stageLegend||mediaLegend||musicLegend)&&score.total>=5000;
+ add('legend',score.total>=8500&&grands>=2||nonAlbumLegend,100);
+ add('grand',grands>=1,1+Math.min(2,grands/3));
+ add('hitmaker',albums.filter(a=>a.chartRank>0&&a.chartRank<=10).length>=4&&albums.filter(a=>a.score>=75).length>=3,1+Math.min(2,part(1)/700));
+ add('albumKing',sales>=4000000&&albums.length>=4,1+Math.min(2,sales/8000000));
+ add('ace',(state.aceRewards||0)>=5&&best>=80,1+Math.min(2,(state.aceRewards||0)/12));
+ const teamHits=albums.filter(a=>a.score>=65&&a.groupPerformance?.teamTalent>a.groupPerformance?.playerTalent).length;add('team',!!state.group&&teamHits>=3&&wins.length>=2&&years>=5,1.05+Math.min(.25,teamHits/40));
+ const debut=state.careerMetrics.debutScore;add('underdog',debut!==null&&debut<56&&score.total>=4500&&peak>=50000,1+Math.min(1,(score.total-4500)/2500));
+ add('fan',peak>=150000&&state.fanSupport>=80&&years>=8,1+Math.min(2,peak/600000));
+ add('veteran',years>=12&&f.stage.filter(e=>e.quality>=55).length>=6,1+Math.min(2,part(2)/600));
+ add('comeback',f.recoveries>=1&&years>=5,.8+Math.min(.5,f.recoveries/5));
+ add('talented',best>=85&&score.total<6000,1+Math.min(1,(best-85)/15));
+ add('brand',f.ads.filter(e=>e.quality>=60).length>=6&&f.adUnits>=2,1+Math.min(2,f.adUnits/6));
+ add('broadcaster',f.media.filter(e=>e.quality>=60).length>=6&&f.mediaUnits>=2,1+Math.min(2,f.mediaUnits/7));
+ add('maker',f.projects.filter(e=>e.quality>=65&&e.personal>0).length>=4&&f.projectProfit>=10000,1+Math.min(2,f.projectProfit/40000));
+ const serious=candidates.sort((a,b)=>b.strength-a.strength||representativeIds.indexOf(a.id)-representativeIds.indexOf(b.id));
+ if(!serious.length)serious.push({id:years<3?'brief':'quiet',strength:0});
+ const winner=serious[0],extras=serious.slice(1).filter(x=>x.id!==winner.id).map(x=>({id:x.id,title:archiveCatalog[x.id][0]}));
+ if(years>=15&&winner.id!=='veteran')extras.push({id:'longcareer',title:'15년 이상 함께한 무대'});
+ const [title,description]=archiveCatalog[winner.id];
+ return {version:2,ruleset:BALANCE_RULESET,id:winner.id,title,description,achievements:extras.slice(0,3),retirement:state.endReason==='자발적 은퇴'?'스스로 내린 마지막 인사':state.endReason||'활동 종료',eligible:serious.map(x=>x.id)};
+}
+careerEnding=function(){if(state?.scoreVersion!==2)return careerEndingV1();return state.endingSnapshot?.version===2?state.endingSnapshot:calculateEndingV2()};
+function freezeBalanceEnding(){if(!state?.careerEnded)return;if(!state.scoreSnapshot){const s=state.scoreVersion===2?calculateScoreV2():finalScoreV1();state.scoreSnapshot=JSON.parse(JSON.stringify({...s,version:state.scoreVersion===2?2:1}))}if(state.scoreVersion===2&&!state.endingSnapshot)state.endingSnapshot=JSON.parse(JSON.stringify(calculateEndingV2()))}
+const STAGE_ARCHIVE_KEY='stage-ending-archive-v1';
+function readEndingArchive(){try{const a=JSON.parse(stageDevStorage.getItem(STAGE_ARCHIVE_KEY)||'null');if(a?.schema===1&&a.discoveries&&Array.isArray(a.completed))return a}catch(e){}return {schema:1,discoveries:{},completed:[]}}
+function registerEndingDiscovery(legacy=false){
+ if(!state?.careerEnded)return null;const ending=careerEnding();if(!representativeIds.includes(ending.id))return null;
+ const a=readEndingArchive(),careerId=activeCharacterId||state.careerRecordId;if(!careerId)return null;const token=careerId+':'+ending.id;
+ if(a.completed.includes(token))return null;const now=new Date().toISOString(),old=a.discoveries[ending.id];
+ a.completed.push(token);a.discoveries[ending.id]={id:ending.id,count:(old?.count||0)+1,firstDiscoveredAt:old?.firstDiscoveredAt||now,firstAchievedAt:old?old.firstAchievedAt:legacy?null:now,lastDiscoveredAt:now,character:old?.character||state.name,scoreVersion:old?.scoreVersion||state.scoreVersion||1,achievements:old?.achievements||ending.achievements||[]};
+ try{stageDevStorage.setItem(STAGE_ARCHIVE_KEY,JSON.stringify(a));return old?null:ending.id}catch(e){return null}
+}
+archiveStageCareer=function(){
+ if(!state?.careerEnded)return;freezeBalanceEnding();
+ const id=activeCharacterId||('legacy-'+state.name+'-'+state.startAge),before=readStageHall(),known=before.find(x=>x.id===id);
+ if(!known||state.scoreVersion===2){originalArchiveV1();const hall=readStageHall(),entry=hall.find(x=>x.id===id);if(entry&&state.scoreVersion===2){entry.scoreVersion=2;entry.endingId=careerEnding().id;entry.endingSnapshot=state.endingSnapshot;entry.scoreSnapshot=state.scoreSnapshot;stageDevStorage.setItem(STAGE_HALL_KEY,JSON.stringify(hall))}}
+ const unlocked=registerEndingDiscovery(state.scoreVersion!==2);if(unlocked)state.lastArchiveUnlock=unlocked;
+};
+showCareerEnd=function(){freezeBalanceEnding();originalEndViewV1();const e=careerEnding();$('endReport').innerHTML+='<p class="small-help">'+(state.scoreVersion===2?'개발용 v2 · 배점·등급·조건은 시험 중':'기존 v1 평가 유지')+'</p>'+(state.scoreVersion===2?'<div class="archive-end"><strong>함께 남은 업적</strong>'+(e.achievements.length?e.achievements.map(a=>'<p>'+escapeCharacterText(a.title)+'</p>').join(''):'<p>추가 조건을 충족한 업적이 없습니다.</p>')+'<p>활동을 마친 이유 · '+escapeCharacterText(e.retirement)+'</p></div>':'')+'<button class="btn secondary" onclick="showEndingArchive()">엔딩 도감 보기 →</button>';if(state.lastArchiveUnlock)showArchiveUnlock(state.lastArchiveUnlock)};
+endTraineeSchool=function(){originalSchoolEndV1();freezeBalanceEnding();save()};
+function showArchiveUnlock(id){const el=$('archiveUnlock');if(!el)return;el.hidden=false;el.innerHTML='<span>새 엔딩 발견 · '+escapeCharacterText(archiveCatalog[id][0])+'</span><button onclick="dismissArchiveUnlock()">닫기</button>';state.lastArchiveUnlock=null}
+function dismissArchiveUnlock(){$('archiveUnlock').hidden=true}
+function showEndingArchive(){
+ const a=readEndingArchive(),found=representativeIds.filter(id=>a.discoveries[id]).length;
+ $('archiveProgress').textContent='발견 '+found+' / 전체 '+representativeIds.length;$('archiveProgressBar').style.width=(found/representativeIds.length*100)+'%';
+ $('archiveCards').innerHTML=representativeIds.map(id=>{const d=a.discoveries[id],rare=['legend','grand','hitmaker','albumKing'].includes(id);return '<button class="archive-card '+(d?'discovered':'locked')+(rare?' rare':'')+'" onclick="openArchiveCard(\''+id+'\')"><small>'+(d?'발견 · '+d.count+'회':'아직 만나지 못한 무대')+'</small><strong>'+(d?escapeCharacterText(archiveCatalog[id][0]):'???')+'</strong><span>'+(d?'기록 펼치기 →':'분위기 힌트 보기 →')+'</span></button>'}).join('');$('archiveDetail').hidden=true;go('endingArchive');
+}
+function openArchiveCard(id){if(!representativeIds.includes(id))return;const d=readEndingArchive().discoveries[id],el=$('archiveDetail');el.hidden=false;el.innerHTML=d?'<h2>'+escapeCharacterText(archiveCatalog[id][0])+'</h2><p>'+escapeCharacterText(archiveCatalog[id][1])+'</p><p>첫 대표 캐릭터 · '+escapeCharacterText(d.character)+'</p><p>최초 달성 · '+(d.firstAchievedAt?escapeCharacterText(new Date(d.firstAchievedAt).toLocaleString('ko-KR')):'기존 기록 · 달성 시각 미기록')+'</p><p>발견한 날 · '+escapeCharacterText(new Date(d.firstDiscoveredAt).toLocaleString('ko-KR'))+'</p>'+((d.achievements||[]).map(x=>'<p>함께 남은 업적 · '+escapeCharacterText(x.title)+'</p>').join('')):'<h2>아직 만나지 못한 무대</h2><p>'+escapeCharacterText(archiveHints[id])+'</p>';el.scrollIntoView({block:'nearest',behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}
+function backupStorageKeys(){return [STAGE_SLOTS_KEY,STAGE_ACTIVE_KEY,'stage-save-v17',STAGE_HALL_KEY,STAGE_ARCHIVE_KEY,...readCharacterSlots().map(x=>characterSlotKey(x.id))]}
+function exportStageBackup(){const entries={};for(const k of backupStorageKeys()){const v=stageDevStorage.getItem(k);if(v!==null)entries[k]=v}return {schema:1,app:'STAGE',scope:'balance-development',exportedAt:new Date().toISOString(),entries}}
+function downloadStageBackup(){const content=JSON.stringify(exportStageBackup(),null,2),url=URL.createObjectURL(new Blob([content],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='STAGE-save-archive-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function validateStageBackup(data){
+ if(!data||data.schema!==1||data.app!=='STAGE'||!data.entries||Array.isArray(data.entries)||Object.getPrototypeOf(data.entries)!==Object.prototype)throw Error('지원하지 않는 백업 형식입니다.');
+ if(JSON.stringify(data).length>5000000)throw Error('백업 파일이 너무 큽니다.');
+ const entries=data.entries,parse=k=>entries[k]===undefined?null:JSON.parse(entries[k]);
+ for(const [k,v] of Object.entries(entries)){if(!['stage-character-slots-v1','stage-active-character-v1','stage-save-v17',STAGE_HALL_KEY,STAGE_ARCHIVE_KEY].includes(k)&&!/^stage-character-[a-zA-Z0-9_-]{1,100}$/.test(k))throw Error('허용되지 않은 저장 항목입니다.');if(typeof v!=='string')throw Error('잘못된 저장 값입니다.')}
+ const clean=o=>{if(typeof o==='number'&&!Number.isFinite(o))throw Error('유한하지 않은 수치입니다.');if(!o||typeof o!=='object')return;if(Array.isArray(o)){if(o.length>10000)throw Error('기록 수가 너무 많습니다.');o.forEach(clean);return}for(const k of Object.keys(o)){if(['__proto__','constructor','prototype'].includes(k))throw Error('허용되지 않은 필드입니다.');clean(o[k])}};
+ const checkState=s=>{clean(s);if(!s||typeof s.name!=='string'||!s.stats||!keys.every(k=>Number.isFinite(s.stats[k])&&s.stats[k]>=0&&s.stats[k]<=100)||!Number.isFinite(s.energy)||s.energy<0||s.energy>100)throw Error('캐릭터 능력치·컨디션이 올바르지 않습니다.');for(const k of ['cash','fans','personalFans','careerSeason','traineeMonths'])if(s[k]!==undefined&&(!Number.isFinite(s[k])||s[k]<0))throw Error('캐릭터 수치가 올바르지 않습니다.');if(s.scoreVersion!==undefined&&![1,2].includes(s.scoreVersion))throw Error('지원하지 않는 점수 버전입니다.');if(s.scoreSnapshot&&(!Number.isFinite(s.scoreSnapshot.total)||s.scoreSnapshot.total<0||s.scoreSnapshot.total>10000||!Array.isArray(s.scoreSnapshot.rows)||s.scoreSnapshot.rows.reduce((n,r)=>n+r.value,0)!==s.scoreSnapshot.total))throw Error('점수 기록이 올바르지 않습니다.')};
+ const slots=parse(STAGE_SLOTS_KEY)||[];if(!Array.isArray(slots)||slots.length>100)throw Error('캐릭터 목록이 올바르지 않습니다.');const ids=new Set();for(const s of slots){if(!s||typeof s.id!=='string'||!/^[a-zA-Z0-9_-]{1,100}$/.test(s.id)||ids.has(s.id))throw Error('캐릭터 ID가 올바르지 않습니다.');ids.add(s.id);if(!entries[characterSlotKey(s.id)])throw Error('캐릭터 파일이 빠져 있습니다.');checkState(parse(characterSlotKey(s.id)))}
+ for(const k of Object.keys(entries))if(k.startsWith('stage-character-')&&k!==STAGE_SLOTS_KEY&&!ids.has(k.slice('stage-character-'.length)))throw Error('목록에 없는 캐릭터입니다.');
+ if(entries['stage-save-v17'])checkState(parse('stage-save-v17'));if(entries[STAGE_ACTIVE_KEY]&&!ids.has(entries[STAGE_ACTIVE_KEY]))throw Error('활성 캐릭터가 없습니다.');
+ const hall=parse(STAGE_HALL_KEY);if(hall!==null&&(!Array.isArray(hall)||hall.length>100||hall.some(x=>!x||typeof x.name!=='string'||!Number.isFinite(x.score)||x.score<0||x.score>10000)))throw Error('명예의 전당 기록이 올바르지 않습니다.');clean(hall);
+ const archive=parse(STAGE_ARCHIVE_KEY);if(archive!==null){clean(archive);if(archive.schema!==1||!archive.discoveries||!Array.isArray(archive.completed)||new Set(archive.completed).size!==archive.completed.length)throw Error('도감 기록이 올바르지 않습니다.');for(const [id,d] of Object.entries(archive.discoveries)){if(!representativeIds.includes(id)||d.id!==id||!Number.isInteger(d.count)||d.count<1||typeof d.character!=='string'||!Number.isFinite(Date.parse(d.firstDiscoveredAt))||!Number.isFinite(Date.parse(d.lastDiscoveredAt)))throw Error('발견 기록이 올바르지 않습니다.')}}
+ return data;
+}
+function restoreStageBackup(input){const data=validateStageBackup(input),snapshot=exportStageBackup();try{for(const k of backupStorageKeys())stageDevStorage.removeItem(k);for(const [k,v] of Object.entries(data.entries))stageDevStorage.setItem(k,v)}catch(e){for(const k of backupStorageKeys())stageDevStorage.removeItem(k);for(const [k,v] of Object.entries(snapshot.entries))stageDevStorage.setItem(k,v);throw Error('저장 공간을 확인하세요. 기존 기록을 복구했습니다.')}state=null;activeCharacterId=stageDevStorage.getItem(STAGE_ACTIVE_KEY);refreshCharacterSlots();return true}
+async function importStageBackupFile(input){const f=input.files?.[0];if(!f)return;try{if(f.size>5000000)throw Error('백업 파일은 5MB 이하여야 합니다.');const data=validateStageBackup(JSON.parse(await f.text()));if(!confirm('개발용 저장과 도감을 이 백업으로 대치합니다. 현재 기록을 먼저 내보냈는지 확인하세요.'))return;restoreStageBackup(data);$('archiveNotice').textContent='백업을 복원했습니다. 타이틀에서 이어하기를 선택하세요.';showEndingArchive()}catch(e){$('archiveNotice').textContent='복원하지 못했습니다: '+e.message}finally{input.value=''}}
+function copyExistingSaves(){
+ if(!confirm('기존 게임 저장을 개발용 공간에 복사합니다. 현재 개발용 기록은 대치됩니다. 기존 게임 원본은 유지됩니다.'))return;
+ try{const slots=JSON.parse(stageNativeStorage.getItem(STAGE_SLOTS_KEY)||'[]'),entries={};for(const k of [STAGE_SLOTS_KEY,STAGE_ACTIVE_KEY,'stage-save-v17',STAGE_HALL_KEY,...slots.map(x=>characterSlotKey(x.id))]){const v=stageNativeStorage.getItem(k);if(v!==null)entries[k]=v}restoreStageBackup({schema:1,app:'STAGE',entries});$('archiveNotice').textContent='기존 기록을 복사했습니다. 기존 캐릭터의 v1 점수를 유지합니다.';showEndingArchive()}catch(e){$('archiveNotice').textContent='복사하지 못했습니다: '+e.message}
+}
+
+// Risk is updated once per completed season, never on render or save/load.
+const retirementCheckV1=checkRetirementSeason,retirementChanceV1=retirementChance,retirementResolveV1=resolveRetirementCrisis,retirementRenderV1=renderRetirementCrisis,careerRenderBeforePressure=renderCareer;
+function retirementPressure(){
+ const p=state.retirementPressure;
+ if(p?.schema===1)return p;
+ return state.retirementPressure={schema:1,lastSeason:state.careerSeason||0,health:0,contract:0,finance:0,decline:0,lossStreak:0,declineStreak:0,previousFans:state.fans||0,stable:0};
+}
+function pressurePreview(){
+ const p=retirementPressure(),labels={health:'건강',contract:'소속사 관계',finance:'연속 적자',decline:'팬덤 하락'};
+ const [key,value]=Object.entries(labels).map(([k])=>[k,p[k]]).sort((a,b)=>b[1]-a[1])[0];
+ const risk=value>=4?Math.min(70,15+value*5+(state.retirementWarnings||0)*5):0;
+ return {key,value,risk,label:labels[key],grace:(state.careerSeason||0)<6};
+}
+checkRetirementSeason=function(){
+ if(state?.scoreVersion!==2||globalThis.STAGE_TEST_DISABLE_PRESSURE===true)return retirementCheckV1();
+ if(!state.debuted||state.careerEnded)return;
+ const p=retirementPressure(),season=state.careerSeason||0;if(p.lastSeason===season)return;p.lastSeason=season;
+ const age=retirementAge();if(age>=50){endCareer('50세 활동 연한 도달');return}
+ const f=balanceFacts(),last=f.entries.find(e=>e.season===season-1),rest=last?.kind==='rest';
+ p.lossStreak=last&&last.kind!=='rest'&&!(last.kind==='project'&&last.plan==='camp')&&last.personal<0?p.lossStreak+1:0;
+ p.declineStreak=state.fans<p.previousFans*.97?p.declineStreak+1:0;p.previousFans=state.fans;
+ p.health=clamp(p.health+(rest?-4:state.energy<=20?3:state.energy<=35?2:state.energy<=50?1:-2),0,12);
+ p.contract=clamp(p.contract+(independent()?-4:state.agencyTrust<30?3:state.agencyTrust<45?2:-2),0,12);
+ p.finance=clamp(p.finance+(p.lossStreak>=2?2:-2),0,12);
+ p.decline=clamp(p.decline+(p.declineStreak>=2?2:-2),0,12);
+ const preview=pressurePreview();
+ if(preview.value<2)p.stable++;else p.stable=0;
+ // Three stable seasons remove one warning; merely winning a negotiation does not.
+ if(p.stable>=3&&(state.retirementWarnings||0)>0){state.retirementWarnings--;p.stable=0;state.careerHistory.push('운영 개선 · 3시즌 안정적으로 활동해 은퇴 경고 1회 해소')}
+ if(!preview.grace&&preview.risk>0&&season-(state.lastRetirementCrisisSeason??-99)>=2&&Math.random()*100<preview.risk){
+  const type=preview.key==='health'?'health':preview.key==='contract'?'contract':'popularity';
+  state.pendingRetirementCrisis={type,risk:preview.risk,age,season,pressure:preview.key};state.lastRetirementCrisisSeason=season;
+  state.careerHistory.push(age+'세 · '+preview.label+' 문제가 누적되어 커리어 위기 발생');save();return;
+ }
+ naturalCareerConclusion(age);
+};
+retirementChance=function(type,index){
+ if(state?.scoreVersion!==2||!state.pendingRetirementCrisis?.pressure)return retirementChanceV1(type,index);
+ const p=retirementPressure(),key=state.pendingRetirementCrisis.pressure;
+ return clamp(retirementChanceV1(type,index)-Math.round(p[key]*1.5)-(state.retirementWarnings||0)*2,12,92);
+};
+resolveRetirementCrisis=function(index){
+ const c=state?.pendingRetirementCrisis;if(state?.scoreVersion!==2||!c?.pressure)return retirementResolveV1(index);
+ if(![0,1,2].includes(index))return;
+ const warnings=state.retirementWarnings||0;retirementResolveV1(index);
+ if(state.careerEnded)return;
+ const p=retirementPressure(),success=(state.retirementWarnings||0)<=warnings;
+ if(success){state.retirementWarnings=warnings;p[c.pressure]=Math.max(0,p[c.pressure]-2)}
+ // Recovery buys time, but only improving following seasons clears the pressure.
+ if(c.type==='health'&&index===0)p.health=Math.max(0,p.health-3);
+ save();
+};
+renderRetirementCrisis=function(){const ok=retirementRenderV1();if(ok&&state.scoreVersion===2&&state.pendingRetirementCrisis?.pressure)$('retirementOdds').textContent+=' · 성공만으로 경고가 사라지지는 않습니다. 건강·관계·손익·팬덤을 안정시킨 3시즌마다 경고 1회 해소.';return ok};
+renderCareer=function(){careerRenderBeforePressure();if(state?.scoreVersion!==2)return;const p=pressurePreview();const help=p.grace?'데뷔 초기 3년은 누적 위기에 따른 강제 은퇴 유예 기간입니다.':p.value>=2?p.label+' 주의 · '+(p.risk?'최근 상태의 위기 발생률 '+p.risk+'% · 다음 시즌 상태에 따라 재계산':'누적되기 전에 운영을 조정하세요'):'현재 활동은 안정적입니다.';$('careerEconomy').innerHTML+='<div class="archive-end" role="status"><strong>활동 지속성 · 은퇴 경고 '+(state.retirementWarnings||0)+'/3</strong><p>'+help+'</p><p class="small-help">휴식으로 피로를 낮추고, 무리한 투자·공연 규모를 줄이며, 관계와 팬덤을 관리하세요. 세 번의 위기 대응 실패 시 활동을 마칩니다.</p></div>'};
+
 migrateLegacyCharacter();refreshCharacterSlots();syncSound();renderDreamChoices();
 
 // First tap selects; a second tap on the same option commits. Navigation stays direct.
